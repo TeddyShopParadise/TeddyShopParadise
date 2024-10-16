@@ -1,0 +1,1 @@
+//Logica de el controlador de la compañia 
