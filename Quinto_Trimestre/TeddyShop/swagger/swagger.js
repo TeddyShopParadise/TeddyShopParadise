@@ -1,4 +1,4 @@
-const swaggerJsDoc = require('swagger-jsdoc');
+/*const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
 //Configuracion basica de swagger
@@ -15,3 +15,5 @@ module.exports = {
     swaggerUi,
     swaggerSpec,
 };
+
+*/
