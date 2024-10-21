@@ -16,7 +16,8 @@
     "joi": "^17.13.3",
     "mongoose": "^8.7.2",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "teddyshop": "file:"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
