@@ -20,10 +20,10 @@ mongoose.connect('mongodb+srv://sa:PM02s8wkGc77jfO3@cluster0.hhmn9.mongodb.net/?
 // Middleware
 const app = express();
 
-/*
+
 // Configuración de Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-*/
+
 
 // Cargar el certificado SSL y la clave privada
 // Si usas HTTPS, descomenta las siguientes líneas y coloca tus certificados
@@ -48,6 +48,6 @@ const port = process.env.PORT || 3000;
 
 // Si usas HTTP:
 http.createServer(app).listen(port, () => {
-  console.log(`Servidor HTTP corriendo en http://localhost:${port}`);
+  console.log(`Servidor HTTP corriendo en http://localhost:${port}/api-docs/#/`);
 });
 
