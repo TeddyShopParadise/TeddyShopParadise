@@ -9,7 +9,7 @@ const {
 } = require('../controllers/movimiento_controller'); // Importa los controladores
 /**
  * @swagger
- * /:
+ * /movimiento:
  *   get:
  *     summary: Obtiene todos los movimientos
  *     tags:
@@ -49,7 +49,7 @@ router.get('/', listarMovimientos);
 
 /**
  * @swagger
- * /:
+ * /movimiento:
  *   post:
  *     summary: Crea un nuevo movimiento
  *     tags:
@@ -88,7 +88,7 @@ router.post('/', crearMovimiento);
 
 /**
  * @swagger
- * /{id}:
+ * /movimiento/{id}:
  *   get:
  *     summary: Obtiene un movimiento por su ID
  *     tags:
@@ -114,7 +114,7 @@ router.get('/:id', obtenerMovimientoPorId);
 
 /**
  * @swagger
- * /{id}:
+ * /movimiento/{id}:
  *   put:
  *     summary: Actualiza un movimiento por su ID
  *     tags:
@@ -159,7 +159,7 @@ router.put('/:id', actualizarMovimiento);
 
 /**
  * @swagger
- * /{id}:
+ * /movimiento/{id}:
  *   delete:
  *     summary: Elimina un movimiento por su ID
  *     tags:

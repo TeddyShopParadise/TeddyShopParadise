@@ -1,6 +1,6 @@
 //Logica de el controlador de la devolucion 
 const logic = require('../Logic/devoluciones_logic'); // Asegúrate de importar la lógica
-const { devolucionSchemaValidation } = require('../Validations/devoluciones_validation'); // Importa la validación
+const { devolucionesSchemaValidation } = require('../Validations/devoluciones_validation'); // Importa la validación
 
 // Controlador para listar todas las devoluciones
 const listarDevoluciones = async (req, res) => {
@@ -16,7 +16,7 @@ const listarDevoluciones = async (req, res) => {
 const crearDevolucion = async (req, res) => {
     const body = req.body;
 
-    const { error, value } = devolucionSchemaValidation.validate(body);
+    const { error, value } = devolucionesSchemaValidation.validate(body);
 
     if (error) {
         return res.status(400).json({ error: error.details[0].message });

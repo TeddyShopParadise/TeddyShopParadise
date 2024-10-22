@@ -37,7 +37,7 @@ const categoriaController = require('../Controllers/categoria_controller');
  *         description: Error interno del servidor
  */
 
-router.get('/categorias', categoriaController.listarCategorias);
+router.get('/', categoriaController.listarCategorias);
 
 /**
  * @swagger
@@ -74,7 +74,7 @@ router.get('/categorias', categoriaController.listarCategorias);
  */
 
 
-router.post('/categorias', categoriaController.crearCategoria);
+router.post('/', categoriaController.crearCategoria);
 
 /**
  * @swagger
@@ -100,7 +100,7 @@ router.post('/categorias', categoriaController.crearCategoria);
  */
 
 
-router.get('/categorias/:id', categoriaController.obtenerCategoriaPorId);
+router.get('/:id', categoriaController.obtenerCategoriaPorId);
 
 /**
  * @swagger
@@ -144,7 +144,7 @@ router.get('/categorias/:id', categoriaController.obtenerCategoriaPorId);
  */
 
 
-router.put('/categorias/:id', categoriaController.actualizarCategoria);
+router.put('/:id', categoriaController.actualizarCategoria);
 
 
 
@@ -171,6 +171,6 @@ router.put('/categorias/:id', categoriaController.actualizarCategoria);
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/categorias/:id', categoriaController.eliminarCategoria);
+router.delete('/:id', categoriaController.eliminarCategoria);
 
 module.exports = router;

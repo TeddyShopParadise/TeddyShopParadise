@@ -1,6 +1,6 @@
 //Logica de el controlador de los roles
 const logic = require('../Logic/roles_logic'); // Asegúrate de importar la lógica
-const { rolSchemaValidation } = require('../Validations/roles_validation'); // Importa la validación
+const { rolesSchemaValidation } = require('../Validations/roles_validation'); // Importa la validación
 
 // Controlador para listar todos los roles
 const listarRoles = async (req, res) => {
@@ -16,7 +16,7 @@ const listarRoles = async (req, res) => {
 const crearRol = async (req, res) => {
     const body = req.body;
 
-    const { error, value } = rolSchemaValidation.validate(body);
+    const { error, value } = rolesSchemaValidation.validate(body);
 
     if (error) {
         return res.status(400).json({ error: error.details[0].message });

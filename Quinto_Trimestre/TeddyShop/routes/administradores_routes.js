@@ -29,7 +29,7 @@ const router = express.Router(); // Define el enrutador
  *         description: No hay administradores disponibles
  */
 
-router.get('/administradores', administradorController.listarAdministradores);
+router.get('/', administradorController.listarAdministradores);
 
 /**
  * @swagger
@@ -66,7 +66,7 @@ router.get('/administradores', administradorController.listarAdministradores);
  *         description: El administrador ya existe
  */
 
-router.post('/administradores', administradorController.crearAdministrador);
+router.post('/', administradorController.crearAdministrador);
 
 /**
  * @swagger
@@ -101,7 +101,7 @@ router.post('/administradores', administradorController.crearAdministrador);
  */
 
 
-router.get('/administradores/:id', administradorController.obtenerAdministradorPorId);
+router.get('/:id', administradorController.obtenerAdministradorPorId);
 
 /**
  * @swagger
@@ -136,7 +136,7 @@ router.get('/administradores/:id', administradorController.obtenerAdministradorP
  *         description: Administrador no encontrado
  */
 
-router.put('/administradores/:id', administradorController.actualizarAdministrador);
+router.put('/:id', administradorController.actualizarAdministrador);
 
 /**
  * @swagger
@@ -159,6 +159,6 @@ router.put('/administradores/:id', administradorController.actualizarAdministrad
  *         description: Administrador no encontrado
  */
 
-router.delete('/administradores/:id', administradorController.eliminarAdministrador);
+router.delete('/:id', administradorController.eliminarAdministrador);
 
 module.exports = router;

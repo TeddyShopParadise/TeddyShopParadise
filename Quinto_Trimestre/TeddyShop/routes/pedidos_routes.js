@@ -4,7 +4,7 @@ const pedidoController = require('../Controllers/pedido_controller');
 
 /**
  * @swagger
- * /pedidos:
+ * /pedido:
  *   get:
  *     summary: Obtiene todos los pedidos
  *     tags:
@@ -75,11 +75,11 @@ const pedidoController = require('../Controllers/pedido_controller');
  */
 
 
-router.get('/pedidos', pedidoController.listarPedidos);
+router.get('/', pedidoController.listarPedidos);
 
 /**
  * @swagger
- * /pedidos:
+ * /pedido:
  *   post:
  *     summary: Crea un nuevo pedido
  *     tags:
@@ -149,11 +149,11 @@ router.get('/pedidos', pedidoController.listarPedidos);
  */
 
 
-router.post('/pedidos', pedidoController.crearPedido);
+router.post('/', pedidoController.crearPedido);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /pedido/{id}:
  *   get:
  *     summary: Obtiene un pedido por su ID
  *     tags:
@@ -176,11 +176,11 @@ router.post('/pedidos', pedidoController.crearPedido);
 
 
 
-router.get('/pedidos/:id', pedidoController.obtenerPedidoPorId);
+router.get('/:id', pedidoController.obtenerPedidoPorId);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /pedido/{id}:
  *   put:
  *     summary: Actualiza un pedido por su ID
  *     tags:
@@ -257,11 +257,11 @@ router.get('/pedidos/:id', pedidoController.obtenerPedidoPorId);
  */
 
 
-router.put('/pedidos/:id', pedidoController.actualizarPedido);
+router.put('/:id', pedidoController.actualizarPedido);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /pedido/{id}:
  *   delete:
  *     summary: Elimina un pedido por su ID
  *     tags:
@@ -282,6 +282,6 @@ router.put('/pedidos/:id', pedidoController.actualizarPedido);
  *         description: Error interno del servidor
  */
 
-router.delete('/pedidos/:id', pedidoController.eliminarPedido);
+router.delete('/:id', pedidoController.eliminarPedido);
 
 module.exports = router;

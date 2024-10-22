@@ -4,7 +4,7 @@ const vendedorController = require('../Controllers/vendedor_controller');
 
 /**
  * @swagger
- * /vendedores:
+ * /vendedor:
  *   get:
  *     summary: Obtiene todos los vendedores
  *     tags:
@@ -35,11 +35,11 @@ const vendedorController = require('../Controllers/vendedor_controller');
  *         description: Error interno del servidor
  */
 
-router.get('/vendedores', vendedorController.listarVendedores);
+router.get('/', vendedorController.listarVendedores);
 
 /**
  * @swagger
- * /vendedores:
+ * /vendedor:
  *   post:
  *     summary: Crea un nuevo vendedor
  *     tags:
@@ -71,11 +71,11 @@ router.get('/vendedores', vendedorController.listarVendedores);
 
 
 
-router.post('/vendedores', vendedorController.crearVendedor);
+router.post('/', vendedorController.crearVendedor);
 
 /**
  * @swagger
- * /vendedores/{id}:
+ * /vendedor/{id}:
  *   get:
  *     summary: Obtiene un vendedor por su ID
  *     tags:
@@ -96,11 +96,11 @@ router.post('/vendedores', vendedorController.crearVendedor);
  *         description: Error interno del servidor
  */
 
-router.get('/vendedores/:id', vendedorController.obtenerVendedorPorId);
+router.get('/:id', vendedorController.obtenerVendedorPorId);
 
 /**
  * @swagger
- * /vendedores/{id}:
+ * /vendedor/{id}:
  *   put:
  *     summary: Actualiza un vendedor por su ID
  *     tags:
@@ -137,11 +137,11 @@ router.get('/vendedores/:id', vendedorController.obtenerVendedorPorId);
  *         description: Vendedor no encontrado
  */
 
-router.put('/vendedores/:id', vendedorController.actualizarVendedor);
+router.put('/:id', vendedorController.actualizarVendedor);
 
 /**
  * @swagger
- * /vendedores/{id}:
+ * /vendedor/{id}:
  *   delete:
  *     summary: Elimina un vendedor por su ID
  *     tags:
@@ -162,7 +162,7 @@ router.put('/vendedores/:id', vendedorController.actualizarVendedor);
  *         description: Error interno del servidor
  */
 
-router.delete('/vendedores/:id', vendedorController.eliminarVendedor);
+router.delete('/:id', vendedorController.eliminarVendedor);
 
 
 module.exports = router;

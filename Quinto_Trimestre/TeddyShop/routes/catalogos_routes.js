@@ -50,7 +50,7 @@ const router = express.Router();
  *         description: Ya existe un catálogo con ese nombre
  */
 
-router.post('/catalogos', catalogoController.crearCatalogo);
+router.post('/', catalogoController.crearCatalogo);
 
 /**
  * @swagger
@@ -107,7 +107,7 @@ router.post('/catalogos', catalogoController.crearCatalogo);
  *         description: Catálogo no encontrado
  */
 
-router.put('/catalogos/:id', catalogoController.actualizarCatalogo);
+router.put('/:id', catalogoController.actualizarCatalogo);
 
 /**
  * @swagger
@@ -130,7 +130,7 @@ router.put('/catalogos/:id', catalogoController.actualizarCatalogo);
  *         description: Catálogo no encontrado
  */
 
-router.patch('/catalogos/:id/desactivar', catalogoController.desactivarCatalogo);
+router.patch('/:id/desactivar', catalogoController.desactivarCatalogo);
 
 /**
  * @swagger
@@ -181,7 +181,7 @@ router.patch('/catalogos/:id/desactivar', catalogoController.desactivarCatalogo)
  *         description: No hay catálogos activos
  */
 
-router.get('/catalogos/activos', catalogoController.listarCatalogosActivos);
+router.get('/activos', catalogoController.listarCatalogosActivos);
 
 /**
  * @swagger
@@ -205,7 +205,7 @@ router.get('/catalogos/activos', catalogoController.listarCatalogosActivos);
  */
 
 
-router.get('/catalogos/:id', catalogoController.obtenerCatalogoPorId);
+router.get('/:id', catalogoController.obtenerCatalogoPorId);
 
 /**
  * @swagger
@@ -257,6 +257,6 @@ router.get('/catalogos/:id', catalogoController.obtenerCatalogoPorId);
  *         description: Error interno del servidor
  */
 
-router.post('/catalogos/coleccion', catalogoController.guardarColeccionCatalogos);
+router.post('/coleccion', catalogoController.guardarColeccionCatalogos);
 
 module.exports = router;

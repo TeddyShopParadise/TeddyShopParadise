@@ -10,7 +10,7 @@ const {
 
 /**
  * @swagger
- * /detalles-factura:
+ * /detallesFactura:
  *   get:
  *     summary: Obtiene todos los detalles de factura
  *     tags:
@@ -55,7 +55,7 @@ router.get('/', listarDetallesFactura);
 
 /**
  * @swagger
- * /detalles-factura:
+ * /detallesFactura:
  *   post:
  *     summary: Crea un nuevo detalle de factura
  *     tags:
@@ -99,7 +99,7 @@ router.post('/', crearDetalleFactura);
 
 /**
  * @swagger
- * /detalles-factura/{id}:
+ * /detallesFactura/{id}:
  *   put:
  *     summary: Actualiza un detalle de factura por su ID
  *     tags:
@@ -152,7 +152,7 @@ router.put('/:id', actualizarDetalleFactura);
 
 /**
  * @swagger
- * /detalles-factura/{id}:
+ * /detallesFactura/{id}:
  *   get:
  *     summary: Obtiene un detalle de factura por su ID
  *     tags:
@@ -178,7 +178,7 @@ router.get('/:id', obtenerDetalleFacturaPorId);
 
 /**
  * @swagger
- * /detalles-factura/{id}:
+ * /detallesFactura/{id}:
  *   delete:
  *     summary: Elimina un detalle de factura por su ID
  *     tags:

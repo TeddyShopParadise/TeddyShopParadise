@@ -11,7 +11,7 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'http://localhost:3000', // Cambia esto a la URL de tu servidor
+            url: 'http://localhost:3000/api',
         },
     ],
     tags: [
@@ -60,6 +60,10 @@ const swaggerDefinition = {
             description: 'Operaciones relacionadas con los historiales de precio'
         }, 
         {
+            name: 'Inventario',
+            description: 'Operaciones relacionadas con los inventarios'
+        }, 
+        {
             name: 'Métodos de Pago',
             description: 'Operaciones relacionadas con los métodos de pago'
         }, 
@@ -86,16 +90,15 @@ const swaggerDefinition = {
         {
             name: 'Vendedores',
             description: 'Operaciones relacionadas con los Vendedores'
-        }, 
+        },
 
 
-        // Puedes definir otros tags aquí si tienes más grupos de endpoints
     ]
 };
 
 const options = {
     swaggerDefinition,
-    apis: ['./routes/*.js'], // Ruta a los archivos que contienen anotaciones de Swagger
+    apis: ['./routes/*.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

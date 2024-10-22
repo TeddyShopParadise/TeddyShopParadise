@@ -10,7 +10,7 @@ const {
 
 /**
  * @swagger
- * /historial-precio:
+ * /historialPrecio:
  *   get:
  *     summary: Obtiene todos los historiales de precio
  *     tags:
@@ -54,7 +54,7 @@ router.get('/', listarHistorialPrecios);
 
 /**
  * @swagger
- * /historial-precio:
+ * /historialPrecio:
  *   post:
  *     summary: Crea un nuevo historial de precio
  *     tags:
@@ -98,7 +98,7 @@ router.post('/', crearHistorialPrecio);
 
 /**
  * @swagger
- * /historial-precio/{id}:
+ * /historialPrecio/{id}:
  *   get:
  *     summary: Obtiene un historial de precio por su ID
  *     tags:
@@ -124,7 +124,7 @@ router.get('/:id', obtenerHistorialPrecioPorId);
 
 /**
  * @swagger
- * /historial-precio/{id}:
+ * /historialPrecio/{id}:
  *   put:
  *     summary: Actualiza un historial de precio por su ID
  *     tags:
@@ -174,7 +174,7 @@ router.put('/:id', actualizarHistorialPrecio);
 
 /**
  * @swagger
- * /historial-precio/{id}:
+ * /historialPrecio/{id}:
  *   delete:
  *     summary: Elimina un historial de precio por su ID
  *     tags:

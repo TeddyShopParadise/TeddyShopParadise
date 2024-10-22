@@ -4,7 +4,7 @@ const productoController = require('../Controllers/producto_controller');
 
 /**
  * @swagger
- * /productos:
+ * /producto:
  *   get:
  *     summary: Obtiene todos los productos
  *     tags:
@@ -60,11 +60,11 @@ const productoController = require('../Controllers/producto_controller');
  */
 
 
-router.get('/productos', productoController.listarProductos);
+router.get('/', productoController.listarProductos);
 
 /**
  * @swagger
- * /productos:
+ * /producto:
  *   post:
  *     summary: Crea un nuevo producto
  *     tags:
@@ -119,11 +119,11 @@ router.get('/productos', productoController.listarProductos);
  */
 
 
-router.post('/productos', productoController.crearProducto);
+router.post('/', productoController.crearProducto);
 
 /**
  * @swagger
- * /productos/{id}:
+ * /producto/{id}:
  *   get:
  *     summary: Obtiene un producto por su ID
  *     tags:
@@ -146,11 +146,11 @@ router.post('/productos', productoController.crearProducto);
 
 
 
-router.get('/productos/:id', productoController.obtenerProductoPorId);
+router.get('/:id', productoController.obtenerProductoPorId);
 
 /**
  * @swagger
- * /productos/{id}:
+ * /producto/{id}:
  *   put:
  *     summary: Actualiza un producto por su ID
  *     tags:
@@ -212,11 +212,11 @@ router.get('/productos/:id', productoController.obtenerProductoPorId);
  */
 
 
-router.put('/productos/:id', productoController.actualizarProducto);
+router.put('/:id', productoController.actualizarProducto);
 
 /**
  * @swagger
- * /productos/{id}:
+ * /producto/{id}:
  *   delete:
  *     summary: Elimina un producto por su ID
  *     tags:
@@ -238,6 +238,6 @@ router.put('/productos/:id', productoController.actualizarProducto);
  */
 
 
-router.delete('/productos/:id', productoController.eliminarProducto);
+router.delete('/:id', productoController.eliminarProducto);
 
 module.exports = router;

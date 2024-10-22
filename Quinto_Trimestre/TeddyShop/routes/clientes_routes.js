@@ -50,7 +50,7 @@ const clienteController = require('../Controllers/cliente_controller');
  *         description: Error interno del servidor
  */
 
-router.get('/clientes', clienteController.listarClientes);
+router.get('/', clienteController.listarClientes);
 
 /**
  * @swagger
@@ -94,7 +94,7 @@ router.get('/clientes', clienteController.listarClientes);
  */
 
 
-router.post('/clientes', clienteController.crearCliente);
+router.post('/', clienteController.crearCliente);
 
 /**
  * @swagger
@@ -138,7 +138,7 @@ router.post('/clientes', clienteController.crearCliente);
  */
 
 
-router.get('/clientes/:id', clienteController.obtenerClientePorId);
+router.get('/:id', clienteController.obtenerClientePorId);
 
 /**
  * @swagger
@@ -187,7 +187,7 @@ router.get('/clientes/:id', clienteController.obtenerClientePorId);
  */
 
 
-router.put('/clientes/:id', clienteController.actualizarCliente);
+router.put('/:id', clienteController.actualizarCliente);
 
 /**
  * @swagger
@@ -213,6 +213,6 @@ router.put('/clientes/:id', clienteController.actualizarCliente);
  */
 
 
-router.delete('/clientes/:id', clienteController.eliminarCliente);
+router.delete('/:id', clienteController.eliminarCliente);
 
 module.exports = router;

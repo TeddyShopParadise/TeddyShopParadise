@@ -10,7 +10,7 @@ const {
 
 /**
  * @swagger
- * /metodos-pago:
+ * /metodoPago:
  *   get:
  *     summary: Obtiene todos los métodos de pago
  *     tags:
@@ -43,7 +43,7 @@ router.get('/', listarMetodosPago);
 
 /**
  * @swagger
- * /metodos-pago:
+ * /metodoPago:
  *   post:
  *     summary: Crea un nuevo método de pago
  *     tags:
@@ -75,7 +75,7 @@ router.post('/', crearMetodoPago);
 
 /**
  * @swagger
- * /metodos-pago/{id}:
+ * /metodoPago/{id}:
  *   get:
  *     summary: Obtiene un método de pago por su ID
  *     tags:
@@ -101,7 +101,7 @@ router.get('/:id', obtenerMetodoPagoPorId);
 
 /**
  * @swagger
- * /metodos-pago/{id}:
+ * /metodoPago/{id}:
  *   put:
  *     summary: Actualiza un método de pago por su ID
  *     tags:
@@ -139,7 +139,7 @@ router.put('/:id', actualizarMetodoPago);
 
 /**
  * @swagger
- * /metodos-pago/{id}:
+ * /metodoPago/{id}:
  *   delete:
  *     summary: Elimina un método de pago por su ID
  *     tags:

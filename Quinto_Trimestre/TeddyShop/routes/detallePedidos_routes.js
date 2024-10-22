@@ -10,7 +10,7 @@ const {
 
 /**
  * @swagger
- * /detalles-pedido:
+ * /detallesPedido:
  *   get:
  *     summary: Obtiene todos los detalles de pedido
  *     tags:
@@ -52,7 +52,7 @@ router.get('/', listarDetallesPedido);
 
 /**
  * @swagger
- * /detalles-pedido:
+ * /detallesPedido:
  *   post:
  *     summary: Crea un nuevo detalle de pedido
  *     tags:
@@ -93,7 +93,7 @@ router.post('/', crearDetallePedido);
 
 /**
  * @swagger
- * /detalles-pedido/{id}:
+ * /detallesPedido/{id}:
  *   put:
  *     summary: Actualiza un detalle de pedido por su ID
  *     tags:
@@ -140,7 +140,7 @@ router.put('/:id', actualizarDetallePedido);
 
 /**
  * @swagger
- * /detalles-pedido/{id}:
+ * /detallesPedido/{id}:
  *   get:
  *     summary: Obtiene un detalle de pedido por su ID
  *     tags:
@@ -167,7 +167,7 @@ router.get('/:id', obtenerDetallePedidoPorId);
 
 /**
  * @swagger
- * /detalles-pedido/{id}:
+ * /detallesPedido/{id}:
  *   delete:
  *     summary: Elimina un detalle de pedido por su ID
  *     tags:

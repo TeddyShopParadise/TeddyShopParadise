@@ -10,7 +10,7 @@ const {
 
 /**
  * @swagger
- * /usuarios:
+ * /usuario:
  *   get:
  *     summary: Obtiene todos los usuarios
  *     tags:
@@ -53,7 +53,7 @@ router.get('/', listarUsuarios);
 
 /**
  * @swagger
- * /usuarios:
+ * /usuario:
  *   post:
  *     summary: Crea un nuevo usuario
  *     tags:
@@ -101,7 +101,7 @@ router.post('/', crearUsuario);
 
 /**
  * @swagger
- * /usuarios/{id}:
+ * /usuario/{id}:
  *   put:
  *     summary: Actualiza un usuario por su ID
  *     tags:
@@ -158,7 +158,7 @@ router.put('/:id', actualizarUsuario);
 
 /**
  * @swagger
- * /usuarios/{id}:
+ * /usuario/{id}:
  *   get:
  *     summary: Obtiene un usuario por su ID
  *     tags:
@@ -185,7 +185,7 @@ router.get('/:id', obtenerUsuarioPorId);
 
 /**
  * @swagger
- * /usuarios/{id}:
+ * /usuario/{id}:
  *   delete:
  *     summary: Elimina un usuario por su ID
  *     tags:

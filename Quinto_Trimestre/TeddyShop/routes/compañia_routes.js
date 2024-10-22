@@ -10,7 +10,7 @@ const {
 
 /**
  * @swagger
- * /compañias:
+ * /Compania:
  *   get:
  *     summary: Obtiene todas las compañías
  *     tags:
@@ -57,7 +57,7 @@ router.get('/', listarCompañias);
 
 /**
  * @swagger
- * /Compañias:
+ * /Compania:
  *   post:
  *     summary: Crea una nueva compañía
  *     tags:
@@ -97,7 +97,7 @@ router.post('/', crearCompañia);
 
 /**
  * @swagger
- * /Compañia/{id}:
+ * /Compania/{id}:
  *   put:
  *     summary: Actualiza una compañía por su ID
  *     tags:
@@ -141,7 +141,7 @@ router.put('/:id', actualizarCompañia);
 
 /**
  * @swagger
- * /Compañia/{id}:
+ * /Compania/{id}:
  *   get:
  *     summary: Obtiene una compañía por su ID
  *     tags:
@@ -167,7 +167,7 @@ router.get('/:id', obtenerCompañiaPorId);
 
 /**
  * @swagger
- * /Compañia/{id}:
+ * /Compania/{id}:
  *   delete:
  *     summary: Elimina una compañía por su ID
  *     tags:
