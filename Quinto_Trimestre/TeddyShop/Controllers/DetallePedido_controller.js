@@ -1,4 +1,4 @@
-const logic = require('../logic/detalle_pedido_logic'); // Asegúrate de importar la lógica
+const logic = require('../Logic/DetallePedido_logic'); // Asegúrate de importar la lógica
 const { detallePedidoSchemaValidation } = require('../Validations/detallePedido_validation'); // Importa la validación
 
 // Controlador para listar todos los detalles de pedido

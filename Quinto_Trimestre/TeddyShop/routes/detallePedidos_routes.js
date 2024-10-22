@@ -6,229 +6,188 @@ const {
     actualizarDetallePedido,
     obtenerDetallePedidoPorId,
     eliminarDetallePedido
-} = require('../controllers/detalle_pedido_controller'); // Asegúrate de importar los controladores
-/**
- * @swagger
- * tags:
- *   name: DetallePedido
- *   description: API para gestionar detalles de pedido
- */
+} = require('../Controllers/DetallePedido_controller'); // Asegúrate de importar los controladores
 
 /**
  * @swagger
- * path:
- *   /detalle-pedido:
- *     get:
- *       tags: [DetallePedido]
- *       summary: Listar todos los detalles de pedido
- *       responses:
- *         200:
- *           description: Lista de detalles de pedido
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     numDetalle:
- *                       type: number
- *                     precioDetallePedido:
- *                       type: number
- *                     cantidadDetallePedido:
- *                       type: number
- *                     pedidoNumPedido:
- *                       type: string
- *                       format: objectId
- *                     productoIdProducto:
- *                       type: string
- *                       format: objectId
- *         500:
- *           description: Error interno del servidor
+ * /detalles-pedido:
+ *   get:
+ *     summary: Obtiene todos los detalles de pedido
+ *     tags:
+ *       - Detalle Pedido
+ *     responses:
+ *       200:
+ *         description: Lista de detalles de pedido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a79"
+ *                   numDetalle:
+ *                     type: number
+ *                     example: 1
+ *                   precioDetallePedido:
+ *                     type: number
+ *                     example: 19.99
+ *                   cantidadDetallePedido:
+ *                     type: number
+ *                     example: 3
+ *                   pedidoNumPedido:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a79"
+ *                   productoIdProducto:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a7a"
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.get('/', listarDetallesPedido);
 
 /**
  * @swagger
- * path:
- *   /detalle-pedido:
- *     post:
- *       tags: [DetallePedido]
- *       summary: Crear un nuevo detalle de pedido
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 numDetalle:
- *                   type: number
- *                   required: true
- *                 precioDetallePedido:
- *                   type: number
- *                   required: true
- *                 cantidadDetallePedido:
- *                   type: number
- *                   required: true
- *                 pedidoNumPedido:
- *                   type: string
- *                   format: objectId
- *                   required: true
- *                 productoIdProducto:
- *                   type: string
- *                   format: objectId
- *                   required: true
- *       responses:
- *         201:
- *           description: Detalle de pedido creado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   numDetalle:
- *                     type: number
- *                   precioDetallePedido:
- *                     type: number
- *                   cantidadDetallePedido:
- *                     type: number
- *                   pedidoNumPedido:
- *                     type: string
- *                     format: objectId
- *                   productoIdProducto:
- *                     type: string
- *                     format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         500:
- *           description: Error interno del servidor
+ * /detalles-pedido:
+ *   post:
+ *     summary: Crea un nuevo detalle de pedido
+ *     tags:
+ *       - Detalle Pedido
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               numDetalle:
+ *                 type: number
+ *                 example: 1
+ *               precioDetallePedido:
+ *                 type: number
+ *                 example: 19.99
+ *               cantidadDetallePedido:
+ *                 type: number
+ *                 example: 3
+ *               pedidoNumPedido:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a79"
+ *               productoIdProducto:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a7a"
+ *     responses:
+ *       201:
+ *         description: Detalle de pedido creado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.post('/', crearDetallePedido);
 
 /**
  * @swagger
- * path:
- *   /detalle-pedido/{id}:
- *     put:
- *       tags: [DetallePedido]
- *       summary: Actualizar un detalle de pedido por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del detalle de pedido a actualizar
- *           schema:
- *             type: string
- *       requestBody:
+ * /detalles-pedido/{id}:
+ *   put:
+ *     summary: Actualiza un detalle de pedido por su ID
+ *     tags:
+ *       - Detalle Pedido
+ *     parameters:
+ *       - in: path
+ *         name: id
  *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 numDetalle:
- *                   type: number
- *                 precioDetallePedido:
- *                   type: number
- *                 cantidadDetallePedido:
- *                   type: number
- *                 pedidoNumPedido:
- *                   type: string
- *                   format: objectId
- *                 productoIdProducto:
- *                   type: string
- *                   format: objectId
- *       responses:
- *         200:
- *           description: Detalle de pedido actualizado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   numDetalle:
- *                     type: number
- *                   precioDetallePedido:
- *                     type: number
- *                   cantidadDetallePedido:
- *                     type: number
- *                   pedidoNumPedido:
- *                     type: string
- *                     format: objectId
- *                   productoIdProducto:
- *                     type: string
- *                     format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         404:
- *           description: Detalle de pedido no encontrado
- *         500:
- *           description: Error interno del servidor
+ *         description: ID del detalle de pedido
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               numDetalle:
+ *                 type: number
+ *                 example: 1
+ *               precioDetallePedido:
+ *                 type: number
+ *                 example: 19.99
+ *               cantidadDetallePedido:
+ *                 type: number
+ *                 example: 3
+ *               pedidoNumPedido:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a79"
+ *               productoIdProducto:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a7a"
+ *     responses:
+ *       200:
+ *         description: Detalle de pedido actualizado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       404:
+ *         description: Detalle de pedido no encontrado
  */
+
 router.put('/:id', actualizarDetallePedido);
 
 /**
  * @swagger
- * path:
- *   /detalle-pedido/{id}:
- *     get:
- *       tags: [DetallePedido]
- *       summary: Obtener un detalle de pedido por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del detalle de pedido a obtener
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Detalle de pedido encontrado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   numDetalle:
- *                     type: number
- *                   precioDetallePedido:
- *                     type: number
- *                   cantidadDetallePedido:
- *                     type: number
- *                   pedidoNumPedido:
- *                     type: string
- *                     format: objectId
- *                   productoIdProducto:
- *                     type: string
- *                     format: objectId
- *         404:
- *           description: Detalle de pedido no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /detalles-pedido/{id}:
+ *   get:
+ *     summary: Obtiene un detalle de pedido por su ID
+ *     tags:
+ *       - Detalle Pedido
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del detalle de pedido
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Detalle de pedido encontrado
+ *       404:
+ *         description: Detalle de pedido no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
+
 router.get('/:id', obtenerDetallePedidoPorId);
 
 /**
  * @swagger
- * path:
- *   /detalle-pedido/{id}:
- *     delete:
- *       tags: [DetallePedido]
- *       summary: Eliminar un detalle de pedido por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del detalle de pedido a eliminar
- *           schema:
- *             type: string
- *       responses:
- *         204:
- *           description: Detalle de pedido eliminado
- *         404:
- *           description: Detalle de pedido no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /detalles-pedido/{id}:
+ *   delete:
+ *     summary: Elimina un detalle de pedido por su ID
+ *     tags:
+ *       - Detalle Pedido
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del detalle de pedido
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Detalle de pedido eliminado exitosamente
+ *       404:
+ *         description: Detalle de pedido no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.delete('/:id', eliminarDetallePedido);
+
+module.exports = router;

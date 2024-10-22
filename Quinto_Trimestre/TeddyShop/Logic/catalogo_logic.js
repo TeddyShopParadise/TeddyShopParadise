@@ -1,6 +1,5 @@
 const Catalogo = require('../models/catalogo_model');
 const Producto = require('../models/producto_model');
-const VendedorCatalogo = require('../models/vendedor_catalogo_model');
 
 // Función asíncrona para crear un catálogo
 async function crearCatalogo(body) {

@@ -1,5 +1,5 @@
 //Logica de el controlador del historial precio
-const logic = require('../Logic/historial_precio_logic'); // Asegúrate de importar la lógica
+const logic = require('../Logic/historialPrecio_logic'); // Asegúrate de importar la lógica
 const { historialPrecioSchemaValidation } = require('../Validations/historialPrecio_validation'); // Importa la validación
 
 // Controlador para listar todos los historiales de precio

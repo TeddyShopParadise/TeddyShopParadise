@@ -24,13 +24,15 @@ const clienteSchemaValidation = Joi.object({
             'string.max': 'El nombre del cliente no debe exceder los 100 caracteres',
             'any.required': 'El nombre del cliente es un campo requerido'
         }),
-    telefonoCliente: Joi.number()
+    telefonoCliente: Joi.string()
         .required()
-        .pattern(/^[0-9]{7,15}$/)
+        .length(7) // Cambia esto si quieres permitir un rango
+        .pattern(/^[0-9]+$/)
         .messages({
-            'number.base': 'El teléfono del cliente debe ser un numero',
-            'number.empty': 'El teléfono del cliente no puede estar vacío',
-            'number.pattern.base': 'El teléfono del cliente debe tener entre 7 y 15 dígitos',
+            'string.base': 'El teléfono del cliente debe ser un número',
+            'string.empty': 'El teléfono del cliente no puede estar vacío',
+            'string.length': 'El teléfono del cliente debe tener exactamente 7 dígitos',
+            'string.pattern.base': 'El teléfono del cliente debe contener solo dígitos',
             'any.required': 'El teléfono del cliente es un campo requerido'
         }),
     fechaNacimientoCliente: Joi.date()

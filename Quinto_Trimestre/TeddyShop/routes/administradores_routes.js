@@ -1,198 +1,164 @@
 const express = require('express');
-const router = express.Router();
 const administradorController = require('../Controllers/administrador_controller');
+const router = express.Router(); // Define el enrutador
 
 /**
  * @swagger
- * tags:
- *   name: Administradores
- *   description: API para gestionar administradores
+ * /administradores:
+ *   get:
+ *     summary: Lista todos los administradores
+ *     tags:
+ *       - Administradores
+ *     responses:
+ *       200:
+ *         description: Lista de administradores
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a75"
+ *                   dniEmpleado:
+ *                     type: integer
+ *                     example: 12345678
+ *       204:
+ *         description: No hay administradores disponibles
  */
 
-/**
- * @swagger
- * path:
- *   /administradores:
- *     get:
- *       tags: [Administradores]
- *       summary: Listar todos los administradores
- *       responses:
- *         200:
- *           description: Lista de administradores
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     nombre:
- *                       type: string
- *                     telefono:
- *                       type: string
- *                     email:
- *                       type: string
- *         500:
- *           description: Error interno del servidor
- */
 router.get('/administradores', administradorController.listarAdministradores);
 
 /**
  * @swagger
- * path:
- *   /administradores:
- *     post:
- *       tags: [Administradores]
- *       summary: Crear un nuevo administrador
- *       requestBody:
- *         required: true
+ * /administradores:
+ *   post:
+ *     summary: Crea un nuevo administrador
+ *     tags:
+ *       - Administradores
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               dniEmpleado:
+ *                 type: integer
+ *                 example: 87654321
+ *     responses:
+ *       201:
+ *         description: Administrador creado exitosamente
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 nombre:
+ *                 _id:
  *                   type: string
- *                 telefono:
- *                   type: string
- *                 email:
- *                   type: string
- *       responses:
- *         201:
- *           description: Administrador creado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   nombre:
- *                     type: string
- *                   telefono:
- *                     type: string
- *                   email:
- *                     type: string
- *         400:
- *           description: Error en la validación de datos
- *         500:
- *           description: Error interno del servidor
+ *                 dniEmpleado:
+ *                   type: integer
+ *       400:
+ *         description: Error en los datos enviados
+ *       409:
+ *         description: El administrador ya existe
  */
+
 router.post('/administradores', administradorController.crearAdministrador);
 
 /**
  * @swagger
- * path:
- *   /administradores/{id}:
- *     get:
- *       tags: [Administradores]
- *       summary: Obtener un administrador por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del administrador a obtener
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Administrador encontrado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   nombre:
- *                     type: string
- *                   telefono:
- *                     type: string
- *                   email:
- *                     type: string
- *         404:
- *           description: Administrador no encontrado
- *         500:
- *           description: Error interno del servidor
- */
-router.get('/administradores/:id', administradorController.obtenerAdministradorPorId);
-
-/**
- * @swagger
- * path:
- *   /administradores/{id}:
- *     put:
- *       tags: [Administradores]
- *       summary: Actualizar un administrador por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del administrador a actualizar
- *           schema:
- *             type: string
- *       requestBody:
+ * /administradores/{id}:
+ *   get:
+ *     summary: Obtiene un administrador por su ID
+ *     tags:
+ *       - Administradores
+ *     parameters:
+ *       - in: path
+ *         name: id
  *         required: true
+ *         description: ID del administrador
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Detalles del administrador
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 nombre:
+ *                 _id:
  *                   type: string
- *                 telefono:
- *                   type: string
- *                 email:
- *                   type: string
- *       responses:
- *         200:
- *           description: Administrador actualizado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   nombre:
- *                     type: string
- *                   telefono:
- *                     type: string
- *                   email:
- *                     type: string
- *         400:
- *           description: Error en la validación de datos
- *         404:
- *           description: Administrador no encontrado
- *         500:
- *           description: Error interno del servidor
+ *                   example: "60d2b6e3e6b0f99dbe0c5a75"
+ *                 dniEmpleado:
+ *                   type: integer
+ *                   example: 12345678
+ *       404:
+ *         description: Administrador no encontrado
  */
+
+
+router.get('/administradores/:id', administradorController.obtenerAdministradorPorId);
+
+/**
+ * @swagger
+ * /administradores/{id}:
+ *   put:
+ *     summary: Actualiza un administrador por su ID
+ *     tags:
+ *       - Administradores
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del administrador
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               dniEmpleado:
+ *                 type: integer
+ *                 example: 87654321
+ *     responses:
+ *       200:
+ *         description: Administrador actualizado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       404:
+ *         description: Administrador no encontrado
+ */
+
 router.put('/administradores/:id', administradorController.actualizarAdministrador);
 
 /**
  * @swagger
- * path:
- *   /administradores/{id}:
- *     delete:
- *       tags: [Administradores]
- *       summary: Eliminar un administrador por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del administrador a eliminar
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Administrador eliminado
- *         404:
- *           description: Administrador no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /administradores/{id}:
+ *   delete:
+ *     summary: Elimina un administrador por su ID
+ *     tags:
+ *       - Administradores
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del administrador
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Administrador eliminado exitosamente
+ *       404:
+ *         description: Administrador no encontrado
  */
+
 router.delete('/administradores/:id', administradorController.eliminarAdministrador);
 
 module.exports = router;

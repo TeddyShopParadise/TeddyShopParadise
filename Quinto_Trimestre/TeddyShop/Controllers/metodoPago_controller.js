@@ -1,5 +1,5 @@
 //Logica de el controlador del metodo pago
-const logic = require('../Logic/metodo_pago_logic'); // Asegúrate de importar la lógica
+const logic = require('../Logic/metodoPago_logic'); // Asegúrate de importar la lógica
 const { metodoPagoSchemaValidation } = require('../Validations/metodoPago_validation'); // Importa la validación
 
 // Controlador para listar todos los métodos de pago

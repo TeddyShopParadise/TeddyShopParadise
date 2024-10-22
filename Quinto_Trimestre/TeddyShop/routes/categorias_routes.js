@@ -6,20 +6,46 @@ const categoriaController = require('../Controllers/categoria_controller');
  * @swagger
  * /categorias:
  *   get:
- *     summary: Listar todas las categorías
+ *     summary: Obtiene todas las categorías
+ *     tags:
+ *       - Categorías
  *     responses:
  *       200:
- *         description: Lista de categorías.
+ *         description: Lista de categorías
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a79"
+ *                   nombreCategoria:
+ *                     type: string
+ *                     example: "Electrónica"
+ *                   descripcionCategoria:
+ *                     type: string
+ *                     example: "Dispositivos electrónicos de consumo"
+ *                   productos:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     example: ["60d2b6e3e6b0f99dbe0c5a7a"]
  *       500:
- *         description: Error al listar las categorías.
+ *         description: Error interno del servidor
  */
+
 router.get('/categorias', categoriaController.listarCategorias);
 
 /**
  * @swagger
  * /categorias:
  *   post:
- *     summary: Crear una nueva categoría
+ *     summary: Crea una nueva categoría
+ *     tags:
+ *       - Categorías
  *     requestBody:
  *       required: true
  *       content:
@@ -32,43 +58,60 @@ router.get('/categorias', categoriaController.listarCategorias);
  *                 example: "Electrónica"
  *               descripcionCategoria:
  *                 type: string
- *                 example: "Categoría de productos electrónicos"
+ *                 example: "Dispositivos electrónicos de consumo"
+ *               productos:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["60d2b6e3e6b0f99dbe0c5a7a"]
  *     responses:
  *       201:
- *         description: Categoría creada exitosamente.
+ *         description: Categoría creada exitosamente
  *       400:
- *         description: Error en la creación de la categoría.
+ *         description: Error en los datos enviados
+ *       409:
+ *         description: Ya existe una categoría con ese nombre
  */
+
+
 router.post('/categorias', categoriaController.crearCategoria);
 
 /**
  * @swagger
  * /categorias/{id}:
  *   get:
- *     summary: Obtener una categoría por su ID
+ *     summary: Obtiene una categoría por su ID
+ *     tags:
+ *       - Categorías
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
  *         description: ID de la categoría
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Categoría encontrada.
+ *         description: Detalles de la categoría
  *       404:
- *         description: Categoría no encontrada.
+ *         description: Categoría no encontrada
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.get('/categorias/:id', categoriaController.obtenerCategoriaPorId);
 
 /**
  * @swagger
  * /categorias/{id}:
  *   put:
- *     summary: Actualizar una categoría por su ID
+ *     summary: Actualiza una categoría por su ID
+ *     tags:
+ *       - Categorías
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
  *         description: ID de la categoría
  *         schema:
@@ -82,33 +125,51 @@ router.get('/categorias/:id', categoriaController.obtenerCategoriaPorId);
  *             properties:
  *               nombreCategoria:
  *                 type: string
+ *                 example: "Electrónica"
  *               descripcionCategoria:
  *                 type: string
+ *                 example: "Dispositivos electrónicos de consumo"
+ *               productos:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["60d2b6e3e6b0f99dbe0c5a7a"]
  *     responses:
  *       200:
- *         description: Categoría actualizada exitosamente.
+ *         description: Categoría actualizada exitosamente
+ *       400:
+ *         description: Error en los datos enviados
  *       404:
- *         description: Categoría no encontrada.
+ *         description: Categoría no encontrada
  */
+
+
 router.put('/categorias/:id', categoriaController.actualizarCategoria);
+
+
+
 
 /**
  * @swagger
  * /categorias/{id}:
  *   delete:
- *     summary: Eliminar una categoría por su ID
+ *     summary: Elimina una categoría por su ID
+ *     tags:
+ *       - Categorías
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
  *         description: ID de la categoría
  *         schema:
  *           type: string
  *     responses:
- *       204:
- *         description: Categoría eliminada exitosamente.
+ *       200:
+ *         description: Categoría eliminada exitosamente
  *       404:
- *         description: Categoría no encontrada.
+ *         description: Categoría no encontrada
+ *       500:
+ *         description: Error interno del servidor
  */
 router.delete('/categorias/:id', categoriaController.eliminarCategoria);
 

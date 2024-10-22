@@ -1,5 +1,5 @@
 const logic = require('../logic/catalogo_logic');
-const { catalogoSchemaValidation } = require('../validaciones/catalogoValidation');
+const { catalogoSchemaValidation } = require('../Validations/catalogo_validation');
 
 // Controlador para crear un catálogo
 const crearCatalogo = async (req, res) => {

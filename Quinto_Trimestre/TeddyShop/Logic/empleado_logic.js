@@ -1,5 +1,5 @@
 const Empleado = require('../models/empleado_model');
-const Compania = require('../models/compania_model'); // Asegúrate de tener el modelo de Compañia
+const Compania = require('../models/compañia_model'); // Asegúrate de tener el modelo de Compañia
 
 // Función asíncrona para crear un nuevo empleado
 async function crearEmpleado(body) {

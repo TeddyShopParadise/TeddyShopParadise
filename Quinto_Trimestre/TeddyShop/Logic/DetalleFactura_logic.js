@@ -1,5 +1,5 @@
-const DetalleFactura = require('../models/detalle_factura_model');
-const Inventario = require('../models/inventario_model');
+const DetalleFactura = require('../models/detalleFactura_model');
+//const Inventario = require('../models/inventario_model');
 const Producto = require('../models/producto_model');
 const Factura = require('../models/factura_model');
 

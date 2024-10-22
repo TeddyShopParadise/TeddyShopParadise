@@ -1,4 +1,4 @@
-const logic = require('../logic/detalle_factura_logic'); // Asegúrate de importar la lógica
+const logic = require('../Logic/DetalleFactura_logic'); // Asegúrate de importar la lógica
 const { detalleFacturaSchemaValidation } = require('../Validations/detalleFactura_validation'); // Importa la validación
 
 // Controlador para listar todos los detalles de factura

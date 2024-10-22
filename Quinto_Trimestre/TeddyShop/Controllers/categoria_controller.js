@@ -1,6 +1,6 @@
 // controllers/categoria_controller.js
 const logic = require('../logic/categoria_logic'); // Asegúrate de importar la lógica
-const { categoriaSchemaValidation } = require('../validaciones/categoriaValidation'); // Importa la validación
+const { categoriaSchemaValidation } = require('../Validations/categoria_validation'); // Importa la validación
 
 // Controlador para listar todas las categorías
 const listarCategorias = async (req, res) => {

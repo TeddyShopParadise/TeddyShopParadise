@@ -6,241 +6,195 @@ const {
     actualizarHistorialPrecio,
     obtenerHistorialPrecioPorId,
     eliminarHistorialPrecio
-} = require('../controllers/historial_precio_controller'); // Importa los controladores
-/**
- * @swagger
- * tags:
- *   name: Historial_Precio
- *   description: API para gestionar el historial de precios de los productos
- */
+} = require('../Controllers/historialPrecio_controller'); // Importa los controladores
 
 /**
  * @swagger
- * path:
- *   /historial-precios:
- *     get:
- *       tags: [Historial_Precio]
- *       summary: Listar todos los historiales de precios
- *       responses:
- *         200:
- *           description: Lista de historiales de precios
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     precio:
- *                       type: number
- *                       format: decimal
- *                     fechaInicio:
- *                       type: string
- *                       format: date-time
- *                     fechaFin:
- *                       type: string
- *                       format: date-time
- *                     estadoPrecio:
- *                       type: boolean
- *                     producto:
- *                       type: string
- *                       format: objectId
- *         500:
- *           description: Error interno del servidor
+ * /historial-precio:
+ *   get:
+ *     summary: Obtiene todos los historiales de precio
+ *     tags:
+ *       - Historial de Precios
+ *     responses:
+ *       200:
+ *         description: Lista de historiales de precio
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a79"
+ *                   precio:
+ *                     type: number
+ *                     format: decimal
+ *                     example: 19.99
+ *                   fechaInicio:
+ *                     type: string
+ *                     format: date
+ *                     example: "2024-10-01"
+ *                   fechaFin:
+ *                     type: string
+ *                     format: date
+ *                     example: "2024-10-31"
+ *                   estadoPrecio:
+ *                     type: boolean
+ *                     example: true
+ *                   producto:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a7a"
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.get('/', listarHistorialPrecios);
 
 /**
  * @swagger
- * path:
- *   /historial-precios:
- *     post:
- *       tags: [Historial_Precio]
- *       summary: Crear un nuevo historial de precio
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 precio:
- *                   type: number
- *                   format: decimal
- *                   required: true
- *                 fechaInicio:
- *                   type: string
- *                   format: date-time
- *                   required: true
- *                 fechaFin:
- *                   type: string
- *                   format: date-time
- *                   required: true
- *                 estadoPrecio:
- *                   type: boolean
- *                   required: true
- *                 producto:
- *                   type: string
- *                   format: objectId
- *                   required: true
- *       responses:
- *         201:
- *           description: Historial de precio creado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   precio:
- *                     type: number
- *                     format: decimal
- *                   fechaInicio:
- *                     type: string
- *                     format: date-time
- *                   fechaFin:
- *                     type: string
- *                     format: date-time
- *                   estadoPrecio:
- *                     type: boolean
- *                   producto:
- *                     type: string
- *                     format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         500:
- *           description: Error interno del servidor
+ * /historial-precio:
+ *   post:
+ *     summary: Crea un nuevo historial de precio
+ *     tags:
+ *       - Historial de Precios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               precio:
+ *                 type: number
+ *                 format: decimal
+ *                 example: 19.99
+ *               fechaInicio:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-10-01"
+ *               fechaFin:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-10-31"
+ *               estadoPrecio:
+ *                 type: boolean
+ *                 example: true
+ *               producto:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a7a"
+ *     responses:
+ *       201:
+ *         description: Historial de precio creado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.post('/', crearHistorialPrecio);
 
 /**
  * @swagger
- * path:
- *   /historial-precios/{id}:
- *     get:
- *       tags: [Historial_Precio]
- *       summary: Obtener un historial de precio por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del historial de precio a obtener
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Historial de precio encontrado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   precio:
- *                     type: number
- *                     format: decimal
- *                   fechaInicio:
- *                     type: string
- *                     format: date-time
- *                   fechaFin:
- *                     type: string
- *                     format: date-time
- *                   estadoPrecio:
- *                     type: boolean
- *                   producto:
- *                     type: string
- *                     format: objectId
- *         404:
- *           description: Historial de precio no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /historial-precio/{id}:
+ *   get:
+ *     summary: Obtiene un historial de precio por su ID
+ *     tags:
+ *       - Historial de Precios
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del historial de precio
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Historial de precio encontrado
+ *       404:
+ *         description: Historial de precio no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.get('/:id', obtenerHistorialPrecioPorId);
 
 /**
  * @swagger
- * path:
- *   /historial-precios/{id}:
- *     put:
- *       tags: [Historial_Precio]
- *       summary: Actualizar un historial de precio por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del historial de precio a actualizar
- *           schema:
- *             type: string
- *       requestBody:
+ * /historial-precio/{id}:
+ *   put:
+ *     summary: Actualiza un historial de precio por su ID
+ *     tags:
+ *       - Historial de Precios
+ *     parameters:
+ *       - in: path
+ *         name: id
  *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 precio:
- *                   type: number
- *                   format: decimal
- *                 fechaInicio:
- *                   type: string
- *                   format: date-time
- *                 fechaFin:
- *                   type: string
- *                   format: date-time
- *                 estadoPrecio:
- *                   type: boolean
- *                 producto:
- *                   type: string
- *                   format: objectId
- *       responses:
- *         200:
- *           description: Historial de precio actualizado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   precio:
- *                     type: number
- *                     format: decimal
- *                   fechaInicio:
- *                     type: string
- *                     format: date-time
- *                   fechaFin:
- *                     type: string
- *                     format: date-time
- *                   estadoPrecio:
- *                     type: boolean
- *                   producto:
- *                     type: string
- *                     format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         404:
- *           description: Historial de precio no encontrado
- *         500:
- *           description: Error interno del servidor
+ *         description: ID del historial de precio
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               precio:
+ *                 type: number
+ *                 format: decimal
+ *                 example: 19.99
+ *               fechaInicio:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-10-01"
+ *               fechaFin:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-10-31"
+ *               estadoPrecio:
+ *                 type: boolean
+ *                 example: true
+ *               producto:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a7a"
+ *     responses:
+ *       200:
+ *         description: Historial de precio actualizado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       404:
+ *         description: Historial de precio no encontrado
  */
+
 router.put('/:id', actualizarHistorialPrecio);
 
 /**
  * @swagger
- * path:
- *   /historial-precios/{id}:
- *     delete:
- *       tags: [Historial_Precio]
- *       summary: Eliminar un historial de precio por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del historial de precio a eliminar
- *           schema:
- *             type: string
- *       responses:
- *         204:
- *           description: Historial de precio eliminado
- *         404:
- *           description: Historial de precio no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /historial-precio/{id}:
+ *   delete:
+ *     summary: Elimina un historial de precio por su ID
+ *     tags:
+ *       - Historial de Precios
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del historial de precio
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Historial de precio eliminado exitosamente
+ *       404:
+ *         description: Historial de precio no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.delete('/:id', eliminarHistorialPrecio);
+
+module.exports = router;

@@ -1,5 +1,5 @@
 const Producto = require('../models/producto_model');
-const HistorialPrecio = require('../models/historial_precio_model'); // Asegúrate de tener el modelo de HistorialPrecio
+const HistorialPrecio = require('../models/historialPrecio_model'); // Asegúrate de tener el modelo de HistorialPrecio
 const Catalogo = require('../models/catalogo_model'); // Asegúrate de tener el modelo de Catalogo
 const Categoria = require('../models/categoria_model'); // Asegúrate de tener el modelo de Categoria
 

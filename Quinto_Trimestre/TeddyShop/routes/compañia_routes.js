@@ -10,85 +10,103 @@ const {
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Compañia:
- *       type: object
- *       properties:
- *         NIT:
- *           type: number
- *           description: El NIT de la compañía.
- *           example: 123456789
- *         telefonoEmpresa:
- *           type: string
- *           description: Teléfono de la compañía.
- *           example: '3001234567'
- *         nombreEmpresa:
- *           type: string
- *           description: Nombre de la compañía.
- *           example: 'Mi Compañía S.A.S.'
- *         direccionEmpresa:
- *           type: string
- *           description: Dirección de la compañía.
- *           example: 'Calle 123 #45-67'
- * 
- *   responses:
- *     CompañiaCreated:
- *       description: Compañía creada exitosamente.
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Compañia'
- */
-
-/**
- * @swagger
- * /api/compañias:
+ * /compañias:
  *   get:
- *     summary: Listar todas las compañías
+ *     summary: Obtiene todas las compañías
+ *     tags:
+ *       - Compañía
  *     responses:
  *       200:
- *         description: Lista de compañías.
+ *         description: Lista de compañías
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a79"
+ *                   NIT:
+ *                     type: number
+ *                     example: 123456789
+ *                   telefonoEmpresa:
+ *                     type: string
+ *                     example: "987654321"
+ *                   nombreEmpresa:
+ *                     type: string
+ *                     example: "Empresa S.A."
+ *                   direccionEmpresa:
+ *                     type: string
+ *                     example: "Calle 123"
+ *                   catalogos:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   empleados:
+ *                     type: array
+ *                     items:
+ *                       type: string
  *       500:
- *         description: Error interno del servidor.
+ *         description: Error interno del servidor
  */
+
+
 router.get('/', listarCompañias);
 
 /**
  * @swagger
- * /api/compañias:
+ * /Compañias:
  *   post:
- *     summary: Crear una nueva compañía
+ *     summary: Crea una nueva compañía
+ *     tags:
+ *       - Compañía
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Compañia'
+ *             type: object
+ *             properties:
+ *               NIT:
+ *                 type: number
+ *                 example: 123456789
+ *               telefonoEmpresa:
+ *                 type: string
+ *                 example: "987654321"
+ *               nombreEmpresa:
+ *                 type: string
+ *                 example: "Empresa S.A."
+ *               direccionEmpresa:
+ *                 type: string
+ *                 example: "Calle 123"
  *     responses:
  *       201:
- *         description: Compañía creada exitosamente.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Compañia'
+ *         description: Compañía creada exitosamente
  *       400:
- *         description: Datos inválidos.
+ *         description: Error en los datos enviados
+ *       409:
+ *         description: Ya existe una compañía con este NIT
  *       500:
- *         description: Error interno del servidor.
+ *         description: Error interno del servidor
  */
+
+
 router.post('/', crearCompañia);
 
 /**
  * @swagger
- * /api/compañias/{id}:
+ * /Compañia/{id}:
  *   put:
- *     summary: Actualizar una compañía por su ID
+ *     summary: Actualiza una compañía por su ID
+ *     tags:
+ *       - Compañía
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
- *         description: ID de la compañía a actualizar.
+ *         description: ID de la compañía
  *         schema:
  *           type: string
  *     requestBody:
@@ -96,63 +114,80 @@ router.post('/', crearCompañia);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Compañia'
+ *             type: object
+ *             properties:
+ *               NIT:
+ *                 type: number
+ *                 example: 123456789
+ *               telefonoEmpresa:
+ *                 type: string
+ *                 example: "987654321"
+ *               nombreEmpresa:
+ *                 type: string
+ *                 example: "Empresa S.A."
+ *               direccionEmpresa:
+ *                 type: string
+ *                 example: "Calle 123"
  *     responses:
  *       200:
- *         description: Compañía actualizada exitosamente.
+ *         description: Compañía actualizada exitosamente
+ *       400:
+ *         description: Error en los datos enviados
  *       404:
- *         description: Compañía no encontrada.
- *       500:
- *         description: Error interno del servidor.
+ *         description: Compañía no encontrada
  */
+
 router.put('/:id', actualizarCompañia);
 
 /**
  * @swagger
- * /api/compañias/{id}:
+ * /Compañia/{id}:
  *   get:
- *     summary: Obtener una compañía por su ID
+ *     summary: Obtiene una compañía por su ID
+ *     tags:
+ *       - Compañía
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
- *         description: ID de la compañía a obtener.
+ *         description: ID de la compañía
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Compañía encontrada.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Compañia'
+ *         description: Compañía encontrada
  *       404:
- *         description: Compañía no encontrada.
+ *         description: Compañía no encontrada
  *       500:
- *         description: Error interno del servidor.
+ *         description: Error interno del servidor
  */
+
+
 router.get('/:id', obtenerCompañiaPorId);
 
 /**
  * @swagger
- * /api/compañias/{id}:
+ * /Compañia/{id}:
  *   delete:
- *     summary: Eliminar una compañía por su ID
+ *     summary: Elimina una compañía por su ID
+ *     tags:
+ *       - Compañía
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
- *         description: ID de la compañía a eliminar.
+ *         description: ID de la compañía
  *         schema:
  *           type: string
  *     responses:
- *       204:
- *         description: Compañía eliminada exitosamente.
+ *       200:
+ *         description: Compañía eliminada exitosamente
  *       404:
- *         description: Compañía no encontrada.
+ *         description: Compañía no encontrada
  *       500:
- *         description: Error interno del servidor.
+ *         description: Error interno del servidor
  */
+
 router.delete('/:id', eliminarCompañia);
 
 module.exports = router;

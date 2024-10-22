@@ -6,20 +6,59 @@ const clienteController = require('../Controllers/cliente_controller');
  * @swagger
  * /clientes:
  *   get:
- *     summary: Listar todos los clientes
+ *     summary: Obtiene todos los clientes
+ *     tags:
+ *       - Cliente
  *     responses:
  *       200:
- *         description: Lista de clientes.
+ *         description: Lista de clientes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a79"
+ *                   dniCliente:
+ *                     type: number
+ *                     example: 12345678
+ *                   nombreCliente:
+ *                     type: string
+ *                     example: "Juan"
+ *                   telefonoCliente:
+ *                     type: string
+ *                     example: "987654321"
+ *                   fechaNacimientoCliente:
+ *                     type: string
+ *                     format: date
+ *                     example: "1990-01-01"
+ *                   apellidoCliente:
+ *                     type: string
+ *                     example: "Pérez"
+ *                   pedidos:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   facturas:
+ *                     type: array
+ *                     items:
+ *                       type: string
  *       500:
- *         description: Error al listar los clientes.
+ *         description: Error interno del servidor
  */
+
 router.get('/clientes', clienteController.listarClientes);
 
 /**
  * @swagger
  * /clientes:
  *   post:
- *     summary: Crear un nuevo cliente
+ *     summary: Crea un nuevo cliente
+ *     tags:
+ *       - Cliente
  *     requestBody:
  *       required: true
  *       content:
@@ -29,56 +68,88 @@ router.get('/clientes', clienteController.listarClientes);
  *             properties:
  *               dniCliente:
  *                 type: number
- *                 example: 123456789
+ *                 example: 12345678
  *               nombreCliente:
  *                 type: string
- *                 example: "Juan Pérez"
+ *                 example: "Juan"
  *               telefonoCliente:
  *                 type: string
- *                 example: "1234567890"
+ *                 example: "987654321"
  *               fechaNacimientoCliente:
  *                 type: string
  *                 format: date
  *                 example: "1990-01-01"
  *               apellidoCliente:
  *                 type: string
- *                 example: "González"
+ *                 example: "Pérez"
  *     responses:
  *       201:
- *         description: Cliente creado exitosamente.
+ *         description: Cliente creado exitosamente
  *       400:
- *         description: Error en la creación del cliente.
+ *         description: Error en los datos enviados
+ *       409:
+ *         description: Ya existe un cliente con este DNI
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.post('/clientes', clienteController.crearCliente);
 
 /**
  * @swagger
- * /clientes/{id}:
- *   get:
- *     summary: Obtener un cliente por su ID
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: ID del cliente
- *         schema:
- *           type: string
+ * /clientes:
+ *   post:
+ *     summary: Crea un nuevo cliente
+ *     tags:
+ *       - Cliente
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               dniCliente:
+ *                 type: number
+ *                 example: 12345678
+ *               nombreCliente:
+ *                 type: string
+ *                 example: "Juan"
+ *               telefonoCliente:
+ *                 type: string
+ *                 example: "987654321"
+ *               fechaNacimientoCliente:
+ *                 type: string
+ *                 format: date
+ *                 example: "1990-01-01"
+ *               apellidoCliente:
+ *                 type: string
+ *                 example: "Pérez"
  *     responses:
- *       200:
- *         description: Cliente encontrado.
- *       404:
- *         description: Cliente no encontrado.
+ *       201:
+ *         description: Cliente creado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       409:
+ *         description: Ya existe un cliente con este DNI
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.get('/clientes/:id', clienteController.obtenerClientePorId);
 
 /**
  * @swagger
  * /clientes/{id}:
  *   put:
- *     summary: Actualizar un cliente por su ID
+ *     summary: Actualiza un cliente por su ID
+ *     tags:
+ *       - Cliente
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
  *         description: ID del cliente
  *         schema:
@@ -92,41 +163,56 @@ router.get('/clientes/:id', clienteController.obtenerClientePorId);
  *             properties:
  *               dniCliente:
  *                 type: number
+ *                 example: 12345678
  *               nombreCliente:
  *                 type: string
+ *                 example: "Juan"
  *               telefonoCliente:
  *                 type: string
+ *                 example: "987654321"
  *               fechaNacimientoCliente:
  *                 type: string
  *                 format: date
+ *                 example: "1990-01-01"
  *               apellidoCliente:
  *                 type: string
+ *                 example: "Pérez"
  *     responses:
  *       200:
- *         description: Cliente actualizado exitosamente.
+ *         description: Cliente actualizado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
  *       404:
- *         description: Cliente no encontrado.
+ *         description: Cliente no encontrado
  */
+
+
 router.put('/clientes/:id', clienteController.actualizarCliente);
 
 /**
  * @swagger
  * /clientes/{id}:
  *   delete:
- *     summary: Eliminar un cliente por su ID
+ *     summary: Elimina un cliente por su ID
+ *     tags:
+ *       - Cliente
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
  *         description: ID del cliente
  *         schema:
  *           type: string
  *     responses:
- *       204:
- *         description: Cliente eliminado exitosamente.
+ *       200:
+ *         description: Cliente eliminado exitosamente
  *       404:
- *         description: Cliente no encontrado.
+ *         description: Cliente no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.delete('/clientes/:id', clienteController.eliminarCliente);
 
 module.exports = router;

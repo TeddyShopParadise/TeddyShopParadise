@@ -1,6 +1,6 @@
 // controllers/cliente_controller.js
 const logic = require('../logic/cliente_logic'); // Asegúrate de importar la lógica
-const { clienteSchemaValidation } = require('../validaciones/clienteValidation'); // Importa la validación
+const { clienteSchemaValidation } = require('../Validations/cliente_validation'); // Importa la validación
 
 // Controlador para listar todos los clientes
 const listarClientes = async (req, res) => {

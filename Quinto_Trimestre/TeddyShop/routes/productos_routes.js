@@ -1,319 +1,243 @@
 const express = require('express');
 const router = express.Router();
 const productoController = require('../Controllers/producto_controller');
-/**
- * @swagger
- * tags:
- *   name: Producto
- *   description: API para gestionar productos
- */
 
 /**
  * @swagger
- * path:
- *   /productos:
- *     get:
- *       tags: [Producto]
- *       summary: Listar todos los productos
- *       responses:
- *         200:
- *           description: Lista de productos
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     estiloProducto:
+ * /productos:
+ *   get:
+ *     summary: Obtiene todos los productos
+ *     tags:
+ *       - Productos
+ *     responses:
+ *       200:
+ *         description: Lista de productos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a79"
+ *                   estiloProducto:
+ *                     type: string
+ *                     example: "Estilo 1"
+ *                   cmCabezaColaProducto:
+ *                     type: string
+ *                     example: "10 cm"
+ *                   materialProducto:
+ *                     type: string
+ *                     example: "Algodón"
+ *                   disponibilidadProducto:
+ *                     type: string
+ *                     example: "Disponible"
+ *                   cmColaPataProducto:
+ *                     type: string
+ *                     example: "15 cm"
+ *                   tamañoProducto:
+ *                     type: string
+ *                     example: "Mediano"
+ *                   historialPrecios:
+ *                     type: array
+ *                     items:
  *                       type: string
- *                     cmCabezaColaProducto:
+ *                       example: "60d2b6e3e6b0f99dbe0c5a7b"
+ *                   catalogos:
+ *                     type: array
+ *                     items:
  *                       type: string
- *                     materialProducto:
+ *                       example: "60d2b6e3e6b0f99dbe0c5a7c"
+ *                   categorias:
+ *                     type: array
+ *                     items:
  *                       type: string
- *                     disponibilidadProducto:
- *                       type: string
- *                     cmColaPataProducto:
- *                       type: string
- *                     tamañoProducto:
- *                       type: string
- *                     historialPrecios:
- *                       type: array
- *                       items:
- *                         type: string
- *                         format: objectId
- *                     catalogos:
- *                       type: array
- *                       items:
- *                         type: string
- *                         format: objectId
- *                     categorias:
- *                       type: array
- *                       items:
- *                         type: string
- *                         format: objectId
- *         500:
- *           description: Error interno del servidor
+ *                       example: "60d2b6e3e6b0f99dbe0c5a7d"
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.get('/productos', productoController.listarProductos);
 
 /**
  * @swagger
- * path:
- *   /productos:
- *     post:
- *       tags: [Producto]
- *       summary: Crear un nuevo producto
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 estiloProducto:
+ * /productos:
+ *   post:
+ *     summary: Crea un nuevo producto
+ *     tags:
+ *       - Productos
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               estiloProducto:
+ *                 type: string
+ *                 example: "Estilo 1"
+ *               cmCabezaColaProducto:
+ *                 type: string
+ *                 example: "10 cm"
+ *               materialProducto:
+ *                 type: string
+ *                 example: "Algodón"
+ *               disponibilidadProducto:
+ *                 type: string
+ *                 example: "Disponible"
+ *               cmColaPataProducto:
+ *                 type: string
+ *                 example: "15 cm"
+ *               tamañoProducto:
+ *                 type: string
+ *                 example: "Mediano"
+ *               historialPrecios:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                   required: true
- *                 cmCabezaColaProducto:
+ *                   example: "60d2b6e3e6b0f99dbe0c5a7b"
+ *               catalogos:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                   required: true
- *                 materialProducto:
+ *                   example: "60d2b6e3e6b0f99dbe0c5a7c"
+ *               categorias:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                   required: true
- *                 disponibilidadProducto:
- *                   type: string
- *                   required: true
- *                 cmColaPataProducto:
- *                   type: string
- *                   required: true
- *                 tamañoProducto:
- *                   type: string
- *                   required: true
- *                 historialPrecios:
- *                   type: array
- *                   items:
- *                     type: string
- *                     format: objectId
- *                 catalogos:
- *                   type: array
- *                   items:
- *                     type: string
- *                     format: objectId
- *                 categorias:
- *                   type: array
- *                   items:
- *                     type: string
- *                     format: objectId
- *       responses:
- *         201:
- *           description: Producto creado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   estiloProducto:
- *                     type: string
- *                   cmCabezaColaProducto:
- *                     type: string
- *                   materialProducto:
- *                     type: string
- *                   disponibilidadProducto:
- *                     type: string
- *                   cmColaPataProducto:
- *                     type: string
- *                   tamañoProducto:
- *                     type: string
- *                   historialPrecios:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *                   catalogos:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *                   categorias:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         500:
- *           description: Error interno del servidor
+ *                   example: "60d2b6e3e6b0f99dbe0c5a7d"
+ *     responses:
+ *       201:
+ *         description: Producto creado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.post('/productos', productoController.crearProducto);
 
 /**
  * @swagger
- * path:
- *   /productos/{id}:
- *     get:
- *       tags: [Producto]
- *       summary: Obtener un producto por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del producto a obtener
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Producto encontrado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   estiloProducto:
- *                     type: string
- *                   cmCabezaColaProducto:
- *                     type: string
- *                   materialProducto:
- *                     type: string
- *                   disponibilidadProducto:
- *                     type: string
- *                   cmColaPataProducto:
- *                     type: string
- *                   tamañoProducto:
- *                     type: string
- *                   historialPrecios:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *                   catalogos:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *                   categorias:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *         404:
- *           description: Producto no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /productos/{id}:
+ *   get:
+ *     summary: Obtiene un producto por su ID
+ *     tags:
+ *       - Productos
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del producto
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Producto encontrado
+ *       404:
+ *         description: Producto no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
+
 router.get('/productos/:id', productoController.obtenerProductoPorId);
 
 /**
  * @swagger
- * path:
- *   /productos/{id}:
- *     put:
- *       tags: [Producto]
- *       summary: Actualizar un producto por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del producto a actualizar
- *           schema:
- *             type: string
- *       requestBody:
+ * /productos/{id}:
+ *   put:
+ *     summary: Actualiza un producto por su ID
+ *     tags:
+ *       - Productos
+ *     parameters:
+ *       - in: path
+ *         name: id
  *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 estiloProducto:
+ *         description: ID del producto
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               estiloProducto:
+ *                 type: string
+ *                 example: "Estilo 1"
+ *               cmCabezaColaProducto:
+ *                 type: string
+ *                 example: "10 cm"
+ *               materialProducto:
+ *                 type: string
+ *                 example: "Algodón"
+ *               disponibilidadProducto:
+ *                 type: string
+ *                 example: "Disponible"
+ *               cmColaPataProducto:
+ *                 type: string
+ *                 example: "15 cm"
+ *               tamañoProducto:
+ *                 type: string
+ *                 example: "Mediano"
+ *               historialPrecios:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                 cmCabezaColaProducto:
+ *                   example: "60d2b6e3e6b0f99dbe0c5a7b"
+ *               catalogos:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                 materialProducto:
+ *                   example: "60d2b6e3e6b0f99dbe0c5a7c"
+ *               categorias:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                 disponibilidadProducto:
- *                   type: string
- *                 cmColaPataProducto:
- *                   type: string
- *                 tamañoProducto:
- *                   type: string
- *                 historialPrecios:
- *                   type: array
- *                   items:
- *                     type: string
- *                     format: objectId
- *                 catalogos:
- *                   type: array
- *                   items:
- *                     type: string
- *                     format: objectId
- *                 categorias:
- *                   type: array
- *                   items:
- *                     type: string
- *                     format: objectId
- *       responses:
- *         200:
- *           description: Producto actualizado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   estiloProducto:
- *                     type: string
- *                   cmCabezaColaProducto:
- *                     type: string
- *                   materialProducto:
- *                     type: string
- *                   disponibilidadProducto:
- *                     type: string
- *                   cmColaPataProducto:
- *                     type: string
- *                   tamañoProducto:
- *                     type: string
- *                   historialPrecios:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *                   catalogos:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *                   categorias:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         404:
- *           description: Producto no encontrado
- *         500:
- *           description: Error interno del servidor
+ *                   example: "60d2b6e3e6b0f99dbe0c5a7d"
+ *     responses:
+ *       200:
+ *         description: Producto actualizado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       404:
+ *         description: Producto no encontrado
  */
+
+
 router.put('/productos/:id', productoController.actualizarProducto);
 
 /**
  * @swagger
- * path:
- *   /productos/{id}:
- *     delete:
- *       tags: [Producto]
- *       summary: Eliminar un producto por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del producto a eliminar
- *           schema:
- *             type: string
- *       responses:
- *         204:
- *           description: Producto eliminado
- *         404:
- *           description: Producto no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /productos/{id}:
+ *   delete:
+ *     summary: Elimina un producto por su ID
+ *     tags:
+ *       - Productos
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del producto
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Producto eliminado exitosamente
+ *       404:
+ *         description: Producto no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
 router.delete('/productos/:id', productoController.eliminarProducto);
+
+module.exports = router;

@@ -1,278 +1,262 @@
 const express = require('express');
-const router = express.Router();
 const catalogoController = require('../Controllers/catalogo_controller');
+const router = express.Router();
 
 /**
  * @swagger
- * tags:
- *   name: Catalogos
- *   description: API para gestionar catálogos
+ * /catalogos:
+ *   post:
+ *     summary: Crea un nuevo catálogo
+ *     tags:
+ *       - Catálogos
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombreCatalogo:
+ *                 type: string
+ *                 example: "Verano 2024"
+ *               descripcionCatalogo:
+ *                 type: string
+ *                 example: "Colección de verano con productos destacados"
+ *               disponibilidadCatalogo:
+ *                 type: boolean
+ *                 example: true
+ *               estiloCatalogo:
+ *                 type: string
+ *                 example: "Modern"
+ *               compania:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a75"
+ *               productos:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["60d2b6e3e6b0f99dbe0c5a76", "60d2b6e3e6b0f99dbe0c5a77"]
+ *               vendedoresCatalogo:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["60d2b6e3e6b0f99dbe0c5a78"]
+ *     responses:
+ *       201:
+ *         description: Catálogo creado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       409:
+ *         description: Ya existe un catálogo con ese nombre
  */
 
-/**
- * @swagger
- * path:
- *   /catalogos:
- *     post:
- *       tags: [Catalogos]
- *       summary: Crear un catálogo
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 nombreCatalogo:
- *                   type: string
- *                 descripcionCatalogo:
- *                   type: string
- *                   nullable: true
- *                 disponibilidadCatalogo:
- *                   type: boolean
- *                   default: true
- *                 estiloCatalogo:
- *                   type: string
- *                 compania:
- *                   type: string
- *                   format: objectId
- *       responses:
- *         201:
- *           description: Catálogo creado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   nombreCatalogo:
- *                     type: string
- *                   descripcionCatalogo:
- *                     type: string
- *                     nullable: true
- *                   disponibilidadCatalogo:
- *                     type: boolean
- *                   estiloCatalogo:
- *                     type: string
- *                   compania:
- *                     type: string
- *                     format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         500:
- *           description: Error interno del servidor
- */
 router.post('/catalogos', catalogoController.crearCatalogo);
 
 /**
  * @swagger
- * path:
- *   /catalogos/{id}:
- *     put:
- *       tags: [Catalogos]
- *       summary: Actualizar un catálogo
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del catálogo a actualizar
- *           schema:
- *             type: string
- *       requestBody:
+ * /catalogos/{id}:
+ *   put:
+ *     summary: Actualiza un catálogo por su ID
+ *     tags:
+ *       - Catálogos
+ *     parameters:
+ *       - in: path
+ *         name: id
  *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 nombreCatalogo:
+ *         description: ID del catálogo
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombreCatalogo:
+ *                 type: string
+ *                 example: "Verano 2024"
+ *               descripcionCatalogo:
+ *                 type: string
+ *                 example: "Colección de verano con productos destacados"
+ *               disponibilidadCatalogo:
+ *                 type: boolean
+ *                 example: true
+ *               estiloCatalogo:
+ *                 type: string
+ *                 example: "Modern"
+ *               compania:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a75"
+ *               productos:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                 descripcionCatalogo:
+ *                 example: ["60d2b6e3e6b0f99dbe0c5a76", "60d2b6e3e6b0f99dbe0c5a77"]
+ *               vendedoresCatalogo:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                   nullable: true
- *                 disponibilidadCatalogo:
- *                   type: boolean
- *                   default: true
- *                 estiloCatalogo:
- *                   type: string
- *                 compania:
- *                   type: string
- *                   format: objectId
- *       responses:
- *         200:
- *           description: Catálogo actualizado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   nombreCatalogo:
- *                     type: string
- *                   descripcionCatalogo:
- *                     type: string
- *                     nullable: true
- *                   disponibilidadCatalogo:
- *                     type: boolean
- *                   estiloCatalogo:
- *                     type: string
- *                   compania:
- *                     type: string
- *                     format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         404:
- *           description: Catálogo no encontrado
- *         500:
- *           description: Error interno del servidor
+ *                 example: ["60d2b6e3e6b0f99dbe0c5a78"]
+ *     responses:
+ *       200:
+ *         description: Catálogo actualizado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       404:
+ *         description: Catálogo no encontrado
  */
+
 router.put('/catalogos/:id', catalogoController.actualizarCatalogo);
 
 /**
  * @swagger
- * path:
- *   /catalogos/{id}/desactivar:
- *     patch:
- *       tags: [Catalogos]
- *       summary: Desactivar un catálogo
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del catálogo a desactivar
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Catálogo desactivado
- *         404:
- *           description: Catálogo no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /catalogos/{id}/desactivar:
+ *   patch:
+ *     summary: Desactiva un catálogo por su ID
+ *     tags:
+ *       - Catálogos
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del catálogo
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Catálogo desactivado exitosamente
+ *       404:
+ *         description: Catálogo no encontrado
  */
+
 router.patch('/catalogos/:id/desactivar', catalogoController.desactivarCatalogo);
 
 /**
  * @swagger
- * path:
- *   /catalogos/activos:
- *     get:
- *       tags: [Catalogos]
- *       summary: Listar catálogos activos
- *       responses:
- *         200:
- *           description: Lista de catálogos activos
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     id:
+ * /catalogos/activos:
+ *   get:
+ *     summary: Lista todos los catálogos activos
+ *     tags:
+ *       - Catálogos
+ *     responses:
+ *       200:
+ *         description: Lista de catálogos activos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a75"
+ *                   nombreCatalogo:
+ *                     type: string
+ *                     example: "Verano 2024"
+ *                   descripcionCatalogo:
+ *                     type: string
+ *                     example: "Colección de verano"
+ *                   disponibilidadCatalogo:
+ *                     type: boolean
+ *                     example: true
+ *                   estiloCatalogo:
+ *                     type: string
+ *                     example: "Modern"
+ *                   compania:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a75"
+ *                   productos:
+ *                     type: array
+ *                     items:
  *                       type: string
- *                     nombreCatalogo:
+ *                     example: ["60d2b6e3e6b0f99dbe0c5a76"]
+ *                   vendedoresCatalogo:
+ *                     type: array
+ *                     items:
  *                       type: string
- *                     descripcionCatalogo:
- *                       type: string
- *                       nullable: true
- *                     disponibilidadCatalogo:
- *                       type: boolean
- *                     estiloCatalogo:
- *                       type: string
- *                     compania:
- *                       type: string
- *                       format: objectId
- *         500:
- *           description: Error interno del servidor
+ *                     example: ["60d2b6e3e6b0f99dbe0c5a78"]
+ *       204:
+ *         description: No hay catálogos activos
  */
+
 router.get('/catalogos/activos', catalogoController.listarCatalogosActivos);
 
 /**
  * @swagger
- * path:
- *   /catalogos/{id}:
- *     get:
- *       tags: [Catalogos]
- *       summary: Obtener un catálogo por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del catálogo a obtener
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Catálogo encontrado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   nombreCatalogo:
- *                     type: string
- *                   descripcionCatalogo:
- *                     type: string
- *                     nullable: true
- *                   disponibilidadCatalogo:
- *                     type: boolean
- *                   estiloCatalogo:
- *                     type: string
- *                   compania:
- *                     type: string
- *                     format: objectId
- *         404:
- *           description: Catálogo no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /catalogos/{id}:
+ *   get:
+ *     summary: Obtiene un catálogo por su ID
+ *     tags:
+ *       - Catálogos
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del catálogo
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Detalles del catálogo
+ *       404:
+ *         description: Catálogo no encontrado
  */
+
+
 router.get('/catalogos/:id', catalogoController.obtenerCatalogoPorId);
 
 /**
  * @swagger
- * path:
- *   /catalogos/coleccion:
- *     post:
- *       tags: [Catalogos]
- *       summary: Guardar una colección de catálogos
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
+ * /catalogos/coleccion:
+ *   post:
+ *     summary: Guarda una colección de catálogos
+ *     tags:
+ *       - Catálogos
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
  *               type: object
  *               properties:
- *                 catalogos:
+ *                 nombreCatalogo:
+ *                   type: string
+ *                   example: "Invierno 2024"
+ *                 descripcionCatalogo:
+ *                   type: string
+ *                   example: "Colección de invierno"
+ *                 disponibilidadCatalogo:
+ *                   type: boolean
+ *                   example: true
+ *                 estiloCatalogo:
+ *                   type: string
+ *                   example: "Classic"
+ *                 compania:
+ *                   type: string
+ *                   example: "60d2b6e3e6b0f99dbe0c5a75"
+ *                 productos:
  *                   type: array
  *                   items:
- *                     type: object
- *                     properties:
- *                       nombreCatalogo:
- *                         type: string
- *                       descripcionCatalogo:
- *                         type: string
- *                         nullable: true
- *                       disponibilidadCatalogo:
- *                         type: boolean
- *                         default: true
- *                       estiloCatalogo:
- *                         type: string
- *                       compania:
- *                         type: string
- *                         format: objectId
- *       responses:
- *         201:
- *           description: Colección de catálogos guardada
- *         400:
- *           description: Error en la validación de datos
- *         500:
- *           description: Error interno del servidor
+ *                     type: string
+ *                   example: ["60d2b6e3e6b0f99dbe0c5a76"]
+ *                 vendedoresCatalogo:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["60d2b6e3e6b0f99dbe0c5a78"]
+ *     responses:
+ *       201:
+ *         description: Catálogos guardados exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.post('/catalogos/coleccion', catalogoController.guardarColeccionCatalogos);
 
 module.exports = router;

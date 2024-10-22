@@ -1,5 +1,5 @@
 const Pedido = require('../models/pedido_model');
-const DetallePedido = require('../models/detalle_pedido_model'); // Asegúrate de tener el modelo de DetallePedido
+const DetallePedido = require('../models/detallePedido_model'); // Asegúrate de tener el modelo de DetallePedido
 const Factura = require('../models/factura_model'); // Asegúrate de tener el modelo de Factura
 const Cliente = require('../models/cliente_model'); // Asegúrate de tener el modelo de Cliente
 const Vendedor = require('../models/vendedor_model'); // Asegúrate de tener el modelo de Vendedor

@@ -1,5 +1,5 @@
 const Devoluciones = require('../models/devoluciones_model');
-const Inventario = require('../models/inventario_model'); // Asegúrate de tener el modelo de Inventario
+//const Inventario = require('../models/inventario_model'); // Asegúrate de tener el modelo de Inventario
 
 // Función asíncrona para crear una nueva devolución
 async function crearDevolucion(body) {

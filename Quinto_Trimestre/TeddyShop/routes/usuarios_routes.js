@@ -7,265 +7,205 @@ const {
     obtenerUsuarioPorId,
     eliminarUsuario
 } = require('../controllers/usuario_controller'); // Asegúrate de importar los controladores
-/**
- * @swagger
- * tags:
- *   name: Usuario
- *   description: API para gestionar usuarios
- */
 
 /**
  * @swagger
- * path:
- *   /usuario:
- *     get:
- *       tags: [Usuario]
- *       summary: Listar todos los usuarios
- *       responses:
- *         200:
- *           description: Lista de usuarios
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     email:
+ * /usuarios:
+ *   get:
+ *     summary: Obtiene todos los usuarios
+ *     tags:
+ *       - Usuarios
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "60d2b6e3e6b0f99dbe0c5a79"
+ *                   email:
+ *                     type: string
+ *                     example: "usuario@example.com"
+ *                   telefono:
+ *                     type: string
+ *                     example: "123456789"
+ *                   username:
+ *                     type: string
+ *                     example: "usuario1"
+ *                   estado:
+ *                     type: boolean
+ *                     example: true
+ *                   roles:
+ *                     type: array
+ *                     items:
  *                       type: string
- *                     telefono:
- *                       type: string
- *                     contraseña:
- *                       type: string
- *                     username:
- *                       type: string
- *                     empleado:
- *                       type: string
- *                       format: objectId
- *                     estado:
- *                       type: boolean
- *                     roles:
- *                       type: array
- *                       items:
- *                         type: string
- *                         format: objectId
- *         500:
- *           description: Error interno del servidor
+ *                       example: "60d2b6e3e6b0f99dbe0c5a7b"
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.get('/', listarUsuarios);
 
 /**
  * @swagger
- * path:
- *   /usuario:
- *     post:
- *       tags: [Usuario]
- *       summary: Crear un nuevo usuario
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 email:
+ * /usuarios:
+ *   post:
+ *     summary: Crea un nuevo usuario
+ *     tags:
+ *       - Usuarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "usuario@example.com"
+ *               telefono:
+ *                 type: string
+ *                 example: "123456789"
+ *               contraseña:
+ *                 type: string
+ *                 example: "miContraseñaSegura"
+ *               username:
+ *                 type: string
+ *                 example: "usuario1"
+ *               empleado:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a7d"
+ *               estado:
+ *                 type: boolean
+ *                 example: true
+ *               roles:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                   required: true
- *                 telefono:
- *                   type: string
- *                   required: true
- *                 contraseña:
- *                   type: string
- *                   required: true
- *                 username:
- *                   type: string
- *                   required: true
- *                 empleado:
- *                   type: string
- *                   format: objectId
- *                   required: true
- *                 estado:
- *                   type: boolean
- *                   required: true
- *                 roles:
- *                   type: array
- *                   items:
- *                     type: string
- *                     format: objectId
- *       responses:
- *         201:
- *           description: Usuario creado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   email:
- *                     type: string
- *                   telefono:
- *                     type: string
- *                   contraseña:
- *                     type: string
- *                   username:
- *                     type: string
- *                   empleado:
- *                     type: string
- *                     format: objectId
- *                   estado:
- *                     type: boolean
- *                   roles:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         500:
- *           description: Error interno del servidor
+ *                   example: "60d2b6e3e6b0f99dbe0c5a7b"
+ *     responses:
+ *       201:
+ *         description: Usuario creado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.post('/', crearUsuario);
 
 /**
  * @swagger
- * path:
- *   /usuario/{id}:
- *     put:
- *       tags: [Usuario]
- *       summary: Actualizar un usuario por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del usuario a actualizar
- *           schema:
- *             type: string
- *       requestBody:
+ * /usuarios/{id}:
+ *   put:
+ *     summary: Actualiza un usuario por su ID
+ *     tags:
+ *       - Usuarios
+ *     parameters:
+ *       - in: path
+ *         name: id
  *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 email:
+ *         description: ID del usuario
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "usuario@example.com"
+ *               telefono:
+ *                 type: string
+ *                 example: "123456789"
+ *               contraseña:
+ *                 type: string
+ *                 example: "miContraseñaSegura"
+ *               username:
+ *                 type: string
+ *                 example: "usuario1"
+ *               empleado:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a7d"
+ *               estado:
+ *                 type: boolean
+ *                 example: true
+ *               roles:
+ *                 type: array
+ *                 items:
  *                   type: string
- *                 telefono:
- *                   type: string
- *                 contraseña:
- *                   type: string
- *                 username:
- *                   type: string
- *                 empleado:
- *                   type: string
- *                   format: objectId
- *                 estado:
- *                   type: boolean
- *                 roles:
- *                   type: array
- *                   items:
- *                     type: string
- *                     format: objectId
- *       responses:
- *         200:
- *           description: Usuario actualizado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   email:
- *                     type: string
- *                   telefono:
- *                     type: string
- *                   contraseña:
- *                     type: string
- *                   username:
- *                     type: string
- *                   empleado:
- *                     type: string
- *                     format: objectId
- *                   estado:
- *                     type: boolean
- *                   roles:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *         400:
- *           description: Error en la validación de datos
- *         404:
- *           description: Usuario no encontrado
- *         500:
- *           description: Error interno del servidor
+ *                   example: "60d2b6e3e6b0f99dbe0c5a7b"
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *       400:
+ *         description: Error en los datos enviados
+ *       404:
+ *         description: Usuario no encontrado
  */
+
+
+
 router.put('/:id', actualizarUsuario);
 
 /**
  * @swagger
- * path:
- *   /usuario/{id}:
- *     get:
- *       tags: [Usuario]
- *       summary: Obtener un usuario por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del usuario a obtener
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Usuario encontrado
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   email:
- *                     type: string
- *                   telefono:
- *                     type: string
- *                   contraseña:
- *                     type: string
- *                   username:
- *                     type: string
- *                   empleado:
- *                     type: string
- *                     format: objectId
- *                   estado:
- *                     type: boolean
- *                   roles:
- *                     type: array
- *                     items:
- *                       type: string
- *                       format: objectId
- *         404:
- *           description: Usuario no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /usuarios/{id}:
+ *   get:
+ *     summary: Obtiene un usuario por su ID
+ *     tags:
+ *       - Usuarios
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
+
+
 router.get('/:id', obtenerUsuarioPorId);
 
 /**
  * @swagger
- * path:
- *   /usuario/{id}:
- *     delete:
- *       tags: [Usuario]
- *       summary: Eliminar un usuario por su ID
- *       parameters:
- *         - in: path
- *           name: id
- *           required: true
- *           description: ID del usuario a eliminar
- *           schema:
- *             type: string
- *       responses:
- *         204:
- *           description: Usuario eliminado
- *         404:
- *           description: Usuario no encontrado
- *         500:
- *           description: Error interno del servidor
+ * /usuarios/{id}:
+ *   delete:
+ *     summary: Elimina un usuario por su ID
+ *     tags:
+ *       - Usuarios
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.delete('/:id', eliminarUsuario);
+
+module.exports = router;

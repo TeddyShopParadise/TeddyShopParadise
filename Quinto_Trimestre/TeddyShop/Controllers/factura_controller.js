@@ -1,5 +1,5 @@
 //Logica de el controlador de la factura
-const logic = require('../Logic/facturas_logic'); // Asegúrate de importar la lógica
+const logic = require('../Logic/factura_logic'); // Asegúrate de importar la lógica
 const { facturaSchemaValidation } = require('../Validations/factura_validation'); // Importa la validación
 
 // Controlador para listar todas las facturas
