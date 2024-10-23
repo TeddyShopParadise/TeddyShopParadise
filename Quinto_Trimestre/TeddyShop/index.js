@@ -7,6 +7,7 @@ const http = require('http'); // Importa el módulo http
 // const https = require('https');
 // const fs = require('fs');
 
+const runAllSeeds = require('./seeds/seedDatabase');
 //Importar todas las rutas 
 const administradorRoutes = require('./routes/administradores_routes');
 const catalogoRoutes = require('./routes/catalogos_routes');
@@ -35,8 +36,8 @@ const app = express();
 mongoose.connect('mongodb+srv://sa:PM02s8wkGc77jfO3@cluster0.hhmn9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => {
     console.log('Conexión exitosa a MongoDB');
-    /*seedDatabase();
-    */
+
+      runAllSeeds();
   })
   .catch(err => console.error('Error de conexión a MongoDB:', err));
 
