@@ -1,0 +1,1 @@
+//Semillas del historial precio
