@@ -1,0 +1,4 @@
+.content {
+  padding: 64px 20px 60px 20px; /* Ajusta el padding inferior para el footer */
+  margin-bottom: 60px; /* Esto asegura que el contenido no quede oculto por el footer */  
+}
