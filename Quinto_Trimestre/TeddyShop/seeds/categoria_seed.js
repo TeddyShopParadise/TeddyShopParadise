@@ -1,14 +1,14 @@
 //Semillas del categoria
 
-const Categoria = require('../models/categoria_model'); // Asegúrate de ajustar la ruta del modelo
+const Categoria = require('../models/categoria_model'); 
 
 const categoriaSeed = {
-  nombreCategoria: 'Peluches 80cm',
-  descripcionCategoria: 'Categoría dedicada a todos los tipos de peluches.',
+  nombreCategoria: 'Peluches de distintos colores',
+  descripcionCategoria: 'Osos de diferentes colores',
   productos: [] // Si tienes IDs de Producto, agréguelos aquí
 };
 
-// Verificar si la categoría ya existe en la base de datos
+// Validación de existencia
 Categoria.findOne({ nombreCategoria: categoriaSeed.nombreCategoria })
   .then(existingCategoria => {
     if (existingCategoria) {

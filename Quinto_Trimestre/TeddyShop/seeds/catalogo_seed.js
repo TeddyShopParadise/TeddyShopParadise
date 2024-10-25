@@ -1,11 +1,11 @@
-const Catalogo = require('../models/catalogo_model'); // Asegúrate de ajustar la ruta del modelo
+const Catalogo = require('../models/catalogo_model'); 
 
 const catalogoSeed = {
   nombreCatalogo: 'Catálogo de Peluches',
   descripcionCatalogo: 'Un catálogo exclusivo de peluches de todos los tamaños.',
   disponibilidadCatalogo: true,
   estiloCatalogo: 'Infantil',
-  compania: '60d5f4847c31a91b8c8b4567', // Reemplaza con un ID válido de Compañia
+  compania: '60d5f4847c31a91b8c8b4567', //ID válido de Compañia
   productos: [], // Si tienes IDs de Producto, agréguelos aquí
   vendedoresCatalogo: [] // Si tienes IDs de Vendedor, agréguelos aquí
 };

@@ -1,4 +1,4 @@
-const Cliente = require('../models/cliente_model'); // Asegúrate de ajustar la ruta del modelo
+const Cliente = require('../models/cliente_model'); 
 
 const clienteSeed = {
   dniCliente: 98765432,

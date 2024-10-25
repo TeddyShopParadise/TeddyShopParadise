@@ -2,12 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { swaggerUi, swaggerSpec } = require('./swagger/swagger');
 const path = require('path');
-const http = require('http'); // Importa el módulo http
-// Si quieres usar HTTPS, también necesitas importar 'https' y cargar el certificado
-// const https = require('https');
-// const fs = require('fs');
-
+const http = require('http');
+const fs = require('fs');
 const runAllSeeds = require('./seeds/seedDatabase');
+// const https = require('https');
+
 //Importar todas las rutas 
 const administradorRoutes = require('./routes/administradores_routes');
 const catalogoRoutes = require('./routes/catalogos_routes');

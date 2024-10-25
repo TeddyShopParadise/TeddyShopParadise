@@ -1,7 +1,4 @@
 //Inicializa las semillas para llamarlas en el index
-
-
-// seedDatabase.js
 const seedCompañia = require('./compañia_seed.js');
 const empleadosSeed = require('./empleado_seed.js');
 const catalogoSeed = require('./catalogo_seed.js');
@@ -9,8 +6,9 @@ const clienteSeed = require('./cliente_seed.js');
 const categoriaSeed = require('./categoria_seed.js');
 const detalleFacturaSeed = require('./detalleFactura_seed');
 const facturaSeed = require('./factura_seed.js');
-//const seedCursos = require('./seeds/curso_seed');
-// Importa otros archivos de semilla...
+const historialPrecioSeed = require('./historialPrecio_seed.js');
+const vendedorSeed = require('./vendedor_seed.js');
+
 
 async function runAllSeeds() {
   try {
@@ -23,6 +21,8 @@ async function runAllSeeds() {
    await categoriaSeed;
    await detalleFacturaSeed;
    await facturaSeed;
+   await historialPrecioSeed;
+   await vendedorSeed;
     // Llama a otras funciones de semilla aquí...
     
     console.log("Semillas completadas correctamente.");

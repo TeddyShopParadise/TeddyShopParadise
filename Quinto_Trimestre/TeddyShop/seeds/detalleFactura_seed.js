@@ -1,6 +1,6 @@
 //Semillas del detalle factura
 
-const DetalleFactura = require('../models/detalleFactura_model'); // Asegúrate de ajustar la ruta del modelo
+const DetalleFactura = require('../models/detalleFactura_model'); 
 
 const detalleFacturaSeed = {
   numDetalle: 1,

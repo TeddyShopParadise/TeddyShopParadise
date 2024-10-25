@@ -1,4 +1,4 @@
-const Compañia = require('../models/compañia_model'); // Asegúrate de ajustar la ruta del modelo
+const Compañia = require('../models/compañia_model'); 
 
 const compañiaSeed = {
   NIT: 1033803030,
