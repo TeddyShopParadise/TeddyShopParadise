@@ -12,7 +12,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Navbar />
-        <div className="content">
+        <div className="content"> {/* Ajuste en la clase content */}
           <NavbarRoutes />
         </div>
         <Footer />
