@@ -15,7 +15,7 @@ function App() {
         <div className="content"> {/* Ajuste en la clase content */}
           <NavbarRoutes />
         </div>
-        <Footer />
+       
       </Router>
     </ThemeProvider>
   );

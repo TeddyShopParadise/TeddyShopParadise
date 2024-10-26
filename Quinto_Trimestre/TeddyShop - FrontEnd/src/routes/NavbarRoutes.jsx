@@ -29,7 +29,7 @@ const NavbarRoutes = () => {
       <Route path="/catalogo" element={<Catalogo />} />
       <Route path="/categoria" element={<Categoria />} />
       <Route path="/clientes" element={<Cliente />} />
-      <Route path="/compania" element={<Compañia />} />
+      <Route path="/compañia" element={<Compañia />} />
       <Route path="/detalle-factura" element={<DetalleFactura />} />
       <Route path="/detalle-pedido" element={<DetallePedido />} />
       <Route path="/devoluciones" element={<Devoluciones />} />
@@ -42,7 +42,7 @@ const NavbarRoutes = () => {
       <Route path="/pedidos" element={<Pedido />} />
       <Route path="/productos" element={<Producto />} />
       <Route path="/roles" element={<Roles />} />
-      <Route path="/user-roles" element={<Usuario />} />
+      <Route path="/usuarios" element={<Usuario />} />
       <Route path="/vendedores" element={<Vendedor />} />
     </Routes>
   );
