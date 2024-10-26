@@ -5,6 +5,7 @@ const path = require('path');
 const http = require('http');
 const fs = require('fs');
 const runAllSeeds = require('./seeds/seedDatabase');
+const cors = require('cors');
 // const https = require('https');
 
 //Importar todas las rutas 
@@ -30,6 +31,8 @@ const vendedorRoutes = require('./routes/vendedores_routes');
 
 // Middleware
 const app = express();
+
+app.use(cors());
 
 // Conexión a la base de datos MongoDB
 mongoose.connect('mongodb+srv://sa:PM02s8wkGc77jfO3@cluster0.hhmn9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
