@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const API_URL = 'http://localhost:3000/api/producto';
 
-const ProductoCRUD = () => {
+const Producto = () => {
   const [productos, setProductos] = useState([]);
   const [producto, setProducto] = useState({ 
     estiloProducto: '', 
@@ -135,4 +135,4 @@ const ProductoCRUD = () => {
   );
 };
 
-export default ProductoCRUD;
+export default Producto;

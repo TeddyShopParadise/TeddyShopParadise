@@ -1,69 +1,87 @@
-import React from 'react';
-import './Footer.css';
-import { Container, Typography, Box, Grid } from '@mui/material';
-
+import React from "react";
+import { Container, Typography, Box, Grid, IconButton } from "@mui/material";
+import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TikTokIcon from '@mui/icons-material/Groups'; // TikTok icon placeholder
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PhoneIcon from '@mui/icons-material/Phone';
+import "./Footer.css";
 
 const Footer = () => {
-    const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
 
-    return (
-            <footer>
-        <Box 
-            sx={{ 
-                backgroundColor: '#503486', 
-                height: '10vh', 
-                width: '95vw', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                textAlign: 'center', 
-                margin: -1,  
-                padding: '50px'
-            }}
-        >
-                <Grid container spacing={2}>
-                    {/* Sección de Información de la empresa */}
-                    <Grid item xs={12} sm={4}>
-                        <Typography variant="h3" sx={{ color: '#48e' }}>
-                            Sobre Peluches.oso
-                        </Typography>
-                        <Typography variant="body1" sx={{ lineHeight: 1.6, color:'white'}}>
-                            Peluches.oso es una empresa especializada en la fabricación y venta de peluches de alta calidad. Nos enorgullecemos de ofrecer peluches suaves, duraderos y seguros para todas las edades.
-                        </Typography>
-                    </Grid>
+  return (
+    <footer>
+      <Box
+        sx={{
+          background: "#7434B0",
+          color: "white",
+          padding: { xs: "30px 20px", sm: "50px 40px" },
+        }}
+      >
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
 
-                    {/* Sección de contacto */}
-                    <Grid item xs={12} sm={4}>
-                        <Typography variant="h3" sx={{ color: '#48e' }}>
-                            Contáctanos
-                        </Typography>
-                        <ul style={{ listStyle: 'none', padding: 0, color: 'white' }}>
-                            <li><a href="https://www.instagram.com/peluches.oso/?utm_medium=copy_link&hl=es" target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>Peluches.oso</a></li>
-                            <li><a href="tel:+573222456505" style={{ color: 'white' }}>3103221166</a></li>
-                            <li><a href="tel:+573058780398" style={{ color: 'white' }}>3058780398</a></li>
-                            <li>Bogotá, Colombia</li>
-                        </ul>
-                    </Grid>
+            {/* Redes Sociales */}
+            <Grid item xs={12} sm={4}>
+              <Typography variant="h6" sx={{ marginBottom: "15px" }}>
+                Síguenos en Redes Sociales
+              </Typography>
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <IconButton href="https://www.instagram.com/peluches.oso/" target="_blank" sx={{ color: "white" }}>
+                  <InstagramIcon fontSize="large" />
+                </IconButton>
+                <IconButton href="https://www.facebook.com/peluches.oso" target="_blank" sx={{ color: "white" }}>
+                  <FacebookIcon fontSize="large" />
+                </IconButton>
+                <IconButton href="https://www.tiktok.com/@peluches.oso" target="_blank" sx={{ color: "white" }}>
+                  <TikTokIcon fontSize="large" />
+                </IconButton>
+              </Box>
+            </Grid>
 
-                    {/* Sección de enlaces rápidos */}
-                    <Grid item xs={12} sm={4}>
-                        <Typography variant="h3" sx={{ color: '#48e' }}>
-                            Enlaces rápidos
-                        </Typography>
-                        <ul style={{ listStyle: 'none', padding: 0 }}>
-                            <li><a href="/" style={{ color: 'white', textDecoration: 'none' }}>Inicio</a></li>
-                            <li><a href="/Devoluciones" style={{ color: 'white', textDecoration: 'none' }}>Devoluciones</a></li>
-                            <li><a href="/Catalogos" style={{ color: 'white', textDecoration: 'none' }}>Catálogo</a></li>
-                        </ul>
-                    </Grid>
-                    <Grid>
-                    <p style={{ textAlign: 'center', color: 'white'}}>© {currentYear} TeddyShop. All rights reserver</p>
-                    </Grid>
-                </Grid>
-            </Box>
-            
-        </footer>
-    );
+            {/* Contáctanos */}
+            <Grid item xs={12} sm={4}>
+              <Typography variant="h6" sx={{ marginBottom: "15px" }}>
+                Contáctanos
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, marginBottom: 1 }}>
+                <PhoneIcon />
+                <Typography variant="body1"><a href="tel:+573222456505" style={{ color: "white" }}>3103221166</a></Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, marginBottom: 1 }}>
+                <PhoneIcon />
+                <Typography variant="body1"><a href="tel:+573058780398" style={{ color: "white" }}>3058780398</a></Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <LocationOnIcon />
+                <Typography variant="body1">Bogotá, Colombia</Typography>
+              </Box>
+            </Grid>
+
+            {/* Enlaces rápidos */}
+            <Grid item xs={12} sm={4}>
+              <Typography variant="h6" sx={{ marginBottom: "15px" }}>
+                Enlaces rápidos
+              </Typography>
+              <Box component="ul" sx={{ listStyle: "none", padding: 0 }}>
+                <li><a href="/" style={{ color: "white", textDecoration: "none" }}>Inicio</a></li>
+                <li><a href="/Devoluciones" style={{ color: "white", textDecoration: "none" }}>Devoluciones</a></li>
+                <li><a href="/Catalogos" style={{ color: "white", textDecoration: "none" }}>Catálogo</a></li>
+              </Box>
+            </Grid>
+
+            {/* Copyright */}
+            <Grid item xs={12} sx={{ textAlign: "center", marginTop: 3 }}>
+              <Typography variant="body2" sx={{ fontSize: "0.9rem", color: "#D3D3D3" }}>
+                © {currentYear} TeddyShop. Todos los derechos reservados.
+              </Typography>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    </footer>
+  );
 };
 
 export default Footer;

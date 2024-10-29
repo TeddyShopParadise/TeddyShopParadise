@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const CompaniaComponent = () => {
+const Compania = () => {
   const [companias, setCompanias] = useState([]);
   const [NIT, setNIT] = useState('');
   const [telefonoEmpresa, setTelefonoEmpresa] = useState('');
@@ -170,4 +170,4 @@ const CompaniaComponent = () => {
   );
 };
 
-export default CompaniaComponent;
+export default Compania;
