@@ -28,12 +28,36 @@ export default function Navbar() {
     setDrawerOpen(!drawerOpen);
   };
 
-  const handleMenuOpen = (setAnchorEl, event) => {
-    setAnchorEl(event.currentTarget);
+  const handleRolesMenuOpen = (event) => {
+    setAnchorElRoles(event.currentTarget);
   };
 
-  const handleMenuClose = (setAnchorEl) => {
-    setAnchorEl(null);
+  const handleRolesMenuClose = () => {
+    setAnchorElRoles(null);
+  };
+
+  const handleUsuariosMenuOpen = (event) => {
+    setAnchorElUsuarios(event.currentTarget);
+  };
+
+  const handleUsuariosMenuClose = () => {
+    setAnchorElUsuarios(null);
+  };
+
+  const handlePedidosMenuOpen = (event) => {
+    setAnchorElPedidos(event.currentTarget);
+  };
+
+  const handlePedidosMenuClose = () => {
+    setAnchorElPedidos(null);
+  };
+
+  const handleProductosMenuOpen = (event) => {
+    setAnchorElProductos(event.currentTarget);
+  };
+
+  const handleProductosMenuClose = () => {
+    setAnchorElProductos(null);
   };
 
   const drawer = (
@@ -44,64 +68,6 @@ export default function Navbar() {
             <ListItemText primary={text} />
           </ListItem>
         ))}
-        {/* Opciones de menú adicional */}
-        <ListItem button onClick={(e) => handleMenuOpen(setAnchorElRoles, e)}>
-          <ListItemText primary="Administrador de Roles" />
-        </ListItem>
-        <Menu
-          anchorEl={anchorElRoles}
-          open={Boolean(anchorElRoles)}
-          onClose={() => handleMenuClose(setAnchorElRoles)}
-        >
-          <MenuItem component={LinkBehavior} to="/roles">Administrar roles</MenuItem>
-          <MenuItem component={LinkBehavior} to="/user-roles">Administrar roles de usuario</MenuItem>
-        </Menu>
-
-        <ListItem button onClick={(e) => handleMenuOpen(setAnchorElUsuarios, e)}>
-          <ListItemText primary="Administrador de Usuarios" />
-        </ListItem>
-        <Menu
-          anchorEl={anchorElUsuarios}
-          open={Boolean(anchorElUsuarios)}
-          onClose={() => handleMenuClose(setAnchorElUsuarios)}
-        >
-          <MenuItem component={LinkBehavior} to="/vendedores">Vendedores</MenuItem>
-          <MenuItem component={LinkBehavior} to="/empleados">Empleados</MenuItem>
-          <MenuItem component={LinkBehavior} to="/clientes">Clientes</MenuItem>
-        </Menu>
-
-        <ListItem button onClick={(e) => handleMenuOpen(setAnchorElPedidos, e)}>
-          <ListItemText primary="Administrador de Pedidos" />
-        </ListItem>
-        <Menu
-          anchorEl={anchorElPedidos}
-          open={Boolean(anchorElPedidos)}
-          onClose={() => handleMenuClose(setAnchorElPedidos)}
-        >
-          <MenuItem component={LinkBehavior} to="/pedidos">Pedidos</MenuItem>
-          <MenuItem component={LinkBehavior} to="/facturas">Facturas</MenuItem>
-          <MenuItem component={LinkBehavior} to="/detalle-factura">Detalle de la Factura</MenuItem>
-          <MenuItem component={LinkBehavior} to="/detalle-pedido">Detalle del Pedido</MenuItem>
-          <MenuItem component={LinkBehavior} to="/devoluciones">Devoluciones</MenuItem>
-        </Menu>
-
-        <ListItem button onClick={(e) => handleMenuOpen(setAnchorElProductos, e)}>
-          <ListItemText primary="Administrador de Productos" />
-        </ListItem>
-        <Menu
-          anchorEl={anchorElProductos}
-          open={Boolean(anchorElProductos)}
-          onClose={() => handleMenuClose(setAnchorElProductos)}
-        >
-          <MenuItem component={LinkBehavior} to="/historial-precio">Historial del Precio</MenuItem>
-          <MenuItem component={LinkBehavior} to="/inventarios">Inventario</MenuItem>
-          <MenuItem component={LinkBehavior} to="/metodo-pago">Método de Pago</MenuItem>
-          <MenuItem component={LinkBehavior} to="/movimientos">Movimientos</MenuItem>
-        </Menu>
-
-        <ListItem button component={LinkBehavior} to="/productos">
-          <ListItemText primary="Ver Productos" />
-        </ListItem>
       </List>
     </div>
   );
@@ -119,7 +85,7 @@ export default function Navbar() {
         }}
       >
         <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1, color: '#2F2F2F'}}>
+          <Typography variant="h6" style={{ flexGrow: 1, color: '#2F2F2F' }}>
             <Button
               component={LinkBehavior}
               to="/Home"
@@ -140,40 +106,81 @@ export default function Navbar() {
             <MenuIcon />
           </IconButton>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* Botones para pantallas grandes */}
+            {/* Menús desplegables para pantallas grandes */}
             <Button
               color="inherit"
-              onClick={(e) => handleMenuOpen(setAnchorElRoles, e)}
-              style={{ color: '#2F2F2F', fontSize: '20px' }} 
+              onClick={handleRolesMenuOpen}
+              style={{ color: '#2F2F2F', fontSize: '20px' }}
             >
               Administrador de Roles
             </Button>
+            <Menu
+              anchorEl={anchorElRoles}
+              open={Boolean(anchorElRoles)}
+              onClose={handleRolesMenuClose}
+            >
+              <MenuItem component={LinkBehavior} to="/roles">Administrar roles</MenuItem>
+            </Menu>
+
             <Button
               color="inherit"
-              onClick={(e) => handleMenuOpen(setAnchorElUsuarios, e)}
-              style={{ color: '#2F2F2F', fontSize: '20px' }} 
+              onClick={handleUsuariosMenuOpen}
+              style={{ color: '#2F2F2F', fontSize: '20px' }}
             >
               Administrador de Usuarios
             </Button>
+            <Menu
+              anchorEl={anchorElUsuarios}
+              open={Boolean(anchorElUsuarios)}
+              onClose={handleUsuariosMenuClose}
+            >
+              <MenuItem component={LinkBehavior} to="/vendedores">Vendedores</MenuItem>
+              <MenuItem component={LinkBehavior} to="/empleado">Empleados</MenuItem>
+              <MenuItem component={LinkBehavior} to="/cliente">Clientes</MenuItem>
+            </Menu>
+
             <Button
               color="inherit"
-              onClick={(e) => handleMenuOpen(setAnchorElPedidos, e)}
-              style={{ color: '#2F2F2F', fontSize: '20px' }} 
+              onClick={handlePedidosMenuOpen}
+              style={{ color: '#2F2F2F', fontSize: '20px' }}
             >
               Administrador de Pedidos
             </Button>
+            <Menu
+              anchorEl={anchorElPedidos}
+              open={Boolean(anchorElPedidos)}
+              onClose={handlePedidosMenuClose}
+            >
+              <MenuItem component={LinkBehavior} to="/pedido">Pedidos</MenuItem>
+              <MenuItem component={LinkBehavior} to="/factura">Facturas</MenuItem>
+              <MenuItem component={LinkBehavior} to="/DetalleFactura">Detalle de la Factura</MenuItem>
+              <MenuItem component={LinkBehavior} to="/DetallePedido">Detalle del Pedido</MenuItem>
+              <MenuItem component={LinkBehavior} to="/devoluciones">Devoluciones</MenuItem>
+            </Menu>
+
             <Button
               color="inherit"
-              onClick={(e) => handleMenuOpen(setAnchorElProductos, e)}
-              style={{ color: '#2F2F2F', fontSize: '20px' }} 
+              onClick={handleProductosMenuOpen}
+              style={{ color: '#2F2F2F', fontSize: '20px' }}
             >
               Administrador de Productos
             </Button>
+            <Menu
+              anchorEl={anchorElProductos}
+              open={Boolean(anchorElProductos)}
+              onClose={handleProductosMenuClose}
+            >
+              <MenuItem component={LinkBehavior} to="/HistorialPrecio">Historial del Precio</MenuItem>
+              <MenuItem component={LinkBehavior} to="/inventario">Inventario</MenuItem>
+              <MenuItem component={LinkBehavior} to="/MetodoPago">Método de Pago</MenuItem>
+              <MenuItem component={LinkBehavior} to="/movimiento">Movimientos</MenuItem>
+            </Menu>
+
             <Button
               color="inherit"
               component={LinkBehavior}
               to="/productos"
-              style={{ color: '#2F2F2F', fontSize: '20px' }} 
+              style={{ color: '#2F2F2F', fontSize: '20px' }}
             >
               Ver Productos
             </Button>

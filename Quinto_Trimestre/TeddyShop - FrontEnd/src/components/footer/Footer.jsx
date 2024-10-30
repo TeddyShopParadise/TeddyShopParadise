@@ -14,7 +14,7 @@ const Footer = () => {
     <footer>
       <Box
         sx={{
-          background: "#7434B0",
+          background: "#7434B0FF",
           color: "white",
           padding: { xs: "30px 20px", sm: "50px 40px" },
         }}

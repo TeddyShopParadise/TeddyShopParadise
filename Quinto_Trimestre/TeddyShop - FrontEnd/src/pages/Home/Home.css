@@ -61,7 +61,7 @@ body {
 
 /* Estilo para el fondo de la página */
 .background-image {
-  background-image: url('https://i.imgur.com/o2l4WPS.jpeg');
+  /*background-image: url('https://i.imgur.com/o2l4WPS.jpeg');*/
   /*Opciones de colores para el fondo:
   1. #E0EBF1
   2. #FFC0CB
@@ -72,7 +72,7 @@ body {
   Opcion de dos colores:
   linear-gradient(to right, #FFC0CB, #E0EBF1)
   */
-  /*background-color: white;*/
+  background: linear-gradient(135deg, rgba(201, 154, 201, 0.9), rgba(221, 160, 221, 0.5), rgba(216, 131, 216, 0.9), rgba(141, 80, 174, 0.7));
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -227,7 +227,7 @@ body {
           contrast(1.2)   blur(5px);
 }
 
-.card-grid:hover > .card:not(:hover) .content{
+.card-grid:hover > .card:not(:hover) .contentCat{
   filter: brightness(0.8) blur(2px);
 }
 

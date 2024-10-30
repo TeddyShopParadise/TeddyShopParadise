@@ -74,7 +74,7 @@ const Home = () => {
               padding: { xs: "20px", md: "50px" },
               background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))",
               borderRadius: "30px",
-              boxShadow: "0 20px 200px rgba(0, 0, 0, 0.5)",
+              boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)",
               backdropFilter: "blur(8px)",
               backgroundSize: "200% 200%",
               animation: "shimmer 10s infinite linear",
@@ -154,7 +154,7 @@ const Home = () => {
             borderRadius: "30px",
             textAlign: "center",
             backdropFilter: "blur(8px)",
-            boxShadow: "0 20px 200px rgba(0, 0, 0, 0.5)",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)",
             backgroundSize: "200% 200%",
             animation: "shimmer 2s infinite linear",
           }}
@@ -225,7 +225,7 @@ const Home = () => {
             background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))",
             borderRadius: "30px",
             backdropFilter: "blur(8px)",
-            boxShadow: "0 20px 200px rgba(0, 0, 0, 0.5)",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)",
             backgroundSize: "200% 200%",
             animation: "shimmer 2s infinite linear",
           }}
@@ -307,7 +307,7 @@ const Home = () => {
             background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))",
             borderRadius: "30px",
             backdropFilter: "blur(8px)",
-            boxShadow: "0 20px 200px rgba(0, 0, 0, 0.5)",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)",
             backgroundSize: "200% 200%",
             animation: "shimmer 2s infinite linear",
           }}
@@ -390,7 +390,7 @@ const Home = () => {
             background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))",
             borderRadius: "30px",
             backdropFilter: "blur(8px)",
-            boxShadow: "0 20px 200px rgba(0, 0, 0, 0.5)",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)",
             backgroundSize: "200% 200%",
             animation: "shimmer 2s infinite linear",
           }}
@@ -436,7 +436,7 @@ const Home = () => {
             background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))",
             borderRadius: "30px",
             backdropFilter: "blur(8px)",
-            boxShadow: "0 20px 200px rgba(0, 0, 0, 0.5)",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)",
             backgroundSize: "200% 200%",
             animation: "shimmer 2s infinite linear",
           }}
