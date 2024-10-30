@@ -33,4 +33,4 @@ const detallePedidoSchema = new mongoose.Schema({
 detallePedidoSchema.index({ numDetalle: 1, productoIdProducto: 1 }, { unique: true });
 
 // Crear y exportar el modelo
-module.exports = mongoose.model('Detalle_Pedido', detallePedidoSchema);
+module.exports = mongoose.model('DetallePedido', detallePedidoSchema);

@@ -36,13 +36,19 @@ async function actualizarFactura(id, body) {
 
 // Función asíncrona para listar todas las facturas
 async function listarFacturas() {
-    const facturas = await Factura.find()
-        .populate('pedido', 'numPedido') // Muestra el número de pedido
-        .populate('cliente', 'nombreCliente') // Muestra el nombre del cliente
-        .populate('detallesFactura') // Muestra detalles de la factura
-        .populate('metodoPago', 'nombreMetodoPago'); // Muestra el nombre del método de pago
-    return facturas;
+    try {
+        const facturas = await Factura.find()
+            .populate('pedido', 'numPedido')
+            .populate('cliente', 'nombreCliente')
+            .populate('detallesFactura')
+            .populate('metodoPago', 'nombreMetodoPago');
+        return facturas;
+    } catch (err) {
+        console.error("Error al listar facturas:", err.message);
+        throw new Error("Error al obtener facturas");  // Esto se capturará en el controlador
+    }
 }
+
 
 // Función asíncrona para buscar una factura por su ID
 async function buscarFacturaPorId(id) {
