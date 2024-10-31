@@ -35,12 +35,12 @@ const actualizarRol = async (req, res) => {
     const { id } = req.params;
     const body = req.body;
 
-    const { error, value } = rolSchemaValidation.validate(body);
+    const { _id, __v, ...cleanedBody } = body;
 
+    const { error, value } = rolesSchemaValidation.validate(cleanedBody);
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
     }
-
     try {
         const rolActualizado = await logic.actualizarRol(id, value);
         if (!rolActualizado) {
