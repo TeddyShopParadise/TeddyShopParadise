@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './roles.css'; // Importa el archivo CSS
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -91,33 +92,52 @@ const Roles = () => {
   };
 
   return (
-    <div>
+    <div className="roles-container">
       <h1>Gestión de Roles</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="roles-form">
         <input
           type="text"
           placeholder="Nombre del Rol"
           value={role.nombre}
           onChange={(e) => setRole({ ...role, nombre: e.target.value })}
           required
+          className="roles-input"
         />
         <select
           value={role.estado}
           onChange={(e) => setRole({ ...role, estado: e.target.value === 'true' })}
+          className="roles-select"
         >
           <option value={true}>Activo</option>
           <option value={false}>Inactivo</option>
         </select>
-        <button type="submit">{isEditing ? 'Actualizar Rol' : 'Crear Rol'}</button>
+        <button 
+          type="submit" 
+          className={`roles-button ${isEditing ? 'editing' : ''}`}
+        >
+          {isEditing ? 'Actualizar Rol' : 'Crear Rol'}
+        </button>
       </form>
 
       <h2>Lista de Roles</h2>
-      <ul>
+      <ul className="role-list">
         {roles.map((r) => (
-          <li key={r._id}>
+          <li key={r._id} className="role-item">
             <span>{r.nombre} - {r.estado ? 'Activo' : 'Inactivo'}</span>
-            <button onClick={() => handleEdit(r)}>Editar</button>
-            <button onClick={() => deleteRole(r._id)}>Eliminar</button>
+            <div>
+              <button 
+                onClick={() => handleEdit(r)} 
+                className="role-action-button"
+              >
+                Editar
+              </button>
+              <button 
+                onClick={() => deleteRole(r._id)} 
+                className="role-action-button delete"
+              >
+                Eliminar
+              </button>
+            </div>
           </li>
         ))}
       </ul>
