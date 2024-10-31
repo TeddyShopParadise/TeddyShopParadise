@@ -1,6 +1,7 @@
-//Logica de el controlador del pedido
-const logic = require('../Logic/pedido_logic'); // Asegúrate de importar la lógica
-const { pedidoSchemaValidation } = require('../Validations/pedido_validation'); // Importa la validación
+//Controlador para Pedido
+//Importación para que funcione correctamente
+const logic = require('../Logic/pedido_logic'); 
+const { pedidoSchemaValidation } = require('../Validations/pedido_validation'); 
 
 // Controlador para listar todos los pedidos
 const listarPedidos = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarPedido = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarPedidos,

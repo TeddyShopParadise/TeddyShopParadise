@@ -1,6 +1,7 @@
-// controllers/cliente_controller.js
-const logic = require('../logic/cliente_logic'); // Asegúrate de importar la lógica
-const { clienteSchemaValidation } = require('../Validations/cliente_validation'); // Importa la validación
+//Controlador para cliente
+//Importación para que funcione correctamente
+const logic = require('../logic/cliente_logic');  
+const { clienteSchemaValidation } = require('../Validations/cliente_validation'); 
 
 // Controlador para listar todos los clientes
 const listarClientes = async (req, res) => {
@@ -82,7 +83,6 @@ const eliminarCliente = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarClientes,

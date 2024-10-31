@@ -1,5 +1,5 @@
-const Movimiento = require('../models/movimiento_model'); // Asegúrate de que la ruta al modelo sea correcta
-//const Inventario = // require ('../models/inventario_model'); // Asegúrate de tener el modelo de Inventario
+const Movimiento = require('../models/movimiento_model'); 
+const Inventario = require ('../models/inventario_model'); 
 
 // Función asíncrona para crear un nuevo movimiento
 async function crearMovimiento(body) {

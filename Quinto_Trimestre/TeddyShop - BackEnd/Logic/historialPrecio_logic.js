@@ -1,5 +1,5 @@
 const HistorialPrecio = require('../models/historialPrecio_model');
-const Producto = require('../models/producto_model'); // Asegúrate de tener el modelo de Producto
+const Producto = require('../models/producto_model');
 
 // Función asíncrona para crear un nuevo historial de precio
 async function crearHistorialPrecio(body) {

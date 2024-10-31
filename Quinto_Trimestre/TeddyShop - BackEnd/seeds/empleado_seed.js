@@ -7,7 +7,6 @@ const empleadoSeed = {
   fechaNacimientoEmpleado: new Date('1990-01-01'),
   nombreEmpleado: 'Juan Pérez',
   compania: '60d5f4847c31a91b8c8b4567', // Reemplaza con un ID válido de Compañia
-  administrador: null, // Si tienes un ID de Administrador, reemplázalo aquí
   usuario: null, // Si tienes un ID de Usuario, reemplázalo aquí
   vendedor: null, // Si tienes un ID de Vendedor, reemplázalo aquí
   vendedorPedidos: [], // Si tienes IDs de Vendedor_Pedido, agréguelos aquí

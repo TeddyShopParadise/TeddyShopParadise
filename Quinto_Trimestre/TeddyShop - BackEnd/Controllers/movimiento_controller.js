@@ -1,6 +1,7 @@
-//Logica de el controlador del movimiento
-const logic = require('../Logic/movimiento_logic'); // Asegúrate de importar la lógica
-const { movimientoSchemaValidation } = require('../Validations/movimiento_validation'); // Importa la validación
+//Controlador para movimiento
+//Importación para que funcione correctamente
+const logic = require('../Logic/movimiento_logic'); 
+const { movimientoSchemaValidation } = require('../Validations/movimiento_validation'); 
 
 // Controlador para listar todos los movimientos
 const listarMovimientos = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarMovimiento = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarMovimientos,

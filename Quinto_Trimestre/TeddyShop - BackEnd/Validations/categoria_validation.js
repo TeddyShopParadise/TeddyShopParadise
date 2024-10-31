@@ -23,6 +23,15 @@ const categoriaSchemaValidation = Joi.object({
             'string.base': 'La descripción de la categoría debe ser un texto',
             'string.max': 'La descripción de la categoría no debe exceder los 500 caracteres'
         }),
+        imagen: Joi.string()
+        .uri()
+        .optional()
+        .allow('')
+        .pattern(/^https?:\/\/[a-zA-Z0-9\-\.]+\.[a-z]{2,}([\/\w \.-]*)*\/?$/)
+        .messages({
+            'string.base': 'La imagen debe ser una URL válida',
+            'string.uri': 'La imagen debe tener un formato de URL válido'
+        }),
     productos: Joi.array()
         .items(Joi.string().length(24).hex())
         .optional()

@@ -26,6 +26,10 @@ const productoSchema = new mongoose.Schema({
     type: String, // NVARCHAR en SQL
     required: true
   },
+  imagen: {
+    type: String, 
+    required: false
+  },
   historialPrecios: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'HistorialPrecio' // Referencia a la colección Historial_Precio
@@ -43,5 +47,5 @@ const productoSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+// exportar el modelo
 module.exports = mongoose.model('Producto', productoSchema);

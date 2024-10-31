@@ -1,5 +1,7 @@
-const logic = require('../Logic/DetallePedido_logic'); // Asegúrate de importar la lógica
-const { detallePedidoSchemaValidation } = require('../Validations/detallePedido_validation'); // Importa la validación
+//Controlador para DetallePedido
+//Importación para que funcione correctamente
+const logic = require('../Logic/DetallePedido_logic');
+const { detallePedidoSchemaValidation } = require('../Validations/detallePedido_validation'); 
 
 // Controlador para listar todos los detalles de pedido
 const listarDetallesPedido = async (req, res) => {
@@ -78,7 +80,6 @@ const eliminarDetallePedido = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarDetallesPedido,

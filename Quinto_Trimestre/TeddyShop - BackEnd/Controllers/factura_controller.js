@@ -1,6 +1,7 @@
-//Logica de el controlador de la factura
-const logic = require('../Logic/factura_logic'); // Asegúrate de importar la lógica
-const { facturaSchemaValidation } = require('../Validations/factura_validation'); // Importa la validación
+//Controlador para Factura
+//Importación para que funcione correctamente
+const logic = require('../Logic/factura_logic'); 
+const { facturaSchemaValidation } = require('../Validations/factura_validation'); 
 
 // Controlador para listar todas las facturas
 const listarFacturas = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarFactura = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarFacturas,

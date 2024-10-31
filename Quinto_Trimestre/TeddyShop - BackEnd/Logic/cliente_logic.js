@@ -44,8 +44,8 @@ async function actualizarCliente(id, body) {
 // Función asíncrona para listar todos los clientes
 async function listarClientes() {
     let clientes = await Cliente.find()
-        .populate('pedidos', 'detallePedido') // Reemplaza 'detallePedido' con el campo relevante de Pedido
-        .populate('facturas', 'numeroFactura'); // Reemplaza 'numeroFactura' con el campo relevante de Factura
+        .populate('pedidos', 'detallePedido') // Reemplazar 'detallePedido' con el campo relevante de Pedido
+        .populate('facturas', 'numeroFactura'); // Reemplazar 'numeroFactura' con el campo relevante de Factura
     return clientes;
 }
 
@@ -53,8 +53,8 @@ async function listarClientes() {
 async function buscarClientePorId(id) {
     try {
         const cliente = await Cliente.findById(id)
-            .populate('pedidos', 'detallePedido') // Reemplaza 'detallePedido' con el campo relevante de Pedido
-            .populate('facturas', 'numeroFactura'); // Reemplaza 'numeroFactura' con el campo relevante de Factura
+            .populate('pedidos', 'detallePedido') // Reemplazar 'detallePedido' con el campo relevante de Pedido
+            .populate('facturas', 'numeroFactura'); // Reemplazar 'numeroFactura' con el campo relevante de Factura
         if (!cliente) {
             throw new Error(`Cliente con ID ${id} no encontrado`);
         }

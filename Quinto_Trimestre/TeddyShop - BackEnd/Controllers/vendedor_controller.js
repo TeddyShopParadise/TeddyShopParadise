@@ -1,6 +1,7 @@
-//Logica de el controlador del vendedor
-const logic = require('../Logic/vendedor_logic'); // Asegúrate de importar la lógica
-const { vendedorSchemaValidation } = require('../Validations/vendedor_validation'); // Importa la validación
+//Controlador para Vendedor
+//Importación para que funcione correctamente
+const logic = require('../Logic/vendedor_logic'); 
+const { vendedorSchemaValidation } = require('../Validations/vendedor_validation'); 
 
 // Controlador para listar todos los vendedores
 const listarVendedores = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarVendedor = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarVendedores,

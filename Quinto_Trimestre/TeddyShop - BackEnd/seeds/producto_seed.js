@@ -9,6 +9,7 @@ const productoSeed = {
   disponibilidadProducto: 'En stock', // Disponibilidad del producto
   cmColaPataProducto: '20', // Medida de la cola a la pata en centímetros
   tamañoProducto: 'Grande', // Tamaño del producto
+  imagen: ' ',
   historialPrecios: [], // Aquí puedes agregar IDs de historial de precios si los tienes
   catalogos: [], // Aquí puedes agregar IDs de catálogos si los tienes
   categorias: [] // Aquí puedes agregar IDs de categorías si los tienes

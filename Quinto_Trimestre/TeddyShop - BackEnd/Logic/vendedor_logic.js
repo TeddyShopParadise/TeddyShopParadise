@@ -1,5 +1,5 @@
 const Vendedor = require('../models/vendedor_model');
-const Empleado = require('../models/empleado_model'); // Asegúrate de tener el modelo de Empleado
+const Empleado = require('../models/empleado_model'); 
 
 // Función asíncrona para crear un nuevo vendedor
 async function crearVendedor(body) {

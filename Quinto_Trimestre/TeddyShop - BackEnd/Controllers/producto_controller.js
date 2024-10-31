@@ -1,6 +1,7 @@
-//Logica de el controlador del producto
-const logic = require('../Logic/producto_logic'); // Asegúrate de importar la lógica
-const { productoSchemaValidation } = require('../Validations/producto_validation'); // Importa la validación
+//Controlador para Producto
+//Importación para que funcione correctamente
+const logic = require('../Logic/producto_logic'); 
+const { productoSchemaValidation } = require('../Validations/producto_validation'); 
 
 // Controlador para listar todos los productos
 const listarProductos = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarProducto = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarProductos,

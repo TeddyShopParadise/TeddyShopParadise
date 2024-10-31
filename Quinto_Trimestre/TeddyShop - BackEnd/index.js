@@ -9,7 +9,6 @@ const cors = require('cors');
 // const https = require('https');
 
 //Importar todas las rutas 
-const administradorRoutes = require('./routes/administradores_routes');
 const catalogoRoutes = require('./routes/catalogos_routes');
 const categoriaRoutes = require('./routes/categorias_routes');
 const clienteRoutes = require('./routes/clientes_routes');
@@ -32,7 +31,12 @@ const vendedorRoutes = require('./routes/vendedores_routes');
 // Middleware
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: '*', //reemplaza con el dominio permitido 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], 
+  allowedHeaders: ['Content-Type', 'Authorization'], //encabezados permitidos
+  credentials: true 
+}));
 
 // Conexión a la base de datos MongoDB
 mongoose.connect('mongodb+srv://sa:PM02s8wkGc77jfO3@cluster0.hhmn9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
@@ -62,7 +66,6 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // Integrar las rutas de cursos
-app.use('/api/administradores', administradorRoutes);
 app.use('/api/catalogos', catalogoRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/clientes', clienteRoutes);

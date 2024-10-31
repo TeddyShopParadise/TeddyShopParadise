@@ -15,5 +15,5 @@ const devolucionesSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+//exportar el modelo
 module.exports = mongoose.model('Devoluciones', devolucionesSchema);

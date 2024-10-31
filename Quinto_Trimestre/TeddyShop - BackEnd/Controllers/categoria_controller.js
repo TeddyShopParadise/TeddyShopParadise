@@ -1,6 +1,7 @@
-// controllers/categoria_controller.js
-const logic = require('../logic/categoria_logic'); // Asegúrate de importar la lógica
-const { categoriaSchemaValidation } = require('../Validations/categoria_validation'); // Importa la validación
+//Controlador para categoria
+//Importación para que funcione correctamente
+const logic = require('../logic/categoria_logic'); 
+const { categoriaSchemaValidation } = require('../Validations/categoria_validation'); 
 
 // Controlador para listar todas las categorías
 const listarCategorias = async (req, res) => {
@@ -82,7 +83,6 @@ const eliminarCategoria = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarCategorias,

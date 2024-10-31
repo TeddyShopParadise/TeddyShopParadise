@@ -4,9 +4,7 @@ const historialPrecioSchema = new mongoose.Schema({
   precio: {
     type: Number, 
     required: true,
-   // Setter para asegurar precisión (almacenar el número como está)
    set: v => parseFloat(v.toFixed(3)),
-   // Getter para mostrar siempre con 3 decimales
    get: v => v.toFixed(3)
   },
   fechaInicio: {
@@ -29,8 +27,8 @@ const historialPrecioSchema = new mongoose.Schema({
 }, {
   collection: 'Historial_Precio',
   timestamps: false,
-  toJSON: { getters: true }, // Asegura que los getters se utilicen al serializar a JSON
-  toObject: { getters: true } // Asegura que los getters se utilicen al convertir a objeto
+  toJSON: { getters: true }, 
+  toObject: { getters: true } 
 });
 
 

@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi');
 
 const historialPrecioSchemaValidation = Joi.object({
     precio: Joi.number()
-        .precision(2) // Permite hasta dos decimales
+        .precision(3) // Permite hasta dos decimales
         .required()
         .messages({
             'number.base': 'El precio debe ser un número',

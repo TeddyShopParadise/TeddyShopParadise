@@ -24,5 +24,5 @@ const movimientoSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+// exportar el modelo
 module.exports = mongoose.model('Movimiento', movimientoSchema);

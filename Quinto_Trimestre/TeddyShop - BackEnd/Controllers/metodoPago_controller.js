@@ -1,6 +1,7 @@
-//Logica de el controlador del metodo pago
-const logic = require('../Logic/metodoPago_logic'); // Asegúrate de importar la lógica
-const { metodoPagoSchemaValidation } = require('../Validations/metodoPago_validation'); // Importa la validación
+//Controlador para metodoPago
+//Importación para que funcione correctamente
+const logic = require('../Logic/metodoPago_logic'); 
+const { metodoPagoSchemaValidation } = require('../Validations/metodoPago_validation'); 
 
 // Controlador para listar todos los métodos de pago
 const listarMetodosPago = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarMetodoPago = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarMetodosPago,

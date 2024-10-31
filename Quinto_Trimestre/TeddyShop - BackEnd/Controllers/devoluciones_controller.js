@@ -1,6 +1,7 @@
-//Logica de el controlador de la devolucion 
-const logic = require('../Logic/devoluciones_logic'); // Asegúrate de importar la lógica
-const { devolucionesSchemaValidation } = require('../Validations/devoluciones_validation'); // Importa la validación
+//Controlador para Devoluciones
+//Importación para que funcione correctamente
+const logic = require('../Logic/devoluciones_logic'); 
+const { devolucionesSchemaValidation } = require('../Validations/devoluciones_validation'); 
 
 // Controlador para listar todas las devoluciones
 const listarDevoluciones = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarDevolucion = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarDevoluciones,

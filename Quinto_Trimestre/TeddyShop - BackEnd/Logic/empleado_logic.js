@@ -1,5 +1,5 @@
 const Empleado = require('../models/empleado_model');
-const Compania = require('../models/compañia_model'); // Asegúrate de tener el modelo de Compañia
+const Compania = require('../models/compañia_model'); 
 
 // Función asíncrona para crear un nuevo empleado
 async function crearEmpleado(body) {
@@ -9,8 +9,7 @@ async function crearEmpleado(body) {
         codigoEmpleado: body.codigoEmpleado,
         fechaNacimientoEmpleado: body.fechaNacimientoEmpleado,
         nombreEmpleado: body.nombreEmpleado,
-        compania: body.compania, // Asegúrate de que sea un ObjectId válido
-        administrador: body.administrador, // Puede ser null si no hay administrador
+        compania: body.compania, // Asegurarse de que sea un ObjectId válido
         usuario: body.usuario, // Puede ser null si no hay usuario
         vendedor: body.vendedor, // Puede ser null si no hay vendedor
         vendedorPedidos: body.vendedorPedidos || [], // Inicializa como array vacío si no hay pedidos
@@ -30,7 +29,6 @@ async function actualizarEmpleado(id, body) {
             fechaNacimientoEmpleado: body.fechaNacimientoEmpleado,
             nombreEmpleado: body.nombreEmpleado,
             compania: body.compania, // Asegúrate de que sea un ObjectId válido
-            administrador: body.administrador,
             usuario: body.usuario,
             vendedor: body.vendedor,
             vendedorPedidos: body.vendedorPedidos,
@@ -45,7 +43,6 @@ async function actualizarEmpleado(id, body) {
 async function listarEmpleados() {
     const empleados = await Empleado.find()
         .populate('compania', 'nombreEmpresa') // Muestra el nombre de la compañía
-        .populate('administrador', 'dniEmpleado nombreEmpleado') // Muestra datos del administrador
         .populate('usuario', 'email username') // Muestra datos del usuario
         .populate('vendedor', 'nombreVendedor'); // Muestra datos del vendedor
     return empleados;
@@ -56,7 +53,6 @@ async function buscarEmpleadoPorId(id) {
     try {
         const empleado = await Empleado.findById(id)
             .populate('compania', 'nombreEmpresa')
-            .populate('administrador', 'dniEmpleado nombreEmpleado')
             .populate('usuario', 'email username')
             .populate('vendedor', 'nombreVendedor');
         

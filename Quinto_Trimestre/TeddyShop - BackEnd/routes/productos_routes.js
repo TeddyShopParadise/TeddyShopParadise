@@ -40,6 +40,9 @@ const productoController = require('../Controllers/producto_controller');
  *                   tamañoProducto:
  *                     type: string
  *                     example: "Mediano"
+ *                   imagen:
+ *                     type: string
+ *                     example: "https://example.com/producto.png"
  *                   historialPrecios:
  *                     type: array
  *                     items:
@@ -58,7 +61,6 @@ const productoController = require('../Controllers/producto_controller');
  *       500:
  *         description: Error interno del servidor
  */
-
 
 router.get('/', productoController.listarProductos);
 
@@ -94,6 +96,9 @@ router.get('/', productoController.listarProductos);
  *               tamañoProducto:
  *                 type: string
  *                 example: "Mediano"
+ *               imagen:
+ *                 type: string
+ *                 example: "https://example.com/producto.png"
  *               historialPrecios:
  *                 type: array
  *                 items:
@@ -117,7 +122,6 @@ router.get('/', productoController.listarProductos);
  *       500:
  *         description: Error interno del servidor
  */
-
 
 router.post('/', productoController.crearProducto);
 
@@ -143,8 +147,6 @@ router.post('/', productoController.crearProducto);
  *       500:
  *         description: Error interno del servidor
  */
-
-
 
 router.get('/:id', productoController.obtenerProductoPorId);
 
@@ -187,6 +189,9 @@ router.get('/:id', productoController.obtenerProductoPorId);
  *               tamañoProducto:
  *                 type: string
  *                 example: "Mediano"
+ *               imagen:
+ *                 type: string
+ *                 example: "https://example.com/producto.png"
  *               historialPrecios:
  *                 type: array
  *                 items:
@@ -210,7 +215,6 @@ router.get('/:id', productoController.obtenerProductoPorId);
  *       404:
  *         description: Producto no encontrado
  */
-
 
 router.put('/:id', productoController.actualizarProducto);
 
@@ -236,7 +240,6 @@ router.put('/:id', productoController.actualizarProducto);
  *       500:
  *         description: Error interno del servidor
  */
-
 
 router.delete('/:id', productoController.eliminarProducto);
 

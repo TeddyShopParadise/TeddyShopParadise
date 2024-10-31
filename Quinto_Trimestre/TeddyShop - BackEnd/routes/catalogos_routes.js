@@ -28,6 +28,9 @@ const router = express.Router();
  *               estiloCatalogo:
  *                 type: string
  *                 example: "Modern"
+ *               imagen:
+ *                 type: string
+ *                 example: "https://example.com/catalogo.png"
  *               compania:
  *                 type: string
  *                 example: "60d2b6e3e6b0f99dbe0c5a75"
@@ -85,6 +88,9 @@ router.post('/', catalogoController.crearCatalogo);
  *               estiloCatalogo:
  *                 type: string
  *                 example: "Modern"
+ *               imagen:
+ *                 type: string
+ *                 example: "https://example.com/catalogo.png"
  *               compania:
  *                 type: string
  *                 example: "60d2b6e3e6b0f99dbe0c5a75"
@@ -164,6 +170,9 @@ router.patch('/:id/desactivar', catalogoController.desactivarCatalogo);
  *                   estiloCatalogo:
  *                     type: string
  *                     example: "Modern"
+ *                   imagen:
+ *                     type: string
+ *                     example: "https://example.com/catalogo.png"
  *                   compania:
  *                     type: string
  *                     example: "60d2b6e3e6b0f99dbe0c5a75"
@@ -204,7 +213,6 @@ router.get('/activos', catalogoController.listarCatalogosActivos);
  *         description: Catálogo no encontrado
  */
 
-
 router.get('/:id', catalogoController.obtenerCatalogoPorId);
 
 /**
@@ -235,6 +243,9 @@ router.get('/:id', catalogoController.obtenerCatalogoPorId);
  *                 estiloCatalogo:
  *                   type: string
  *                   example: "Classic"
+ *                 imagen:
+ *                   type: string
+ *                   example: "https://example.com/catalogo.png"
  *                 compania:
  *                   type: string
  *                   example: "60d2b6e3e6b0f99dbe0c5a75"

@@ -15,6 +15,7 @@ async function crearCatalogo(body) {
         descripcionCatalogo: body.descripcionCatalogo,
         disponibilidadCatalogo: body.disponibilidadCatalogo,
         estiloCatalogo: body.estiloCatalogo,
+        imagen: body.imagen,
         compania: body.compania,
         productos: body.productos,
         vendedoresCatalogo: body.vendedoresCatalogo
@@ -31,6 +32,7 @@ async function actualizarCatalogo(id, body) {
             descripcionCatalogo: body.descripcionCatalogo,
             disponibilidadCatalogo: body.disponibilidadCatalogo,
             estiloCatalogo: body.estiloCatalogo,
+            imagen: body.imagen,
             compania: body.compania,
             productos: body.productos,
             vendedoresCatalogo: body.vendedoresCatalogo

@@ -1,5 +1,5 @@
 const DetalleFactura = require('../models/detalleFactura_model');
-//const Inventario = require('../models/inventario_model');
+const Inventario = require('../models/inventario_model');
 const Producto = require('../models/producto_model');
 const Factura = require('../models/factura_model');
 
@@ -36,9 +36,9 @@ async function actualizarDetalleFactura(id, body) {
 // Función asíncrona para listar todos los detalles de factura
 async function listarDetallesFactura() {
     let detallesFactura = await DetalleFactura.find()
-        .populate('inventarioIdInventario', 'nombreInventario') // Reemplaza con los campos relevantes de Inventario
-        .populate('productoIdProducto', 'nombreProducto') // Reemplaza con los campos relevantes de Producto
-        .populate('facturaIdFactura', 'numeroFactura'); // Reemplaza con los campos relevantes de Factura
+        .populate('inventarioIdInventario', 'nombreInventario') // Reemplazar con los campos relevantes de Inventario
+        .populate('productoIdProducto', 'nombreProducto') // Reemplazar con los campos relevantes de Producto
+        .populate('facturaIdFactura', 'numeroFactura'); // Reemplazar con los campos relevantes de Factura
     return detallesFactura;
 }
 
@@ -46,9 +46,9 @@ async function listarDetallesFactura() {
 async function buscarDetalleFacturaPorId(id) {
     try {
         const detalleFactura = await DetalleFactura.findById(id)
-            .populate('inventarioIdInventario', 'nombreInventario') // Reemplaza con los campos relevantes de Inventario
-            .populate('productoIdProducto', 'nombreProducto') // Reemplaza con los campos relevantes de Producto
-            .populate('facturaIdFactura', 'numeroFactura'); // Reemplaza con los campos relevantes de Factura
+            .populate('inventarioIdInventario', 'nombreInventario') // Reemplazar con los campos relevantes de Inventario
+            .populate('productoIdProducto', 'nombreProducto') // Reemplazar con los campos relevantes de Producto
+            .populate('facturaIdFactura', 'numeroFactura'); // Reemplazar con los campos relevantes de Factura
         if (!detalleFactura) {
             throw new Error(`Detalle de Factura con ID ${id} no encontrado`);
         }

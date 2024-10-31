@@ -33,8 +33,8 @@ async function actualizarDetallePedido(id, body) {
 // Función asíncrona para listar todos los detalles de pedido
 async function listarDetallesPedido() {
     let detallesPedido = await DetallePedido.find()
-        .populate('pedidoNumPedido', 'numeroPedido') // Reemplaza con los campos relevantes de Pedido
-        .populate('productoIdProducto', 'nombreProducto'); // Reemplaza con los campos relevantes de Producto
+        .populate('pedidoNumPedido', 'numeroPedido') // Reemplazar con los campos relevantes de Pedido
+        .populate('productoIdProducto', 'nombreProducto'); // Reemplazar con los campos relevantes de Producto
     return detallesPedido;
 }
 
@@ -42,8 +42,8 @@ async function listarDetallesPedido() {
 async function buscarDetallePedidoPorId(id) {
     try {
         const detallePedido = await DetallePedido.findById(id)
-            .populate('pedidoNumPedido', 'numeroPedido') // Reemplaza con los campos relevantes de Pedido
-            .populate('productoIdProducto', 'nombreProducto'); // Reemplaza con los campos relevantes de Producto
+            .populate('pedidoNumPedido', 'numeroPedido') // Reemplazar con los campos relevantes de Pedido
+            .populate('productoIdProducto', 'nombreProducto'); // Reemplazar con los campos relevantes de Producto
         if (!detallePedido) {
             throw new Error(`Detalle de Pedido con ID ${id} no encontrado`);
         }

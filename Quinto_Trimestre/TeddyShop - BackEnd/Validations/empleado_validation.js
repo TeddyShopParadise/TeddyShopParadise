@@ -42,11 +42,6 @@ const empleadoSchemaValidation = Joi.object({
             'string.length': 'El ID de la compañía debe tener 24 caracteres',
             'any.required': 'La compañía es un campo requerido'
         }),
-    administrador: Joi.string().length(24).hex().optional()
-        .messages({
-            'string.base': 'El ID del administrador debe ser un ID válido en formato hexadecimal',
-            'string.length': 'El ID del administrador debe tener 24 caracteres'
-        }),
     usuario: Joi.string().length(24).hex().optional()
         .messages({
             'string.base': 'El ID del usuario debe ser un ID válido en formato hexadecimal',

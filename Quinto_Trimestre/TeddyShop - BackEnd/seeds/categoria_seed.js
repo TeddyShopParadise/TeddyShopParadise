@@ -5,6 +5,7 @@ const Categoria = require('../models/categoria_model');
 const categoriaSeed = {
   nombreCategoria: 'Peluches de distintos colores',
   descripcionCategoria: 'Osos de diferentes colores',
+  imagen: ' ', 
   productos: [] // Si tienes IDs de Producto, agréguelos aquí
 };
 

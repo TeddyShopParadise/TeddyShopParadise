@@ -47,9 +47,6 @@ const {
  *                   compania:
  *                     type: string
  *                     example: "60d2b6e3e6b0f99dbe0c5a7a"
- *                   administrador:
- *                     type: string
- *                     example: "60d2b6e3e6b0f99dbe0c5a7b"
  *                   usuario:
  *                     type: string
  *                     example: "60d2b6e3e6b0f99dbe0c5a7c"
@@ -107,9 +104,6 @@ router.get('/', listarEmpleados);
  *               compania:
  *                 type: string
  *                 example: "60d2b6e3e6b0f99dbe0c5a7a"
- *               administrador:
- *                 type: string
- *                 example: "60d2b6e3e6b0f99dbe0c5a7b"
  *               usuario:
  *                 type: string
  *                 example: "60d2b6e3e6b0f99dbe0c5a7c"
@@ -169,9 +163,6 @@ router.post('/', crearEmpleado);
  *               compania:
  *                 type: string
  *                 example: "60d2b6e3e6b0f99dbe0c5a7a"
- *               administrador:
- *                 type: string
- *                 example: "60d2b6e3e6b0f99dbe0c5a7b"
  *               usuario:
  *                 type: string
  *                 example: "60d2b6e3e6b0f99dbe0c5a7c"

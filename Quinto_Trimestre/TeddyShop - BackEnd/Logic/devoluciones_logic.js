@@ -1,11 +1,11 @@
 const Devoluciones = require('../models/devoluciones_model');
-//const Inventario = require('../models/inventario_model'); // Asegúrate de tener el modelo de Inventario
+const Inventario = require('../models/inventario_model'); 
 
 // Función asíncrona para crear una nueva devolución
 async function crearDevolucion(body) {
     let devolucion = new Devoluciones({
         detalleDevolucion: body.detalleDevolucion,
-        inventarios: body.inventarios // Asegúrate de que sea un array de ObjectId válidos
+        inventarios: body.inventarios 
     });
 
     return await devolucion.save();
@@ -16,7 +16,7 @@ async function actualizarDevolucion(id, body) {
     let devolucion = await Devoluciones.findByIdAndUpdate(id, {
         $set: {
             detalleDevolucion: body.detalleDevolucion,
-            inventarios: body.inventarios // Asegúrate de que sea un array de ObjectId válidos
+            inventarios: body.inventarios 
         }
     }, { new: true });
 
@@ -26,7 +26,7 @@ async function actualizarDevolucion(id, body) {
 // Función asíncrona para listar todas las devoluciones
 async function listarDevoluciones() {
     let devoluciones = await Devoluciones.find()
-        .populate('inventarios', 'nombreInventario'); // Reemplaza con los campos relevantes de Inventario
+        .populate('inventarios', 'nombreInventario'); // Reemplazar con los campos relevantes de Inventario
     return devoluciones;
 }
 
@@ -34,7 +34,7 @@ async function listarDevoluciones() {
 async function buscarDevolucionPorId(id) {
     try {
         const devolucion = await Devoluciones.findById(id)
-            .populate('inventarios', 'nombreInventario'); // Reemplaza con los campos relevantes de Inventario
+            .populate('inventarios', 'nombreInventario'); // Reemplazar con los campos relevantes de Inventario
         if (!devolucion) {
             throw new Error(`Devolución con ID ${id} no encontrada`);
         }

@@ -1,5 +1,7 @@
-const logic = require('../Logic/compañia_logic'); // Asegúrate de importar la lógica
-const { compañiaSchemaValidation } = require('../validations/compañia_validation'); // Importa la validación
+//Controlador para compañia
+//Importación para que funcione correctamente
+const logic = require('../Logic/compañia_logic'); 
+const { compañiaSchemaValidation } = require('../validations/compañia_validation'); 
 
 // Controlador para listar todas las compañías
 const listarCompañias = async (req, res) => {
@@ -81,7 +83,6 @@ const eliminarCompañia = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarCompañias,

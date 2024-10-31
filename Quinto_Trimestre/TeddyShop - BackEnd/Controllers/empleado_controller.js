@@ -1,6 +1,7 @@
-//Logica de el controlador del empleado
-const logic = require('../Logic/empleado_logic'); // Asegúrate de importar la lógica
-const { empleadoSchemaValidation } = require('../Validations/empleado_validation'); // Importa la validación
+//Controlador para Empleado
+//Importación para que funcione correctamente
+const logic = require('../Logic/empleado_logic'); 
+const { empleadoSchemaValidation } = require('../Validations/empleado_validation'); 
 
 // Controlador para listar todos los empleados
 const listarEmpleados = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarEmpleado = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarEmpleados,

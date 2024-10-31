@@ -1,5 +1,7 @@
-const logic = require('../Logic/usuario_logic'); // Asegúrate de importar la lógica
-const { usuarioSchemaValidation } = require('../Validations/usuario_validation'); // Importa la validación
+//Controlador para Usuario
+//Importación para que funcione correctamente
+const logic = require('../Logic/usuario_logic'); 
+const { usuarioSchemaValidation } = require('../Validations/usuario_validation'); 
 const bcrypt = require('bcrypt'); // Para encriptar contraseñas
 
 // Controlador para listar todos los usuarios
@@ -89,7 +91,6 @@ const eliminarUsuario = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarUsuarios,

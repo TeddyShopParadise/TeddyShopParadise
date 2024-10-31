@@ -10,6 +10,9 @@ const pedidoSchema = new mongoose.Schema({
     type: String, // NVARCHAR en SQL
     required: true
   },
+  apellidoComprador: {
+    type: String, // NVARCHAR en SQL
+  },
   numeroComprador: {
     type: String, // NVARCHAR en SQL
     required: true
@@ -17,6 +20,9 @@ const pedidoSchema = new mongoose.Schema({
   nombreAgendador: {
     type: String, // NVARCHAR en SQL
     required: true
+  },
+ apellidoAgendador: {
+    type: String, // NVARCHAR en SQL
   },
   numeroAgendador: {
     type: String, // NVARCHAR en SQL
@@ -39,12 +45,7 @@ const pedidoSchema = new mongoose.Schema({
     ref: 'Cliente', // Referencia a la colección Cliente
     required: true
   },
-  apellidoAgendador: {
-    type: String, // NVARCHAR en SQL
-  },
-  apellidoComprador: {
-    type: String, // NVARCHAR en SQL
-  },
+ 
   detallesPedido: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'DetallePedido' // Referencia a la colección DetallePedido
@@ -62,5 +63,5 @@ const pedidoSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+//exportar el modelo
 module.exports = mongoose.model('Pedido', pedidoSchema);

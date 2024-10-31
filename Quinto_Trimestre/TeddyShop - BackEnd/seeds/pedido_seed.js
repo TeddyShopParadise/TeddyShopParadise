@@ -5,15 +5,15 @@
 const pedidoSeed = {
   tamañoOso: 'Grande', // Tamaño del oso
   nombreComprador: 'Juan Pérez', // Nombre del comprador
+  apellidoComprador: 'Pérez', // Apellido del comprador
   numeroComprador: '3001234567', // Número de contacto del comprador
   nombreAgendador: 'Ana Gómez', // Nombre del agendador
+  apellidoAgendador: 'Gómez', // Apellido del agendador
   numeroAgendador: '3109876543', // Número de contacto del agendador
   localidad: 'Bogotá', // Localidad
   direccion: 'Calle 123 #45-67', // Dirección
   barrio: 'Chapinero', // Barrio
   cliente: '60d21b4667d0d8992e610c85', // ID del cliente (ajusta según tu base de datos)
-  apellidoAgendador: 'Gómez', // Apellido del agendador
-  apellidoComprador: 'Pérez', // Apellido del comprador
   detallesPedido: [], // Aquí puedes agregar IDs de detalles de pedido si los tienes
   facturas: [], // Aquí puedes agregar IDs de facturas si los tienes
   vendedores: [] // Aquí puedes agregar IDs de vendedores si los tienes

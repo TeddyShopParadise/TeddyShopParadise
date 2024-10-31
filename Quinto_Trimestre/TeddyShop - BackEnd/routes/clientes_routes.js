@@ -31,10 +31,6 @@ const clienteController = require('../Controllers/cliente_controller');
  *                   telefonoCliente:
  *                     type: string
  *                     example: "987654321"
- *                   fechaNacimientoCliente:
- *                     type: string
- *                     format: date
- *                     example: "1990-01-01"
  *                   apellidoCliente:
  *                     type: string
  *                     example: "Pérez"
@@ -75,10 +71,6 @@ router.get('/', clienteController.listarClientes);
  *               telefonoCliente:
  *                 type: string
  *                 example: "987654321"
- *               fechaNacimientoCliente:
- *                 type: string
- *                 format: date
- *                 example: "1990-01-01"
  *               apellidoCliente:
  *                 type: string
  *                 example: "Pérez"
@@ -119,10 +111,6 @@ router.post('/', clienteController.crearCliente);
  *               telefonoCliente:
  *                 type: string
  *                 example: "987654321"
- *               fechaNacimientoCliente:
- *                 type: string
- *                 format: date
- *                 example: "1990-01-01"
  *               apellidoCliente:
  *                 type: string
  *                 example: "Pérez"
@@ -170,10 +158,6 @@ router.get('/:id', clienteController.obtenerClientePorId);
  *               telefonoCliente:
  *                 type: string
  *                 example: "987654321"
- *               fechaNacimientoCliente:
- *                 type: string
- *                 format: date
- *                 example: "1990-01-01"
  *               apellidoCliente:
  *                 type: string
  *                 example: "Pérez"

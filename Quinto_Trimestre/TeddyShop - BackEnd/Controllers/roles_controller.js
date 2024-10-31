@@ -1,6 +1,7 @@
-//Logica de el controlador de los roles
-const logic = require('../Logic/roles_logic'); // Asegúrate de importar la lógica
-const { rolesSchemaValidation } = require('../Validations/roles_validation'); // Importa la validación
+//Controlador para Roles
+//Importación para que funcione correctamente
+const logic = require('../Logic/roles_logic'); 
+const { rolesSchemaValidation } = require('../Validations/roles_validation'); 
 
 // Controlador para listar todos los roles
 const listarRoles = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarRol = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarRoles,

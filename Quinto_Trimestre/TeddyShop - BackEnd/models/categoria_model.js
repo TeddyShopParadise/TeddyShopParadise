@@ -10,6 +10,10 @@ const categoriaSchema = new mongoose.Schema({
     type: String, // NVARCHAR en SQL
     required: false
   },
+  imagen: {
+    type: String, 
+    required: false
+  },
   productos: [{
     type: mongoose.Schema.Types.ObjectId, // Referencia a Producto por ObjectId
     ref: 'Producto' // Relación muchos a muchos con Producto
@@ -19,5 +23,5 @@ const categoriaSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+//  exportar el modelo
 module.exports = mongoose.model('Categoria', categoriaSchema);

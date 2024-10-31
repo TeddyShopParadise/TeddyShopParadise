@@ -1,5 +1,5 @@
-const MetodoPago = require('../models/metodoPago_model'); // Asegúrate de que la ruta al modelo sea correcta
-const Factura = require('../models/factura_model'); // Asegúrate de tener el modelo de Factura
+const MetodoPago = require('../models/metodoPago_model'); 
+const Factura = require('../models/factura_model'); 
 
 // Función asíncrona para crear un nuevo método de pago
 async function crearMetodoPago(body) {

@@ -1,8 +1,8 @@
 const Factura = require('../models/factura_model');
-const DetalleFactura = require('../models/detalleFactura_model'); // Asegúrate de tener el modelo de DetalleFactura
-const Cliente = require('../models/cliente_model'); // Asegúrate de tener el modelo de Cliente
-const Pedido = require('../models/pedido_model'); // Asegúrate de tener el modelo de Pedido
-const MetodoPago = require('../models/metodoPago_model'); // Asegúrate de tener el modelo de MetodoPago
+const DetalleFactura = require('../models/detalleFactura_model'); 
+const Cliente = require('../models/cliente_model'); 
+const Pedido = require('../models/pedido_model'); 
+const MetodoPago = require('../models/metodoPago_model'); 
 
 // Función asíncrona para crear una nueva factura
 async function crearFactura(body) {

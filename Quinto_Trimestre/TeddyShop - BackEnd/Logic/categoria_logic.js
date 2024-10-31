@@ -13,6 +13,7 @@ async function crearCategoria(body) {
     let categoria = new Categoria({
         nombreCategoria: body.nombreCategoria,
         descripcionCategoria: body.descripcionCategoria,
+        imagen: body.imagen,
         productos: body.productos
     });
 
@@ -25,6 +26,7 @@ async function actualizarCategoria(id, body) {
         $set: {
             nombreCategoria: body.nombreCategoria,
             descripcionCategoria: body.descripcionCategoria,
+            imagen: body.imagen,
             productos: body.productos
         }
     }, { new: true });

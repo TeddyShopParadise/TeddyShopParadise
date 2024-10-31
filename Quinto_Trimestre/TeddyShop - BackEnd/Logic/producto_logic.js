@@ -1,7 +1,7 @@
 const Producto = require('../models/producto_model');
-const HistorialPrecio = require('../models/historialPrecio_model'); // Asegúrate de tener el modelo de HistorialPrecio
-const Catalogo = require('../models/catalogo_model'); // Asegúrate de tener el modelo de Catalogo
-const Categoria = require('../models/categoria_model'); // Asegúrate de tener el modelo de Categoria
+const HistorialPrecio = require('../models/historialPrecio_model'); 
+const Catalogo = require('../models/catalogo_model'); 
+const Categoria = require('../models/categoria_model'); 
 
 // Función asíncrona para crear un nuevo producto
 async function crearProducto(body) {
@@ -12,6 +12,7 @@ async function crearProducto(body) {
         disponibilidadProducto: body.disponibilidadProducto,
         cmColaPataProducto: body.cmColaPataProducto,
         tamañoProducto: body.tamañoProducto,
+        imagen: body.imagen,
         historialPrecios: body.historialPrecios || [],
         catalogos: body.catalogos || [],
         categorias: body.categorias || []
@@ -30,6 +31,7 @@ async function actualizarProducto(id, body) {
             disponibilidadProducto: body.disponibilidadProducto,
             cmColaPataProducto: body.cmColaPataProducto,
             tamañoProducto: body.tamañoProducto,
+            imagen: body.imagen,
             historialPrecios: body.historialPrecios || [],
             catalogos: body.catalogos || [],
             categorias: body.categorias || []

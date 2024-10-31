@@ -35,14 +35,6 @@ const clienteSchemaValidation = Joi.object({
             'string.pattern.base': 'El teléfono del cliente debe contener solo dígitos',
             'any.required': 'El teléfono del cliente es un campo requerido'
         }),
-    fechaNacimientoCliente: Joi.date()
-        .required()
-        .greater('1900-01-01')
-        .messages({
-            'date.base': 'La fecha de nacimiento del cliente debe ser una fecha válida',
-            'date.greater': 'La fecha de nacimiento debe ser posterior a 1900-01-01',
-            'any.required': 'La fecha de nacimiento del cliente es un campo requerido'
-        }),
     apellidoCliente: Joi.string()
         .max(100)
         .optional()

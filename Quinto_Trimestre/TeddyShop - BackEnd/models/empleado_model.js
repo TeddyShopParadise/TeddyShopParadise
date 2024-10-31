@@ -28,10 +28,6 @@ const empleadoSchema = new mongoose.Schema({
     ref: 'Compañia', // Relación uno a muchos con Compañia
     required: true
   },
-  administrador: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Administrador' // Relación uno a uno con Administrador
-  },
   usuario: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Usuario' // Relación uno a uno con Usuario
@@ -53,5 +49,5 @@ const empleadoSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+// exportar el modelo
 module.exports = mongoose.model('Empleado', empleadoSchema);

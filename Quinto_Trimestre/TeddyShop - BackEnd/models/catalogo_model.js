@@ -19,6 +19,10 @@ const catalogoSchema = new mongoose.Schema({
     type: String, // Atributo "EstiloCatalogo"
     required: true
   },
+  imagen: {
+    type: String, 
+    required: false
+  },
   compania: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Compañia', // Relación uno a uno con Compañia
@@ -37,5 +41,5 @@ const catalogoSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+// exportar el modelo
 module.exports = mongoose.model('Catalogo', catalogoSchema);

@@ -14,6 +14,11 @@ const pedidoSchemaValidation = Joi.object({
             'string.base': 'El nombre del comprador debe ser un texto',
             'any.required': 'El nombre del comprador es un campo requerido'
         }),
+        apellidoComprador: Joi.string()
+        .optional()
+        .messages({
+            'string.base': 'El apellido del comprador debe ser un texto'
+        }),
     numeroComprador: Joi.string()
         .required()
         .messages({
@@ -25,6 +30,11 @@ const pedidoSchemaValidation = Joi.object({
         .messages({
             'string.base': 'El nombre del agendador debe ser un texto',
             'any.required': 'El nombre del agendador es un campo requerido'
+        }),
+        apellidoAgendador: Joi.string()
+        .optional()
+        .messages({
+            'string.base': 'El apellido del agendador debe ser un texto'
         }),
     numeroAgendador: Joi.string()
         .required()
@@ -59,16 +69,7 @@ const pedidoSchemaValidation = Joi.object({
             'string.length': 'El ID del cliente debe tener 24 caracteres',
             'any.required': 'El ID del cliente es un campo requerido'
         }),
-    apellidoAgendador: Joi.string()
-        .optional()
-        .messages({
-            'string.base': 'El apellido del agendador debe ser un texto'
-        }),
-    apellidoComprador: Joi.string()
-        .optional()
-        .messages({
-            'string.base': 'El apellido del comprador debe ser un texto'
-        }),
+    
     detallesPedido: Joi.array()
         .items(Joi.string().length(24).hex())
         .optional()

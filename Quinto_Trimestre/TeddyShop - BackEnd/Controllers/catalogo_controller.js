@@ -1,3 +1,5 @@
+//Controlador para catalogo
+//Importación para que funcione correctamente
 const logic = require('../logic/catalogo_logic');
 const { catalogoSchemaValidation } = require('../Validations/catalogo_validation');
 
@@ -109,7 +111,6 @@ const guardarColeccionCatalogos = async (req, res) => {
         });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     crearCatalogo,

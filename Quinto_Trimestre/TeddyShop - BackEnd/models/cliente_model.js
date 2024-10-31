@@ -14,10 +14,6 @@ const clienteSchema = new mongoose.Schema({
     type: String, // NVARCHAR en SQL
     required: true
   },
-  fechaNacimientoCliente: {
-    type: Date, // DATE en SQL
-    required: true
-  },
   apellidoCliente: {
     type: String, // NVARCHAR en SQL
     required: false // Campo opcional
@@ -35,5 +31,5 @@ const clienteSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+//exportar el modelo
 module.exports = mongoose.model('Cliente', clienteSchema);

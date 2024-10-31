@@ -1,5 +1,7 @@
-const logic = require('../Logic/inventario_logic'); // Importa la lógica del inventario
-const { validarInventario } = require('../Validations/inventario_validation'); // Importa la validación del inventario
+//Controlador para Inventario
+//Importación para que funcione correctamente
+const logic = require('../Logic/inventario_logic'); 
+const { validarInventario } = require('../Validations/inventario_validation'); 
 
 // Controlador para listar todos los inventarios
 const listarInventarios = async (req, res) => {
@@ -80,7 +82,6 @@ const eliminarInventario = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarInventarios,

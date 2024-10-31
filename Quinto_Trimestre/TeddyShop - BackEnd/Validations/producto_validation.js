@@ -38,6 +38,15 @@ const productoSchemaValidation = Joi.object({
             'string.base': 'El tamaño del producto debe ser un texto',
             'any.required': 'El tamaño del producto es un campo requerido'
         }),
+        imagen: Joi.string()
+        .uri()
+        .optional()
+        .allow('')
+        .pattern(/^https?:\/\/[a-zA-Z0-9\-\.]+\.[a-z]{2,}([\/\w \.-]*)*\/?$/)
+        .messages({
+            'string.base': 'La imagen debe ser una URL válida',
+            'string.uri': 'La imagen debe tener un formato de URL válido'
+        }),
     historialPrecios: Joi.array()
         .items(Joi.string().length(24).hex())
         .optional()

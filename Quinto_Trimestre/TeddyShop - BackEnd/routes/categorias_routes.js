@@ -28,6 +28,9 @@ const categoriaController = require('../Controllers/categoria_controller');
  *                   descripcionCategoria:
  *                     type: string
  *                     example: "Dispositivos electrónicos de consumo"
+ *                   imagen:
+ *                     type: string
+ *                     example: "https://example.com/categoria.png"
  *                   productos:
  *                     type: array
  *                     items:
@@ -59,6 +62,9 @@ router.get('/', categoriaController.listarCategorias);
  *               descripcionCategoria:
  *                 type: string
  *                 example: "Dispositivos electrónicos de consumo"
+ *               imagen:
+ *                 type: string
+ *                 example: "https://example.com/categoria.png"
  *               productos:
  *                 type: array
  *                 items:
@@ -72,7 +78,6 @@ router.get('/', categoriaController.listarCategorias);
  *       409:
  *         description: Ya existe una categoría con ese nombre
  */
-
 
 router.post('/', categoriaController.crearCategoria);
 
@@ -98,7 +103,6 @@ router.post('/', categoriaController.crearCategoria);
  *       500:
  *         description: Error interno del servidor
  */
-
 
 router.get('/:id', categoriaController.obtenerCategoriaPorId);
 
@@ -129,6 +133,9 @@ router.get('/:id', categoriaController.obtenerCategoriaPorId);
  *               descripcionCategoria:
  *                 type: string
  *                 example: "Dispositivos electrónicos de consumo"
+ *               imagen:
+ *                 type: string
+ *                 example: "https://example.com/categoria.png"
  *               productos:
  *                 type: array
  *                 items:
@@ -143,11 +150,7 @@ router.get('/:id', categoriaController.obtenerCategoriaPorId);
  *         description: Categoría no encontrada
  */
 
-
 router.put('/:id', categoriaController.actualizarCategoria);
-
-
-
 
 /**
  * @swagger
@@ -171,6 +174,7 @@ router.put('/:id', categoriaController.actualizarCategoria);
  *       500:
  *         description: Error interno del servidor
  */
+
 router.delete('/:id', categoriaController.eliminarCategoria);
 
 module.exports = router;

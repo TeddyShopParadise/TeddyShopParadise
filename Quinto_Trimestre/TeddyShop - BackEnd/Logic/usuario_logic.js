@@ -37,8 +37,8 @@ async function actualizarUsuario(id, body) {
 // Función asíncrona para listar todos los usuarios
 async function listarUsuarios() {
     let usuarios = await Usuario.find()
-        .populate('empleado', 'nombreEmpleado') // Reemplaza con los campos relevantes de Empleado
-        .populate('roles', 'nombreRol'); // Reemplaza con los campos relevantes de Roles
+        .populate('empleado', 'nombreEmpleado') // Reemplazar con los campos relevantes de Empleado
+        .populate('roles', 'nombreRol'); // Reemplazar con los campos relevantes de Roles
     return usuarios;
 }
 
@@ -46,8 +46,8 @@ async function listarUsuarios() {
 async function buscarUsuarioPorId(id) {
     try {
         const usuario = await Usuario.findById(id)
-            .populate('empleado', 'nombreEmpleado') // Reemplaza con los campos relevantes de Empleado
-            .populate('roles', 'nombreRol'); // Reemplaza con los campos relevantes de Roles
+            .populate('empleado', 'nombreEmpleado') // Reemplazar con los campos relevantes de Empleado
+            .populate('roles', 'nombreRol'); // Reemplazar con los campos relevantes de Roles
         if (!usuario) {
             throw new Error(`Usuario con ID ${id} no encontrado`);
         }

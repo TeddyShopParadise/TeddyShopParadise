@@ -1,5 +1,7 @@
-const logic = require('../Logic/DetalleFactura_logic'); // Asegúrate de importar la lógica
-const { detalleFacturaSchemaValidation } = require('../Validations/detalleFactura_validation'); // Importa la validación
+//Controlador para DetalleFactura
+//Importación para que funcione correctamente
+const logic = require('../Logic/DetalleFactura_logic');
+const { detalleFacturaSchemaValidation } = require('../Validations/detalleFactura_validation');
 
 // Controlador para listar todos los detalles de factura
 const listarDetallesFactura = async (req, res) => {
@@ -78,7 +80,6 @@ const eliminarDetalleFactura = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarDetallesFactura,

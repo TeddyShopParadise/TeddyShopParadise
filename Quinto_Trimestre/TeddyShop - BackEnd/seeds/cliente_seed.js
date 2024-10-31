@@ -4,7 +4,6 @@ const clienteSeed = {
   dniCliente: 98765432,
   nombreCliente: 'Ana Gómez',
   telefonoCliente: '3145678901',
-  fechaNacimientoCliente: new Date('1985-05-15'),
   apellidoCliente: 'Gómez', // Campo opcional
   pedidos: [], // Si tienes IDs de Pedido, agréguelos aquí
   facturas: [] // Si tienes IDs de Factura, agréguelos aquí

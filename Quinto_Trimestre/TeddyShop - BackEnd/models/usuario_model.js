@@ -37,5 +37,5 @@ const usuarioSchema = new mongoose.Schema({
   timestamps: false
 });
 
-// Crear y exportar el modelo
+//exportar el modelo
 module.exports = mongoose.model('Usuario', usuarioSchema);

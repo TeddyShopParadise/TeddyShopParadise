@@ -1,6 +1,7 @@
-//Logica de el controlador del historial precio
-const logic = require('../Logic/historialPrecio_logic'); // Asegúrate de importar la lógica
-const { historialPrecioSchemaValidation } = require('../Validations/historialPrecio_validation'); // Importa la validación
+//Controlador para HistorialPrecio
+//Importación para que funcione correctamente
+const logic = require('../Logic/historialPrecio_logic'); 
+const { historialPrecioSchemaValidation } = require('../Validations/historialPrecio_validation'); 
 
 // Controlador para listar todos los historiales de precio
 const listarHistorialPrecios = async (req, res) => {
@@ -79,7 +80,6 @@ const eliminarHistorialPrecio = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
 // Exportar los controladores
 module.exports = {
     listarHistorialPrecios,
