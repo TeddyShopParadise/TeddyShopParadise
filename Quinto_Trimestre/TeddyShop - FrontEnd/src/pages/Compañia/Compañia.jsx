@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './compania.css';
+
 const Compania = () => {
   const [companias, setCompanias] = useState([]);
   const [NIT, setNIT] = useState('');
@@ -122,19 +122,15 @@ const Compania = () => {
   }, []);
 
   return (
-    <div className="companias-container">
+    <div>
       <h1>Gestión de Compañías</h1>
-      <form 
-        className="companias-form" 
-        onSubmit={(e) => { e.preventDefault(); editingId ? actualizarCompania() : crearCompania(); }}
-      >
+      <form onSubmit={(e) => { e.preventDefault(); editingId ? actualizarCompania() : crearCompania(); }}>
         <input
           type="number"
           placeholder="NIT"
           value={NIT}
           onChange={(e) => setNIT(e.target.value)}
           required
-          className="companias-input"
         />
         <input
           type="text"
@@ -142,7 +138,6 @@ const Compania = () => {
           value={telefonoEmpresa}
           onChange={(e) => setTelefonoEmpresa(e.target.value)}
           required
-          className="companias-input"
         />
         <input
           type="text"
@@ -150,7 +145,6 @@ const Compania = () => {
           value={nombreEmpresa}
           onChange={(e) => setNombreEmpresa(e.target.value)}
           required
-          className="companias-input"
         />
         <input
           type="text"
@@ -158,32 +152,22 @@ const Compania = () => {
           value={direccionEmpresa}
           onChange={(e) => setDireccionEmpresa(e.target.value)}
           required
-          className="companias-input"
         />
-        <button type="submit" className={`companias-button ${editingId ? 'editing' : ''}`}>
-          {editingId ? 'Actualizar' : 'Crear'}
-        </button>
-        <button type="button" onClick={resetForm} className="companias-button">
-          Cancelar
-        </button>
+        <button type="submit">{editingId ? 'Actualizar' : 'Crear'}</button>
+        <button type="button" onClick={resetForm}>Cancelar</button>
       </form>
       <h2>Lista de Compañías</h2>
-      <ul className="compania-list">
+      <ul>
         {companias.map((comp) => (
-          <li key={comp._id} className="compania-item">
-            <span>{comp.nombreEmpresa} - {comp.telefonoEmpresa} - {comp.direccionEmpresa}</span>
-            <button onClick={() => editarCompania(comp)} className="compania-action-button">
-              Editar
-            </button>
-            <button onClick={() => eliminarCompania(comp._id)} className="compania-action-button delete">
-              Eliminar
-            </button>
+          <li key={comp._id}>
+            {comp.nombreEmpresa} - {comp.telefonoEmpresa} - {comp.direccionEmpresa}
+            <button onClick={() => editarCompania(comp)}>Editar</button>
+            <button onClick={() => eliminarCompania(comp._id)}>Eliminar</button>
           </li>
         ))}
       </ul>
     </div>
   );
-  
 };
 
 export default Compania;

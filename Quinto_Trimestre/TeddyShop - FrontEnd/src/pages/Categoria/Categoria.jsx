@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './categoria.css';
-
 
 const CategoriaComponent = () => {
   const [categorias, setCategorias] = useState([]);
@@ -112,19 +110,15 @@ const CategoriaComponent = () => {
   }, []);
 
   return (
-    <div className="categorias-container">
+    <div>
       <h1>Gestión de Categorías</h1>
-      <form 
-        onSubmit={(e) => { e.preventDefault(); editingId ? actualizarCategoria() : crearCategoria(); }}
-        className="categorias-form"
-      >
+      <form onSubmit={(e) => { e.preventDefault(); editingId ? actualizarCategoria() : crearCategoria(); }}>
         <input
           type="text"
           placeholder="Nombre de la categoría"
           value={nombreCategoria}
           onChange={(e) => setNombreCategoria(e.target.value)}
           required
-          className="categorias-input"
         />
         <input
           type="text"
@@ -132,47 +126,22 @@ const CategoriaComponent = () => {
           value={descripcionCategoria}
           onChange={(e) => setDescripcionCategoria(e.target.value)}
           required
-          className="categorias-input"
         />
-        <button 
-          type="submit" 
-          className={`categorias-button ${editingId ? 'editing' : ''}`}
-        >
-          {editingId ? 'Actualizar' : 'Crear'}
-        </button>
-        <button 
-          type="button" 
-          onClick={resetForm} 
-          className="categorias-button"
-        >
-          Cancelar
-        </button>
+        <button type="submit">{editingId ? 'Actualizar' : 'Crear'}</button>
+        <button type="button" onClick={resetForm}>Cancelar</button>
       </form>
       <h2>Lista de Categorías</h2>
-      <ul className="categoria-list">
+      <ul>
         {categorias.map((cat) => (
-          <li key={cat._id} className="categoria-item">
-            <span>{cat.nombreCategoria} - {cat.descripcionCategoria}</span>
-            <div>
-              <button 
-                onClick={() => editarCategoria(cat)} 
-                className="categoria-action-button"
-              >
-                Editar
-              </button>
-              <button 
-                onClick={() => eliminarCategoria(cat._id)} 
-                className="categoria-action-button delete"
-              >
-                Eliminar
-              </button>
-            </div>
+          <li key={cat._id}>
+            {cat.nombreCategoria} - {cat.descripcionCategoria}
+            <button onClick={() => editarCategoria(cat)}>Editar</button>
+            <button onClick={() => eliminarCategoria(cat._id)}>Eliminar</button>
           </li>
         ))}
       </ul>
     </div>
   );
-  
 };
 
 export default CategoriaComponent;

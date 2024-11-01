@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#39A900', // Verde Institucional
+      main: '#7434B0FF', // Color primario
     },
     secondary: {
       main: '#007832', // Color secundario
@@ -45,6 +45,24 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none', // Desactiva la capitalización automática de los botones
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          color: '#000', // Color del texto en los campos de entrada
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#fff', // Color de fondo del campo de entrada
+          borderRadius: 8, // Aplicar borde redondeado al campo
+          '& .MuiInputBase-input': {
+            color: '#000', // Color del texto dentro del campo
+          },
         },
       },
     },

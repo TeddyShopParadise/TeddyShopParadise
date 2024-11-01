@@ -75,7 +75,7 @@ export default function Navbar() {
   return (
     <>
       <AppBar 
-        position="fixed" 
+        position="relative" 
         style={{
           background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))",
           backdropFilter: "blur(8px)",

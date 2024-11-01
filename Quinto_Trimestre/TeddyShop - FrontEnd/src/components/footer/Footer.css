@@ -22,7 +22,11 @@ footer ul li {
 }
 
 footer .MuiSvgIcon-root {
-  font-size: 32px;
+  font-size: 50px;
+}
+
+footer .tiktok{
+    font-size: 50px;
 }
 
 @media (max-width: 600px) {

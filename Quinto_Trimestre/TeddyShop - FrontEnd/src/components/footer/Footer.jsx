@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Typography, Box, Grid, IconButton } from "@mui/material";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import TikTokIcon from '@mui/icons-material/Groups'; // TikTok icon placeholder
+import { FaTiktok } from "react-icons/fa6";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import "./Footer.css";
@@ -31,11 +31,11 @@ const Footer = () => {
                 <IconButton href="https://www.instagram.com/peluches.oso/" target="_blank" sx={{ color: "white" }}>
                   <InstagramIcon fontSize="large" />
                 </IconButton>
-                <IconButton href="https://www.facebook.com/peluches.oso" target="_blank" sx={{ color: "white" }}>
+                <IconButton href="https://www.facebook.com/peluches.osooficial?mibextid=ZbWKwL" target="_blank" sx={{ color: "white" }}>
                   <FacebookIcon fontSize="large" />
                 </IconButton>
                 <IconButton href="https://www.tiktok.com/@peluches.oso" target="_blank" sx={{ color: "white" }}>
-                  <TikTokIcon fontSize="large" />
+                  <FaTiktok className="tiktok" fontSize="large" />
                 </IconButton>
               </Box>
             </Grid>

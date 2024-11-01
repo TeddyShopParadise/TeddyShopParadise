@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './movimiento.css'
+
 const Movimientos = () => {
   const [movimientos, setMovimientos] = useState([]);
   const [formData, setFormData] = useState({
@@ -82,16 +82,15 @@ const Movimientos = () => {
   };
 
   return (
-    <div className="Movimientos-container">
+    <div>
       <h1>Movimientos</h1>
-      <form onSubmit={handleSubmit} className="Movimientos-form">
+      <form onSubmit={handleSubmit}>
         <input
           type="datetime-local"
           name="fecha"
           value={formData.fecha}
           onChange={handleChange}
           required
-          className="Movimientos-input"
         />
         <input
           type="number"
@@ -100,7 +99,6 @@ const Movimientos = () => {
           onChange={handleChange}
           placeholder="Cantidad Ingreso"
           required
-          className="Movimientos-input"
         />
         <input
           type="number"
@@ -109,7 +107,6 @@ const Movimientos = () => {
           onChange={handleChange}
           placeholder="Cantidad Vendida"
           required
-          className="Movimientos-input"
         />
         <input
           type="text"
@@ -118,37 +115,23 @@ const Movimientos = () => {
           onChange={handleChange}
           placeholder="Inventario ID"
           required
-          className="Movimientos-input"
         />
-        <button type="submit" className="Movimientos-button">
-          {editId ? 'Actualizar' : 'Crear'}
-        </button>
+        <button type="submit">{editId ? 'Actualizar' : 'Crear'}</button>
       </form>
-      <ul className="Movimiento-list">
+      <ul>
         {movimientos.map((movimiento) => (
-          <li key={movimiento._id} className="Movimiento-item">
+          <li key={movimiento._id}>
             <strong>Fecha:</strong> {new Date(movimiento.fecha).toLocaleString()} <br />
             <strong>Cantidad Ingreso:</strong> {movimiento.cantidadIngreso} <br />
             <strong>Cantidad Vendida:</strong> {movimiento.cantidadVendida} <br />
             <strong>Inventario:</strong> {movimiento.inventario?._id || 'N/A'} <br />
-            <button
-              onClick={() => handleEdit(movimiento)}
-              className="Movimiento-action-button"
-            >
-              Editar
-            </button>
-            <button
-              onClick={() => handleDelete(movimiento._id)}
-              className="Movimiento-action-button delete"
-            >
-              Eliminar
-            </button>
+            <button onClick={() => handleEdit(movimiento)}>Editar</button>
+            <button onClick={() => handleDelete(movimiento._id)}>Eliminar</button>
           </li>
         ))}
       </ul>
     </div>
   );
-  
 };
 
 export default Movimientos;

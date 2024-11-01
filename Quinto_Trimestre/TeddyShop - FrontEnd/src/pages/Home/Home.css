@@ -1,5 +1,22 @@
 @import "https://unpkg.com/open-props";
 
+
+/* Estilo para el fondo de la página */
+.background-image {
+  /*background-image: url('https://i.imgur.com/ADemq0K.jpeg');*/
+  background: linear-gradient(135deg, rgba(201, 154, 201, 0.9), rgba(221, 160, 221, 0.5), rgba(216, 131, 216, 0.9), rgba(141, 80, 174, 0.7));
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+  opacity: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
 fieldset {
   display: grid;
   grid-template-columns: var(--col-1, 1fr) var(--col-2, 1fr) var(--col-3, 1fr) var(--col-4, 1fr) var(--col-5, 1fr);
@@ -42,14 +59,9 @@ label:focus-within {
   outline-offset: 5px;
 }
 
-input {
-  opacity: 1;
-}
-
 body {
-  min-block-size: 270%;
   place-content: center;
-  gap: var(--size-5);
+  gap: var(--size-4);
   height: 100%;
   margin: 0;
   padding: 0;
@@ -57,32 +69,6 @@ body {
   width: 100vw;
   display: flex;
   flex-direction: column;
-}
-
-/* Estilo para el fondo de la página */
-.background-image {
-  /*background-image: url('https://i.imgur.com/o2l4WPS.jpeg');*/
-  /*Opciones de colores para el fondo:
-  1. #E0EBF1
-  2. #FFC0CB
-  3. #F5F5F5
-  4. #90E0EF
-  5. #F4C2C2
-  6. #C2F0F0
-  Opcion de dos colores:
-  linear-gradient(to right, #FFC0CB, #E0EBF1)
-  */
-  background: linear-gradient(135deg, rgba(201, 154, 201, 0.9), rgba(221, 160, 221, 0.5), rgba(216, 131, 216, 0.9), rgba(141, 80, 174, 0.7));
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  height: 100vh;
-  width: 100%;
-  opacity: 1;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
 }
 
 
@@ -233,21 +219,22 @@ body {
 
 .contentCat{
   padding: 24px;
+  font-family:Arial, Helvetica, sans-serif;
   position: absolute;
   top: 0;
 }
 
 .category{
   color: black;
-  font-size: 0.9rem;
-  margin-bottom: 8px;
+  font-size: 1.5rem;
+  margin-bottom: -85px;
   text-transform: uppercase;
 }
 
-.heading{
+/*.heading{
   color: black;
-  font-size: 1.8rem;
-}
+  font-size: 2rem;
+}*/
 
 
 /* FAQ Styles */

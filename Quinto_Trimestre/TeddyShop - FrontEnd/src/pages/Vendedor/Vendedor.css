@@ -1,110 +1,109 @@
-/* Estilo general para el contenedor */
-.Vendedores-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
-  
-  /* Estilo general para el formulario */
-  .Vendedores-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  /* Estilo para el input de nombre */
-.Vendedores-input {
-    border: 1px solid #ccc; /* Borde del campo */
-    padding: 8px; /* Espaciado interno */
-    width: 100%; /* Ancho completo */
-    border-radius: 4px; /* Bordes redondeados */
-    color: black; /* Color del texto */
-    opacity: 1; /* Asegúrate de que la opacidad sea 1 */
-  }
-  
-  /* Estilo para el botón */
-  .Vendedores-button {
-    padding: 10px 15px;
-    background-color: #008CBA; /* Azul por defecto */
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  /* Cambiar color del botón cuando se está editando */
-  .Vendedores-button.editing {
-    background-color: #4CAF50; /* Verde para editar */
-  }
-  
-  /* Estilo para la lista de Vendedores */
-  .Vendedor-list {
-    list-style-type: none;
+/* roles.css */
+
+/* Fondo general para la vista */
+body {
+    background: linear-gradient(135deg, rgba(201, 154, 201, 0.9), rgba(221, 160, 221, 0.5), rgba(216, 131, 216, 0.9), rgba(141, 80, 174, 0.7));
+    font-family: 'Arial', sans-serif;
+    font-size: large;
+    margin: 0;
     padding: 0;
   }
   
-  /* Estilo para cada rol en la lista */
-  .Vendedor-item {
+  /* Título de la página */
+  h1 {
+    color: #000000;
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Formulario */
+  form {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 8px;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
   }
   
-  /* Estilo para los botones de editar y eliminar */
-  .Vendedor-action-button {
-    padding: 5px 10px;
+  /* Campos de texto */
+  input[type="text"],
+  button {
+    border-radius: 8px;
+  }
+  
+  /* Estilos específicos para el TextField de Material-UI */
+  .MuiInputBase-input {
+    color: #000000 !important; /* Color del texto negro */
+  }
+  
+  .MuiOutlinedInput-root {
+    background-color: #FFFFFF !important; /* Fondo blanco para el campo */
+  }
+  
+  /* Botones */
+  button {
+    background-color: #FFB6C1;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    margin-right: 10px;
+    transition: background-color 0.3s ease;
   }
   
-  .Vendedor-action-button.delete {
-    color: #ff0000; /* Rojo para eliminar */
+  /* Tabla */
+  table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
   }
   
-  /* Vendedores.css */
-
-/* Vendedores.css */
-
-/* Color y opacidad para el encabezado principal */
-.Vendedores-container h1 {
-    color: black; /* Color negro para el encabezado */
-    opacity: 1; /* Totalmente opaco */
+  th, td {
+    padding: 12px;
+    text-align: center;
   }
   
-  /* Color y opacidad para el subtítulo */
-  .Vendedores-container h2 {
-    color: black; /* Color negro para el subtítulo */
-    opacity: 1; /* Totalmente opaco */
+  th {
+    background-color: whitesmoke;
+    color: white;
+    font-weight: bold;
   }
   
-  /* Color y opacidad para los elementos de la lista de Vendedores */
-  .Vendedor-item span {
-    color: black; /* Color negro para el texto de los Vendedores */
-    opacity: 1; /* Totalmente opaco */
+  tr:nth-child(even) {
+    background-color: rgba(255, 228, 225, 0.5);
   }
   
-  /* Color y opacidad del texto del botón */
-  .Vendedores-button {
-    color: black; /* Color negro para el texto del botón */
-    opacity: 1; /* Totalmente opaco */
+  /* Diálogo de eliminación */
+  .dialog-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4a148c;
+    text-align: center;
   }
   
-  /* Color y opacidad del texto de los botones de acción */
-  .Vendedor-action-button {
-    color: black; /* Color negro para el texto de los botones */
-    opacity: 1; /* Totalmente opaco */
+  .dialog-content {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    background-color: rgba(245, 245, 245, 0.9);
+    border-radius: 10px;
   }
   
-  /* Color y opacidad para el botón de eliminar */
-  .Vendedor-action-button.delete {
-    color: black; /* Color negro para el texto del botón de eliminar */
-    opacity: 1; /* Totalmente opaco */
+  .dialog-actions {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .dialog-actions button {
+    margin: 0 5px;
+  }
+  
+  
+  /* Snackbar */
+  .snackbar {
+    background-color: #FFB6C1;
+    color: white;
   }
   

@@ -55,14 +55,13 @@ const Home = () => {
      {/* Sección de Carrusel */}
       <Box
           sx={{
-            height: { xs: "auto", md: "90vh" },
+            height: { xs: "auto", md: "70vh" },
             width: "100vw",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
             margin: 0,
-            marginTop: 395,
             padding: 0,
             py: 2, // Ajuste de padding en pantallas pequeñas
           }}
@@ -70,7 +69,7 @@ const Home = () => {
       <Box
             sx={{
               width: "90%",
-              maxWidth: "6000px",
+              maxWidth: "100%",
               padding: { xs: "20px", md: "50px" },
               background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))",
               borderRadius: "30px",
@@ -247,12 +246,12 @@ const Home = () => {
               <div
                 className="backgroundCat"
                 style={{
-                  backgroundImage: 'url(https://i.imgur.com/jsuWbW3.jpeg)',
+                  backgroundImage: 'url(https://imgur.com/i1VnFF8.jpeg)',
                 }}
               ></div>
               <div className="contentCat">
-                <p className="category">Catalogo</p>
-                <h3 className="heading">Importados</h3>
+                <p className="category"></p>
+                <p className="category">Importados</p>
               </div>
             </a>
 
@@ -260,12 +259,12 @@ const Home = () => {
               <div
                 className="backgroundCat"
                 style={{
-                  backgroundImage: 'url(https://i.imgur.com/nJd2J5f.jpeg)',
+                  backgroundImage: 'url(https://imgur.com/ucTEu2r.jpeg',
                 }}
               ></div>
               <div className="contentCat">
-                <p className="category">Catalogo</p>
-                <h3 className="heading">General</h3>
+                <p className="category"></p>
+                <p className="category">General</p>
               </div>
             </a>
 
@@ -273,12 +272,12 @@ const Home = () => {
               <div
                 className="backgroundCat"
                 style={{
-                  backgroundImage: 'url(https://i.imgur.com/RTjeowS.jpeg)',
+                  backgroundImage: 'url(https://i.imgur.com/nTWfEGu.jpeg)',
                 }}
               ></div>
               <div className="contentCat">
-                <p className="category">Catalogo</p>
-                <h3 className="heading">Fechas Especiales</h3>
+                <p className="category"></p>
+                <p className="category">Fechas Especiales</p>
               </div>
             </a>
             </div>

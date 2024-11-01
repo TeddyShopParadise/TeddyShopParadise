@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './DetallePedido.css';
-
 
 const DetallePedido = () => {
   const [detalles, setDetalles] = useState([]);
@@ -101,9 +99,9 @@ const DetallePedido = () => {
   };
 
   return (
-    <div className="DetallePedidos-container">
+    <div>
       <h2>Detalles de Pedido</h2>
-      <form className="DetallePedidos-form" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           type="number"
           name="numDetalle"
@@ -111,7 +109,6 @@ const DetallePedido = () => {
           onChange={handleChange}
           placeholder="Número de Detalle"
           required
-          className="DetallePedidos-input"
         />
         <input
           type="number"
@@ -120,7 +117,6 @@ const DetallePedido = () => {
           onChange={handleChange}
           placeholder="Precio"
           required
-          className="DetallePedidos-input"
         />
         <input
           type="number"
@@ -129,7 +125,6 @@ const DetallePedido = () => {
           onChange={handleChange}
           placeholder="Cantidad"
           required
-          className="DetallePedidos-input"
         />
         <input
           type="text"
@@ -138,7 +133,6 @@ const DetallePedido = () => {
           onChange={handleChange}
           placeholder="ID de Pedido"
           required
-          className="DetallePedidos-input"
         />
         <input
           type="text"
@@ -147,39 +141,22 @@ const DetallePedido = () => {
           onChange={handleChange}
           placeholder="ID de Producto"
           required
-          className="DetallePedidos-input"
         />
-        <button
-          type="submit"
-          className={`DetallePedidos-button ${editingId ? 'editing' : ''}`}
-        >
-          {editingId ? 'Actualizar' : 'Crear'}
-        </button>
+        <button type="submit">{editingId ? 'Actualizar' : 'Crear'}</button>
       </form>
-  
+
       <h3>Lista de Detalles</h3>
-      <ul className="DetallePedido-list">
+      <ul>
         {detalles.map((d) => (
-          <li key={d._id} className="DetallePedido-item">
+          <li key={d._id}>
             <span>{`Detalle #${d.numDetalle}, Precio: ${d.precioDetallePedido}, Cantidad: ${d.cantidadDetallePedido}`}</span>
-            <button
-              onClick={() => handleEdit(d)}
-              className="DetallePedido-action-button"
-            >
-              Editar
-            </button>
-            <button
-              onClick={() => handleDelete(d._id)}
-              className="DetallePedido-action-button delete"
-            >
-              Eliminar
-            </button>
+            <button onClick={() => handleEdit(d)}>Editar</button>
+            <button onClick={() => handleDelete(d._id)}>Eliminar</button>
           </li>
         ))}
       </ul>
     </div>
   );
-  
 };
 
 export default DetallePedido;

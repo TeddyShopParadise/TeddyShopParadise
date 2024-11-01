@@ -1,12 +1,44 @@
 import React, { useEffect, useState } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Snackbar,
+  Alert,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  IconButton,
+  TablePagination,
+} from '@mui/material';
+import { Edit, Delete, ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import './metodoPago.css';
+
 const MetodoPago = () => {
   const [metodosPago, setMetodosPago] = useState([]);
   const [nuevoMetodo, setNuevoMetodo] = useState({ nombreMetodoPago: '', factura: '' });
   const [editarMetodo, setEditarMetodo] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [currentId, setCurrentId] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState('nombreMetodoPago');
+  const [sortOrder, setSortOrder] = useState('asc');
 
-  // Obtener todos los métodos de pago
   const fetchMetodosPago = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/metodoPago');
@@ -23,127 +55,251 @@ const MetodoPago = () => {
     fetchMetodosPago();
   }, []);
 
-  // Crear un nuevo método de pago
   const crearMetodoPago = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/metodoPago', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoMetodo),
       });
-      if (response.ok) {
-        fetchMetodosPago(); // Actualizar la lista
-        setNuevoMetodo({ nombreMetodoPago: '', factura: '' });
-      } else {
-        console.error('Error creando método de pago');
-      }
+      const newMetodo = await response.json();
+      setMetodosPago([...metodosPago, newMetodo]);
+      setSnackbarMessage('Método de pago creado con éxito');
+      setOpenSnackbar(true);
+      setNuevoMetodo({ nombreMetodoPago: '', factura: '' });
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error creando método de pago:', error);
+      setSnackbarMessage('Error al crear el método de pago');
+      setOpenSnackbar(true);
     }
   };
 
-  // Actualizar un método de pago
-  const actualizarMetodoPago = async (id) => {
+  const actualizarMetodoPago = async () => {
+    if (!editarMetodo) return;
+
     try {
-      const response = await fetch(`http://localhost:3000/api/metodoPago/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/metodoPago/${editarMetodo._id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editarMetodo),
       });
-      if (response.ok) {
-        fetchMetodosPago(); // Actualizar la lista
-        setEditarMetodo(null);
-      } else {
-        console.error('Error actualizando método de pago');
-      }
+      const updatedMetodo = await response.json();
+      setMetodosPago(metodosPago.map((metodo) => (metodo._id === updatedMetodo._id ? updatedMetodo : metodo)));
+      setSnackbarMessage('Método de pago actualizado con éxito');
+      setOpenSnackbar(true);
+      setEditarMetodo(null);
+      setNuevoMetodo({ nombreMetodoPago: '', factura: '' });
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error actualizando el método de pago:', error);
+      setSnackbarMessage('Error al actualizar el método de pago');
+      setOpenSnackbar(true);
     }
   };
 
-  // Eliminar un método de pago
-  const eliminarMetodoPago = async (id) => {
+  const eliminarMetodoPago = async () => {
+    if (!currentId) return;
+
     try {
-      const response = await fetch(`http://localhost:3000/api/metodoPago/${id}`, {
+      await fetch(`http://localhost:3000/api/metodoPago/${currentId}`, {
         method: 'DELETE',
       });
-      if (response.ok) {
-        fetchMetodosPago(); // Actualizar la lista
-      } else {
-        console.error('Error eliminando método de pago');
-      }
+      setMetodosPago((prevMetodos) => prevMetodos.filter((metodo) => metodo._id !== currentId));
+      setSnackbarMessage('Método de pago eliminado con éxito');
+      setOpenSnackbar(true);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error eliminando el método de pago:', error);
+      setSnackbarMessage('Error al eliminar el método de pago');
+      setOpenSnackbar(true);
+    } finally {
+      setOpenDeleteDialog(false);
     }
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSort = (field) => {
+    const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newSortOrder);
+    setSortBy(field);
+  };
+
+  const handleEditClick = (metodo) => {
+    setEditarMetodo(metodo);
+    setNuevoMetodo({ nombreMetodoPago: metodo.nombreMetodoPago, factura: metodo.factura });
   };
 
   if (loading) {
     return <div>Cargando...</div>;
   }
 
-  return (
-    <div className="MetodoPagos-container">
-      <h2>Métodos de Pago</h2>
-  
-      <div className="MetodoPagos-form">
-        <h3>Crear Método de Pago</h3>
-        <input
-          type="text"
-          className="MetodoPagos-input"
-          placeholder="Nombre del método de pago"
-          value={nuevoMetodo.nombreMetodoPago}
-          onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, nombreMetodoPago: e.target.value })}
-        />
-        <input
-          type="text"
-          className="MetodoPagos-input"
-          placeholder="Factura"
-          value={nuevoMetodo.factura}
-          onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, factura: e.target.value })}
-        />
-        <button className="MetodoPagos-button" onClick={crearMetodoPago}>Crear</button>
-      </div>
-  
-      <ul className="MetodoPago-list">
-        {metodosPago.map((metodo) => (
-          <li key={metodo._id} className="MetodoPago-item">
-            <span>{metodo.nombreMetodoPago} - {metodo.factura}</span>
-            <div>
-              <button className="MetodoPago-action-button" onClick={() => setEditarMetodo(metodo)}>Editar</button>
-              <button className="MetodoPago-action-button delete" onClick={() => eliminarMetodoPago(metodo._id)}>Eliminar</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-  
-      {editarMetodo && (
-        <div className="MetodoPagos-form">
-          <h3>Editar Método de Pago</h3>
-          <input
-            type="text"
-            className="MetodoPagos-input"
-            placeholder="Nombre del método de pago"
-            value={editarMetodo.nombreMetodoPago}
-            onChange={(e) => setEditarMetodo({ ...editarMetodo, nombreMetodoPago: e.target.value })}
-          />
-          <input
-            type="text"
-            className="MetodoPagos-input"
-            placeholder="Factura"
-            value={editarMetodo.factura}
-            onChange={(e) => setEditarMetodo({ ...editarMetodo, factura: e.target.value })}
-          />
-          <button className={`MetodoPagos-button ${editing ? 'editing' : ''}`} onClick={() => actualizarMetodoPago(editarMetodo._id)}>Actualizar</button>
-          <button className="MetodoPagos-button" onClick={() => setEditarMetodo(null)}>Cancelar</button>
-        </div>
-      )}
-    </div>
+  const filteredMetodosPago = metodosPago.filter((metodo) =>
+    metodo.nombreMetodoPago.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
+  const sortedMetodosPago = [...filteredMetodosPago].sort((a, b) => {
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
+
+    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  return (
+    <Box
+      sx={{
+        height: 'auto',
+        width: '100vw',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        margin: 0,
+        padding: 0,
+        py: 2,
+      }}
+    >
+      <Box
+        sx={{
+          width: '90%',
+          maxWidth: '100%',
+          padding: '50px',
+          background: 'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+          borderRadius: '30px',
+          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(8px)',
+          animation: 'shimmer 10s infinite linear',
+        }}
+      >
+        <Container>
+          <h1>Métodos de Pago</h1>
+          <Box mb={4}>
+            <TextField
+              label="Nombre del Método de Pago"
+              value={nuevoMetodo.nombreMetodoPago || ''} // Asegurarse de que sea una cadena
+              onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, nombreMetodoPago: e.target.value || '' })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Factura"
+              value={nuevoMetodo.factura || ''} // Asegurarse de que sea una cadena
+              onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, factura: e.target.value || '' })}
+              fullWidth
+              margin="normal"
+            />
+            {editarMetodo ? (
+              <Button variant="contained" onClick={actualizarMetodoPago}>
+                Actualizar
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={crearMetodoPago}>
+                Crear
+              </Button>
+            )}
+          </Box>
+
+          <Box display="flex" justifyContent="space-between" alignItems="center" mt={4}>
+            <h2>Métodos de Pago</h2>
+            <TextField
+              label="Buscar por nombre"
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              style={{ width: 250 }}
+            />
+          </Box>
+
+          <TableContainer component={Paper} style={{ marginTop: 20 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Box display="flex" alignItems="center" onClick={() => handleSort('nombreMetodoPago')}>
+                      Nombre del Método de Pago
+                      {sortBy === 'nombreMetodoPago' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box display="flex" alignItems="center" onClick={() => handleSort('factura')}>
+                      Factura
+                      {sortBy === 'factura' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+                    </Box>
+                  </TableCell>
+                  <TableCell>Acciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {sortedMetodosPago.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((metodo) => (
+                  <TableRow key={metodo._id}>
+                    <TableCell>{metodo.nombreMetodoPago}</TableCell>
+                    <TableCell>{metodo.factura || 'No disponible'}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => handleEditClick(metodo)}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton onClick={() => { setCurrentId(metodo._id); setOpenDeleteDialog(true); }}>
+                        <Delete />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={sortedMetodosPago.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+
+          <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
+            <DialogTitle>Confirmar Eliminación</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                ¿Estás seguro de que deseas eliminar este método de pago?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+                Cancelar
+              </Button>
+              <Button onClick={eliminarMetodoPago} color="primary">
+                Eliminar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSnackbar(false)}
+          >
+            <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+        </Container>
+      </Box>
+    </Box>
+  );
 };
 
 export default MetodoPago;

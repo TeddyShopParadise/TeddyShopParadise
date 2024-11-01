@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './Devoluciones.css';
 
 const Devoluciones = () => {
     const [devoluciones, setDevoluciones] = useState([]);
@@ -79,55 +78,32 @@ const Devoluciones = () => {
     };
 
     return (
-        <div className="Devoluciones-container">
+        <div>
             <h1>Devoluciones</h1>
-            <form className="Devoluciones-form" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     placeholder="Detalle de Devolución"
                     value={devolucion.detalleDevolucion}
                     onChange={(e) => setDevolucion({ ...devolucion, detalleDevolucion: e.target.value })}
                     required
-                    className="Devoluciones-input"
                 />
-                <button
-                    type="submit"
-                    className={`Devoluciones-button ${isEditing ? 'editing' : ''}`}
-                >
-                    {isEditing ? 'Actualizar' : 'Crear'} Devolución
-                </button>
-                {isEditing && (
-                    <button type="button" onClick={resetForm} className="Devoluciones-button">
-                        Cancelar
-                    </button>
-                )}
+                <button type="submit">{isEditing ? 'Actualizar' : 'Crear'} Devolución</button>
+                {isEditing && <button type="button" onClick={resetForm}>Cancelar</button>}
             </form>
-    
+
             <h2>Lista de Devoluciones</h2>
-            <ul className="Devolucion-list">
+            <ul>
                 {devoluciones.map((devolucion) => (
-                    <li key={devolucion._id} className="Devolucion-item">
-                        <span>{devolucion.detalleDevolucion}</span>
-                        <div>
-                            <button
-                                onClick={() => handleEdit(devolucion)}
-                                className="Devolucion-action-button"
-                            >
-                                Editar
-                            </button>
-                            <button
-                                onClick={() => handleDelete(devolucion._id)}
-                                className="Devolucion-action-button delete"
-                            >
-                                Eliminar
-                            </button>
-                        </div>
+                    <li key={devolucion._id}>
+                        {devolucion.detalleDevolucion}
+                        <button onClick={() => handleEdit(devolucion)}>Editar</button>
+                        <button onClick={() => handleDelete(devolucion._id)}>Eliminar</button>
                     </li>
                 ))}
             </ul>
         </div>
     );
-    
 };
 
 export default Devoluciones;

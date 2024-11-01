@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './clientes.css';
+
 export default function Cliente() {
     const [clientes, setClientes] = useState([]);
     const [formData, setFormData] = useState({
@@ -107,36 +107,22 @@ export default function Cliente() {
     };
 
     return (
-        <div className="clientes-container">
+        <div>
             <h1>Lista de Clientes</h1>
-            <div className="cliente-list">
-                {clientes.map(cliente => (
-                    <div key={cliente._id} className="cliente-item">
-                        <p>
-                            <span>DNI: {cliente.dniCliente}</span>, 
-                            <span>Nombre: {cliente.nombreCliente}</span>, 
-                            <span>Teléfono: {cliente.telefonoCliente}</span>, 
-                            <span>Fecha de Nacimiento: {new Date(cliente.fechaNacimientoCliente).toLocaleDateString()}</span>, 
-                            <span>Apellido: {cliente.apellidoCliente}</span>
-                        </p>
-                        <button 
-                            onClick={() => handleEdit(cliente)} 
-                            className="cliente-action-button clientes-button editing"
-                        >
-                            Editar
-                        </button>
-                        <button 
-                            onClick={() => eliminarCliente(cliente._id)} 
-                            className="cliente-action-button delete"
-                        >
-                            Eliminar
-                        </button>
-                    </div>
-                ))}
-            </div>
-    
+            {clientes.map(cliente => (
+                <div key={cliente._id}>
+                    <p>
+                        DNI: {cliente.dniCliente}, Nombre: {cliente.nombreCliente}, Teléfono: {cliente.telefonoCliente}, 
+                        Fecha de Nacimiento: {new Date(cliente.fechaNacimientoCliente).toLocaleDateString()}, 
+                        Apellido: {cliente.apellidoCliente}
+                    </p>
+                    <button onClick={() => handleEdit(cliente)}>Editar</button>
+                    <button onClick={() => eliminarCliente(cliente._id)}>Eliminar</button>
+                </div>
+            ))}
+
             <h2>{selectedClientId ? 'Actualizar Cliente' : 'Crear Cliente'}</h2>
-            <form onSubmit={handleSubmit} className="clientes-form">
+            <form onSubmit={handleSubmit}>
                 <label>
                     DNI del Cliente:
                     <input
@@ -145,9 +131,9 @@ export default function Cliente() {
                         value={formData.dniCliente}
                         onChange={handleChange}
                         required
-                        className="clientes-input"
                     />
                 </label>
+                <br />
                 <label>
                     Nombre del Cliente:
                     <input
@@ -156,9 +142,9 @@ export default function Cliente() {
                         value={formData.nombreCliente}
                         onChange={handleChange}
                         required
-                        className="clientes-input"
                     />
                 </label>
+                <br />
                 <label>
                     Teléfono del Cliente:
                     <input
@@ -167,9 +153,9 @@ export default function Cliente() {
                         value={formData.telefonoCliente}
                         onChange={handleChange}
                         required
-                        className="clientes-input"
                     />
                 </label>
+                <br />
                 <label>
                     Fecha de Nacimiento:
                     <input
@@ -178,9 +164,9 @@ export default function Cliente() {
                         value={formData.fechaNacimientoCliente}
                         onChange={handleChange}
                         required
-                        className="clientes-input"
                     />
                 </label>
+                <br />
                 <label>
                     Apellido del Cliente:
                     <input
@@ -188,18 +174,15 @@ export default function Cliente() {
                         name="apellidoCliente"
                         value={formData.apellidoCliente}
                         onChange={handleChange}
-                        className="clientes-input"
                     />
                 </label>
-                <button type="submit" className="clientes-button">
-                    {selectedClientId ? 'Actualizar Cliente' : 'Crear Cliente'}
-                </button>
+                <br />
+                <button type="submit">{selectedClientId ? 'Actualizar Cliente' : 'Crear Cliente'}</button>
             </form>
-    
+
             {/* Mensajes de éxito o error */}
             {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
     );
-    
 }
