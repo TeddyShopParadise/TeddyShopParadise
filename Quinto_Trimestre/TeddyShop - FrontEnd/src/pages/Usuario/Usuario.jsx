@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import './usuario.css';
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [usuario, setUsuario] = useState({ email: '', telefono: '', contraseña: '', username: '', empleado: '', estado: true, roles: [] });
@@ -87,9 +87,10 @@ const Usuarios = () => {
   };
 
   return (
-    <div>
+    <div className="Usuarios-container">
       <h1>Gestión de Usuarios</h1>
       <form
+        className="Usuarios-form"
         onSubmit={(e) => {
           e.preventDefault();
           editing ? actualizarUsuario() : crearUsuario();
@@ -101,6 +102,7 @@ const Usuarios = () => {
           value={usuario.email}
           onChange={(e) => setUsuario({ ...usuario, email: e.target.value })}
           required
+          className="Usuarios-input"
         />
         <input
           type="text"
@@ -108,6 +110,7 @@ const Usuarios = () => {
           value={usuario.telefono}
           onChange={(e) => setUsuario({ ...usuario, telefono: e.target.value })}
           required
+          className="Usuarios-input"
         />
         <input
           type="password"
@@ -115,6 +118,7 @@ const Usuarios = () => {
           value={usuario.contraseña}
           onChange={(e) => setUsuario({ ...usuario, contraseña: e.target.value })}
           required
+          className="Usuarios-input"
         />
         <input
           type="text"
@@ -122,12 +126,14 @@ const Usuarios = () => {
           value={usuario.username}
           onChange={(e) => setUsuario({ ...usuario, username: e.target.value })}
           required
+          className="Usuarios-input"
         />
         <input
           type="text"
           placeholder="ID Empleado"
           value={usuario.empleado}
           onChange={(e) => setUsuario({ ...usuario, empleado: e.target.value })}
+          className="Usuarios-input"
         />
         <label>
           <input
@@ -137,19 +143,24 @@ const Usuarios = () => {
           />
           Activo
         </label>
-        <button type="submit">{editing ? 'Actualizar Usuario' : 'Crear Usuario'}</button>
+        <button type="submit" className={`Usuarios-button ${editing ? 'editing' : ''}`}>
+          {editing ? 'Actualizar Usuario' : 'Crear Usuario'}
+        </button>
       </form>
-      <ul>
+      <ul className="Usuario-list">
         {usuarios.map((user) => (
-          <li key={user._id}>
+          <li key={user._id} className="Usuario-item">
             <span>{user.email} - {user.username}</span>
-            <button onClick={() => iniciarEdicion(user)}>Editar</button>
-            <button onClick={() => eliminarUsuario(user._id)}>Eliminar</button>
+            <div>
+              <button className="Usuario-action-button" onClick={() => iniciarEdicion(user)}>Editar</button>
+              <button className="Usuario-action-button delete" onClick={() => eliminarUsuario(user._id)}>Eliminar</button>
+            </div>
           </li>
         ))}
       </ul>
     </div>
-  );
+);
+
 };
 
 export default Usuarios;

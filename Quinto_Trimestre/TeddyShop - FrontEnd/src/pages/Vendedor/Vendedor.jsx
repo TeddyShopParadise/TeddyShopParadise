@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import './vendedor.css';
 const Vendedores = () => {
   const [vendedores, setVendedores] = useState([]);
   const [dniEmpleado, setDniEmpleado] = useState('');
@@ -66,10 +66,11 @@ const Vendedores = () => {
   };
 
   return (
-    <div>
+    <div className="Vendedores-container">
       <h1>Vendedores</h1>
-      <form onSubmit={currentId ? handleUpdate : handleCreate}>
+      <form className="Vendedores-form" onSubmit={currentId ? handleUpdate : handleCreate}>
         <input
+          className="Vendedores-input"
           type="number"
           placeholder="DNI Empleado"
           value={dniEmpleado}
@@ -77,26 +78,32 @@ const Vendedores = () => {
           required
         />
         <input
+          className="Vendedores-input"
           type="text"
           placeholder="Código Vendedor"
           value={codigoVendedor}
           onChange={(e) => setCodigoVendedor(e.target.value)}
           required
         />
-        <button type="submit">{currentId ? 'Actualizar' : 'Crear'}</button>
+        <button className={`Vendedores-button ${currentId ? 'editing' : ''}`} type="submit">
+          {currentId ? 'Actualizar' : 'Crear'}
+        </button>
       </form>
 
-      <ul>
+      <ul className="Vendedor-list">
         {vendedores.map((vendedor) => (
-          <li key={vendedor._id}>
-            {vendedor.codigoVendedor} - DNI: {vendedor.dniEmpleado}
-            <button onClick={() => handleEdit(vendedor)}>Editar</button>
-            <button onClick={() => handleDelete(vendedor._id)}>Eliminar</button>
+          <li className="Vendedor-item" key={vendedor._id}>
+            <span>{vendedor.codigoVendedor} - DNI: {vendedor.dniEmpleado}</span>
+            <div>
+              <button className="Vendedor-action-button" onClick={() => handleEdit(vendedor)}>Editar</button>
+              <button className="Vendedor-action-button delete" onClick={() => handleDelete(vendedor._id)}>Eliminar</button>
+            </div>
           </li>
         ))}
       </ul>
     </div>
-  );
+);
+
 };
 
 export default Vendedores;

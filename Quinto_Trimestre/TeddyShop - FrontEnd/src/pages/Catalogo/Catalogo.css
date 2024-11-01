@@ -1,0 +1,110 @@
+/* Estilo general para el contenedor */
+.catalogos-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Estilo general para el formulario */
+  .catalogos-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Estilo para el input de nombre */
+.catalogos-input {
+    border: 1px solid #ccc; /* Borde del campo */
+    padding: 8px; /* Espaciado interno */
+    width: 100%; /* Ancho completo */
+    border-radius: 4px; /* Bordes redondeados */
+    color: black; /* Color del texto */
+    opacity: 1; /* Asegúrate de que la opacidad sea 1 */
+  }
+  
+  /* Estilo para el botón */
+  .catalogos-button {
+    padding: 10px 15px;
+    background-color: #008CBA; /* Azul por defecto */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  /* Cambiar color del botón cuando se está editando */
+  .catalogos-button.editing {
+    background-color: #4CAF50; /* Verde para editar */
+  }
+  
+  /* Estilo para la lista de catalogos */
+  .catalogo-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  /* Estilo para cada rol en la lista */
+  .catalogo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  
+  /* Estilo para los botones de editar y eliminar */
+  .catalogo-action-button {
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .catalogo-action-button.delete {
+    color: #ff0000; /* Rojo para eliminar */
+  }
+  
+  /* catalogos.css */
+
+/* catalogos.css */
+
+/* Color y opacidad para el encabezado principal */
+.catalogos-container h1 {
+    color: black; /* Color negro para el encabezado */
+    opacity: 1; /* Totalmente opaco */
+  }
+  
+  /* Color y opacidad para el subtítulo */
+  .catalogos-container h2 {
+    color: black; /* Color negro para el subtítulo */
+    opacity: 1; /* Totalmente opaco */
+  }
+  
+  /* Color y opacidad para los elementos de la lista de catalogos */
+  .catalogo-item span {
+    color: black; /* Color negro para el texto de los catalogos */
+    opacity: 1; /* Totalmente opaco */
+  }
+  
+  /* Color y opacidad del texto del botón */
+  .catalogos-button {
+    color: black; /* Color negro para el texto del botón */
+    opacity: 1; /* Totalmente opaco */
+  }
+  
+  /* Color y opacidad del texto de los botones de acción */
+  .catalogo-action-button {
+    color: black; /* Color negro para el texto de los botones */
+    opacity: 1; /* Totalmente opaco */
+  }
+  
+  /* Color y opacidad para el botón de eliminar */
+  .catalogo-action-button.delete {
+    color: black; /* Color negro para el texto del botón de eliminar */
+    opacity: 1; /* Totalmente opaco */
+  }
+  

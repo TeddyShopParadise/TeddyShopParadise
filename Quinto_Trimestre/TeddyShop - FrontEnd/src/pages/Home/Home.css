@@ -43,7 +43,7 @@ label:focus-within {
 }
 
 input {
-  opacity: 0;
+  opacity: 1;
 }
 
 body {

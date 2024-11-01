@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import './metodoPago.css';
 const MetodoPago = () => {
   const [metodosPago, setMetodosPago] = useState([]);
   const [nuevoMetodo, setNuevoMetodo] = useState({ nombreMetodoPago: '', factura: '' });
@@ -86,57 +86,64 @@ const MetodoPago = () => {
   }
 
   return (
-    <div>
+    <div className="MetodoPagos-container">
       <h2>Métodos de Pago</h2>
-
-      <div>
+  
+      <div className="MetodoPagos-form">
         <h3>Crear Método de Pago</h3>
         <input
           type="text"
+          className="MetodoPagos-input"
           placeholder="Nombre del método de pago"
           value={nuevoMetodo.nombreMetodoPago}
           onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, nombreMetodoPago: e.target.value })}
         />
         <input
           type="text"
+          className="MetodoPagos-input"
           placeholder="Factura"
           value={nuevoMetodo.factura}
           onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, factura: e.target.value })}
         />
-        <button onClick={crearMetodoPago}>Crear</button>
+        <button className="MetodoPagos-button" onClick={crearMetodoPago}>Crear</button>
       </div>
-
-      <ul>
+  
+      <ul className="MetodoPago-list">
         {metodosPago.map((metodo) => (
-          <li key={metodo._id}>
-            {metodo.nombreMetodoPago} - {metodo.factura}
-            <button onClick={() => setEditarMetodo(metodo)}>Editar</button>
-            <button onClick={() => eliminarMetodoPago(metodo._id)}>Eliminar</button>
+          <li key={metodo._id} className="MetodoPago-item">
+            <span>{metodo.nombreMetodoPago} - {metodo.factura}</span>
+            <div>
+              <button className="MetodoPago-action-button" onClick={() => setEditarMetodo(metodo)}>Editar</button>
+              <button className="MetodoPago-action-button delete" onClick={() => eliminarMetodoPago(metodo._id)}>Eliminar</button>
+            </div>
           </li>
         ))}
       </ul>
-
+  
       {editarMetodo && (
-        <div>
+        <div className="MetodoPagos-form">
           <h3>Editar Método de Pago</h3>
           <input
             type="text"
+            className="MetodoPagos-input"
             placeholder="Nombre del método de pago"
             value={editarMetodo.nombreMetodoPago}
             onChange={(e) => setEditarMetodo({ ...editarMetodo, nombreMetodoPago: e.target.value })}
           />
           <input
             type="text"
+            className="MetodoPagos-input"
             placeholder="Factura"
             value={editarMetodo.factura}
             onChange={(e) => setEditarMetodo({ ...editarMetodo, factura: e.target.value })}
           />
-          <button onClick={() => actualizarMetodoPago(editarMetodo._id)}>Actualizar</button>
-          <button onClick={() => setEditarMetodo(null)}>Cancelar</button>
+          <button className={`MetodoPagos-button ${editing ? 'editing' : ''}`} onClick={() => actualizarMetodoPago(editarMetodo._id)}>Actualizar</button>
+          <button className="MetodoPagos-button" onClick={() => setEditarMetodo(null)}>Cancelar</button>
         </div>
       )}
     </div>
   );
+  
 };
 
 export default MetodoPago;

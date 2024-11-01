@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './factura.css';
 
 const Facturas = () => {
   const [facturas, setFacturas] = useState([]);
@@ -131,10 +132,11 @@ const Facturas = () => {
   };
 
   return (
-    <div>
+    <div className="Facturas-container">
       <h2>{editing ? 'Actualizar Factura' : 'Crear Factura'}</h2>
-      <form onSubmit={handleSubmit}>
+      <form className="Facturas-form" onSubmit={handleSubmit}>
         <input
+          className="Facturas-input"
           type="date"
           name="fechaCreacionFactura"
           value={factura.fechaCreacionFactura}
@@ -142,6 +144,7 @@ const Facturas = () => {
           required
         />
         <input
+          className="Facturas-input"
           type="time"
           name="horaCreacionFactura"
           value={factura.horaCreacionFactura}
@@ -149,6 +152,7 @@ const Facturas = () => {
           required
         />
         <input
+          className="Facturas-input"
           type="text"
           name="pedido"
           value={factura.pedido}
@@ -157,6 +161,7 @@ const Facturas = () => {
           required
         />
         <input
+          className="Facturas-input"
           type="text"
           name="cliente"
           value={factura.cliente}
@@ -165,14 +170,23 @@ const Facturas = () => {
           required
         />
         <input
+          className="Facturas-input"
           type="text"
           name="detallesFactura"
           value={factura.detallesFactura.join(', ')}
-          onChange={(e) => handleChange({ target: { name: 'detallesFactura', value: e.target.value.split(', ') } })}
+          onChange={(e) =>
+            handleChange({
+              target: {
+                name: 'detallesFactura',
+                value: e.target.value.split(', '),
+              },
+            })
+          }
           placeholder="Detalles de la factura (separados por comas)"
           required
         />
         <input
+          className="Facturas-input"
           type="text"
           name="metodoPago"
           value={factura.metodoPago}
@@ -180,21 +194,39 @@ const Facturas = () => {
           placeholder="ID del método de pago"
           required
         />
-        <button type="submit">{editing ? 'Actualizar' : 'Crear'}</button>
+        <button
+          className={`Facturas-button ${editing ? 'editing' : ''}`}
+          type="submit"
+        >
+          {editing ? 'Actualizar' : 'Crear'}
+        </button>
       </form>
-
+  
       <h2>Lista de Facturas</h2>
-      <ul>
+      <ul className="Factura-list">
         {facturas.map((factura) => (
-          <li key={factura._id}>
+          <li className="Factura-item" key={factura._id}>
             {`${factura.fechaCreacionFactura} - ${factura.horaCreacionFactura}`}
-            <button onClick={() => obtenerFacturaPorId(factura._id)}>Editar</button>
-            <button onClick={() => eliminarFactura(factura._id)}>Eliminar</button>
+            <div>
+              <button
+                className="Factura-action-button"
+                onClick={() => obtenerFacturaPorId(factura._id)}
+              >
+                Editar
+              </button>
+              <button
+                className="Factura-action-button delete"
+                onClick={() => eliminarFactura(factura._id)}
+              >
+                Eliminar
+              </button>
+            </div>
           </li>
         ))}
       </ul>
     </div>
   );
+  
 };
 
 export default Facturas;

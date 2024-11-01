@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import './producto.css';
 const API_URL = 'http://localhost:3000/api/producto';
 
 const Producto = () => {
@@ -106,33 +106,86 @@ const Producto = () => {
   };
 
   return (
-    <div>
+    <div className="Productos-container">
       <h1>CRUD de Productos</h1>
       
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="estiloProducto" value={producto.estiloProducto} onChange={handleChange} placeholder="Estilo Producto" required />
-        <input type="text" name="cmCabezaColaProducto" value={producto.cmCabezaColaProducto} onChange={handleChange} placeholder="CM Cabeza Cola" required />
-        <input type="text" name="materialProducto" value={producto.materialProducto} onChange={handleChange} placeholder="Material Producto" required />
-        <input type="text" name="disponibilidadProducto" value={producto.disponibilidadProducto} onChange={handleChange} placeholder="Disponibilidad Producto" required />
-        <input type="text" name="cmColaPataProducto" value={producto.cmColaPataProducto} onChange={handleChange} placeholder="CM Cola Pata" required />
-        <input type="text" name="tamañoProducto" value={producto.tamañoProducto} onChange={handleChange} placeholder="Tamaño Producto" required />
+      <form className="Productos-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="estiloProducto"
+          value={producto.estiloProducto}
+          onChange={handleChange}
+          placeholder="Estilo Producto"
+          required
+          className="Productos-input"
+        />
+        <input
+          type="text"
+          name="cmCabezaColaProducto"
+          value={producto.cmCabezaColaProducto}
+          onChange={handleChange}
+          placeholder="CM Cabeza Cola"
+          required
+          className="Productos-input"
+        />
+        <input
+          type="text"
+          name="materialProducto"
+          value={producto.materialProducto}
+          onChange={handleChange}
+          placeholder="Material Producto"
+          required
+          className="Productos-input"
+        />
+        <input
+          type="text"
+          name="disponibilidadProducto"
+          value={producto.disponibilidadProducto}
+          onChange={handleChange}
+          placeholder="Disponibilidad Producto"
+          required
+          className="Productos-input"
+        />
+        <input
+          type="text"
+          name="cmColaPataProducto"
+          value={producto.cmColaPataProducto}
+          onChange={handleChange}
+          placeholder="CM Cola Pata"
+          required
+          className="Productos-input"
+        />
+        <input
+          type="text"
+          name="tamañoProducto"
+          value={producto.tamañoProducto}
+          onChange={handleChange}
+          placeholder="Tamaño Producto"
+          required
+          className="Productos-input"
+        />
         
-        <button type="submit">{editMode ? 'Actualizar Producto' : 'Crear Producto'}</button>
-        <button type="button" onClick={resetForm}>Cancelar</button>
+        <button type="submit" className={`Productos-button ${editMode ? 'editing' : ''}`}>
+          {editMode ? 'Actualizar Producto' : 'Crear Producto'}
+        </button>
+        <button type="button" onClick={resetForm} className="Productos-button">Cancelar</button>
       </form>
 
       <h2>Lista de Productos</h2>
-      <ul>
+      <ul className="Producto-list">
         {productos.map(p => (
-          <li key={p._id}>
-            {p.estiloProducto} - {p.materialProducto}
-            <button onClick={() => handleEdit(p._id)}>Editar</button>
-            <button onClick={() => handleDelete(p._id)}>Eliminar</button>
+          <li key={p._id} className="Producto-item">
+            <span>{p.estiloProducto} - {p.materialProducto}</span>
+            <div>
+              <button onClick={() => handleEdit(p._id)} className="Producto-action-button">Editar</button>
+              <button onClick={() => handleDelete(p._id)} className="Producto-action-button delete">Eliminar</button>
+            </div>
           </li>
         ))}
       </ul>
     </div>
-  );
+);
+
 };
 
 export default Producto;

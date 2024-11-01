@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import './pedido.css'
 const Pedido = () => {
   const [pedidos, setPedidos] = useState([]);
   const [nuevoPedido, setNuevoPedido] = useState({
@@ -121,10 +121,10 @@ const Pedido = () => {
   };
 
   return (
-    <div>
+    <div className="Pedidos-container">
       <h2>Gestión de Pedidos</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={crearPedido}>
+      <form onSubmit={crearPedido} className="Pedidos-form">
         <input
           type="text"
           name="tamañoOso"
@@ -132,6 +132,7 @@ const Pedido = () => {
           value={nuevoPedido.tamañoOso}
           onChange={handleChange}
           required
+          className="Pedidos-input"
         />
         <input
           type="text"
@@ -140,37 +141,52 @@ const Pedido = () => {
           value={nuevoPedido.nombreComprador}
           onChange={handleChange}
           required
+          className="Pedidos-input"
         />
         {/* Agregar más campos según sea necesario */}
-        <button type="submit">Crear Pedido</button>
+        <button type="submit" className="Pedidos-button">Crear Pedido</button>
       </form>
-
-      <ul>
+  
+      <ul className="Pedido-list">
         {pedidos.map((pedido) => (
-          <li key={pedido._id}>
+          <li key={pedido._id} className="Pedido-item">
             <span>{pedido.nombreComprador}</span>
-            <button onClick={() => setPedidoEdicion(pedido)}>Editar</button>
-            <button onClick={() => eliminarPedido(pedido._id)}>Eliminar</button>
+            <div>
+              <button
+                onClick={() => setPedidoEdicion(pedido)}
+                className="Pedido-action-button"
+              >
+                Editar
+              </button>
+              <button
+                onClick={() => eliminarPedido(pedido._id)}
+                className="Pedido-action-button delete"
+              >
+                Eliminar
+              </button>
+            </div>
           </li>
         ))}
       </ul>
       {pedidoEdicion && (
         <div>
           <h3>Editar Pedido</h3>
-          <form onSubmit={() => actualizarPedido(pedidoEdicion._id)}>
+          <form onSubmit={() => actualizarPedido(pedidoEdicion._id)} className="Pedidos-form">
             <input
               type="text"
               name="nombreComprador"
               value={pedidoEdicion.nombreComprador}
               onChange={(e) => setPedidoEdicion({ ...pedidoEdicion, nombreComprador: e.target.value })}
+              className="Pedidos-input"
             />
             {/* Agregar más campos según sea necesario */}
-            <button type="submit">Actualizar Pedido</button>
+            <button type="submit" className="Pedidos-button">Actualizar Pedido</button>
           </form>
         </div>
       )}
     </div>
   );
+  
 };
 
 export default Pedido;

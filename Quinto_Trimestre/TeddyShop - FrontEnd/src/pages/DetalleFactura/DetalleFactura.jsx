@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import './DetalleFactura.css';
 const DetalleFactura = () => {
   const [detalles, setDetalles] = useState([]);
   const [detalle, setDetalle] = useState({
@@ -99,9 +99,9 @@ const DetalleFactura = () => {
   };
 
   return (
-    <div>
+    <div className="DetalleFacturas-container">
       <h2>Detalles de Factura</h2>
-      <form onSubmit={handleSubmit}>
+      <form className="DetalleFacturas-form" onSubmit={handleSubmit}>
         <input
           type="number"
           name="numDetalle"
@@ -109,6 +109,7 @@ const DetalleFactura = () => {
           onChange={handleChange}
           placeholder="Número de Detalle"
           required
+          className="DetalleFacturas-input"
         />
         <input
           type="number"
@@ -117,6 +118,7 @@ const DetalleFactura = () => {
           onChange={handleChange}
           placeholder="Precio"
           required
+          className="DetalleFacturas-input"
         />
         <input
           type="number"
@@ -125,6 +127,7 @@ const DetalleFactura = () => {
           onChange={handleChange}
           placeholder="Cantidad"
           required
+          className="DetalleFacturas-input"
         />
         <input
           type="text"
@@ -132,6 +135,7 @@ const DetalleFactura = () => {
           value={detalle.inventarioIdInventario}
           onChange={handleChange}
           placeholder="ID de Inventario"
+          className="DetalleFacturas-input"
         />
         <input
           type="text"
@@ -139,6 +143,7 @@ const DetalleFactura = () => {
           value={detalle.productoIdProducto}
           onChange={handleChange}
           placeholder="ID de Producto"
+          className="DetalleFacturas-input"
         />
         <input
           type="text"
@@ -146,22 +151,39 @@ const DetalleFactura = () => {
           value={detalle.facturaIdFactura}
           onChange={handleChange}
           placeholder="ID de Factura"
+          className="DetalleFacturas-input"
         />
-        <button type="submit">{editingId ? 'Actualizar' : 'Crear'}</button>
+        <button
+          type="submit"
+          className={`DetalleFacturas-button ${editingId ? 'editing' : ''}`}
+        >
+          {editingId ? 'Actualizar' : 'Crear'}
+        </button>
       </form>
-
+  
       <h3>Lista de Detalles</h3>
-      <ul>
+      <ul className="DetalleFactura-list">
         {detalles.map((d) => (
-          <li key={d._id}>
+          <li key={d._id} className="DetalleFactura-item">
             <span>{`Detalle #${d.numDetalle}, Precio: ${d.precioDetalleFactura}, Cantidad: ${d.cantidadDetalleFactura}`}</span>
-            <button onClick={() => handleEdit(d)}>Editar</button>
-            <button onClick={() => handleDelete(d._id)}>Eliminar</button>
+            <button
+              onClick={() => handleEdit(d)}
+              className="DetalleFactura-action-button"
+            >
+              Editar
+            </button>
+            <button
+              onClick={() => handleDelete(d._id)}
+              className="DetalleFactura-action-button DetalleFactura-action-button.delete"
+            >
+              Eliminar
+            </button>
           </li>
         ))}
       </ul>
     </div>
   );
+  
 };
 
 export default DetalleFactura;
