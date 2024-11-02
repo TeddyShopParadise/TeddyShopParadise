@@ -1,20 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import {
+    Container,
+    TextField,
+    Button,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Snackbar,
+    Alert,
+    Box,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    IconButton,
+    TablePagination,
+} from '@mui/material';
+import { Edit, Delete, ArrowUpward, ArrowDownward } from '@mui/icons-material';
 
 const Devoluciones = () => {
     const [devoluciones, setDevoluciones] = useState([]);
     const [devolucion, setDevolucion] = useState({ detalleDevolucion: '', inventarios: [] });
     const [isEditing, setIsEditing] = useState(false);
     const [currentId, setCurrentId] = useState(null);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortBy, setSortBy] = useState('detalleDevolucion');
+    const [sortOrder, setSortOrder] = useState('asc');
 
-    // Fetch all devoluciones
     const fetchDevoluciones = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/devoluciones', {
-                headers: { 'Accept': 'application/json' },
-            });
-            if (!response.ok) {
-                throw new Error('Error en la solicitud');
-            }
+            const response = await fetch('http://localhost:3000/api/devoluciones');
+            if (!response.ok) throw new Error('Error fetching data');
             const data = await response.json();
             setDevoluciones(data);
         } catch (error) {
@@ -26,83 +51,184 @@ const Devoluciones = () => {
         fetchDevoluciones();
     }, []);
 
-    // Create or update a devolucion
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         try {
             const method = isEditing ? 'PUT' : 'POST';
-            const url = isEditing ? `http://localhost:3000/api/devoluciones/${currentId}` : 'http://localhost:3000/api/devoluciones';
-
+            const url = isEditing
+                ? `http://localhost:3000/api/devoluciones/${currentId}`
+                : 'http://localhost:3000/api/devoluciones';
             const response = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(devolucion),
             });
+            if (!response.ok) throw new Error('Error al crear/actualizar la devolución');
 
-            if (!response.ok) {
-                throw new Error('Error en la creación/actualización de la devolución');
-            }
-
-            fetchDevoluciones(); // Refresh the list after create/update
+            setSnackbarMessage(isEditing ? 'Devolución actualizada' : 'Devolución creada');
+            setOpenSnackbar(true);
+            fetchDevoluciones();
             resetForm();
         } catch (error) {
             console.error('Error submitting devolucion:', error);
+            setSnackbarMessage('Error al crear/actualizar la devolución');
+            setOpenSnackbar(true);
         }
     };
 
-    // Delete a devolucion
-    const handleDelete = async (id) => {
+    const handleDelete = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/devoluciones/${id}`, { method: 'DELETE' });
-            if (!response.ok) {
-                throw new Error('Error al eliminar la devolución');
-            }
-            fetchDevoluciones(); // Refresh the list after deletion
+            await fetch(`http://localhost:3000/api/devoluciones/${currentId}`, { method: 'DELETE' });
+            setSnackbarMessage('Devolución eliminada');
+            setOpenSnackbar(true);
+            fetchDevoluciones();
         } catch (error) {
             console.error('Error deleting devolucion:', error);
+            setSnackbarMessage('Error al eliminar la devolución');
+            setOpenSnackbar(true);
+        } finally {
+            setOpenDeleteDialog(false);
         }
     };
 
-    // Set form for editing
-    const handleEdit = (devolucion) => {
-        setDevolucion(devolucion);
-        setIsEditing(true);
-        setCurrentId(devolucion._id);
-    };
-
-    // Reset form
     const resetForm = () => {
         setDevolucion({ detalleDevolucion: '', inventarios: [] });
         setIsEditing(false);
         setCurrentId(null);
     };
 
+    const handleEditClick = (devolucion) => {
+        setDevolucion(devolucion);
+        setIsEditing(true);
+        setCurrentId(devolucion._id);
+    };
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleSort = (field) => {
+        const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        setSortOrder(newSortOrder);
+        setSortBy(field);
+    };
+
+    const filteredDevoluciones = devoluciones.filter((devolucion) =>
+        devolucion.detalleDevolucion.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const sortedDevoluciones = [...filteredDevoluciones].sort((a, b) => {
+        const aValue = a[sortBy];
+        const bValue = b[sortBy];
+        if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+    });
+
     return (
-        <div>
-            <h1>Devoluciones</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Detalle de Devolución"
+        <Box
+        sx={{
+          height: 'auto',
+          width: '100vw',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          margin: 0,
+          padding: 0,
+          py: 2,
+        }}
+      >
+        <Box
+          sx={{
+            width: '90%',
+            maxWidth: '100%',
+            padding: '50px',
+            background: 'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+            borderRadius: '30px',
+            boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
+            backdropFilter: 'blur(8px)',
+            animation: 'shimmer 10s infinite linear',
+          }}
+        >
+            <Container>
+                <h1>Devoluciones</h1>
+                <TextField
+                    label="Detalle de Devolución"
                     value={devolucion.detalleDevolucion}
                     onChange={(e) => setDevolucion({ ...devolucion, detalleDevolucion: e.target.value })}
-                    required
+                    fullWidth
+                    margin="normal"
                 />
-                <button type="submit">{isEditing ? 'Actualizar' : 'Crear'} Devolución</button>
-                {isEditing && <button type="button" onClick={resetForm}>Cancelar</button>}
-            </form>
-
-            <h2>Lista de Devoluciones</h2>
-            <ul>
-                {devoluciones.map((devolucion) => (
-                    <li key={devolucion._id}>
-                        {devolucion.detalleDevolucion}
-                        <button onClick={() => handleEdit(devolucion)}>Editar</button>
-                        <button onClick={() => handleDelete(devolucion._id)}>Eliminar</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
+                <Button variant="contained" onClick={handleSubmit}>
+                    {isEditing ? 'Actualizar' : 'Crear'}
+                </Button>
+                <TableContainer component={Paper} style={{ marginTop: 20 }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>
+                                    <Box display="flex" alignItems="center" onClick={() => handleSort('detalleDevolucion')}>
+                                        Detalle de Devolución
+                                        {sortBy === 'detalleDevolucion' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+                                    </Box>
+                                </TableCell>
+                                <TableCell>Acciones</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {sortedDevoluciones.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((devolucion) => (
+                                <TableRow key={devolucion._id}>
+                                    <TableCell>{devolucion.detalleDevolucion}</TableCell>
+                                    <TableCell>
+                                        <IconButton onClick={() => handleEditClick(devolucion)}>
+                                            <Edit />
+                                        </IconButton>
+                                        <IconButton onClick={() => {
+                                            setCurrentId(devolucion._id);
+                                            setOpenDeleteDialog(true);
+                                        }}>
+                                            <Delete />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={filteredDevoluciones.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+                <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+                    <Alert severity="success" onClose={() => setOpenSnackbar(false)}>
+                        {snackbarMessage}
+                    </Alert>
+                </Snackbar>
+                <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
+                    <DialogTitle>Confirmar eliminación</DialogTitle>
+                    <DialogContent>¿Estás seguro de que deseas eliminar esta devolución?</DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setOpenDeleteDialog(false)}>Cancelar</Button>
+                        <Button color="error" onClick={handleDelete}>Eliminar</Button>
+                    </DialogActions>
+                </Dialog>
+            </Container>
+        </Box>
+    </Box>
     );
 };
 

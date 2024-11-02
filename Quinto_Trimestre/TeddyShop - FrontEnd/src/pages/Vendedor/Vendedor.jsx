@@ -329,9 +329,8 @@ const Vendedores = () => {
             <DialogTitle>Detalles del Vendedor</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                <strong>Código del Vendedor:</strong> {selectedVendedor?.codigoVendedor}
-                <br />
-                <strong>DNI del Empleado:</strong> {selectedVendedor?.dniEmpleado}
+                <strong>Código del Vendedor:</strong> {selectedVendedor?.codigoVendedor} <br />
+                <strong>DNI del Empleado:</strong> {selectedVendedor?.dniEmpleado} <br />
               </DialogContentText>
             </DialogContent>
             <DialogActions>

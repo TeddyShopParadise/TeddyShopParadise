@@ -21,7 +21,7 @@ import {
   IconButton,
   TablePagination,
 } from '@mui/material';
-import { Edit, Delete, ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
 import './metodoPago.css';
 
 const MetodoPago = () => {
@@ -32,6 +32,8 @@ const MetodoPago = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [currentId, setCurrentId] = useState(null);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
+  const [selectedMetodo, setSelectedMetodo] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
@@ -62,6 +64,11 @@ const MetodoPago = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoMetodo),
       });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+
       const newMetodo = await response.json();
       setMetodosPago([...metodosPago, newMetodo]);
       setSnackbarMessage('Método de pago creado con éxito');
@@ -69,7 +76,7 @@ const MetodoPago = () => {
       setNuevoMetodo({ nombreMetodoPago: '', factura: '' });
     } catch (error) {
       console.error('Error creando método de pago:', error);
-      setSnackbarMessage('Error al crear el método de pago');
+      setSnackbarMessage('Error al crear el método de pago: ' + error.message);
       setOpenSnackbar(true);
     }
   };
@@ -77,12 +84,22 @@ const MetodoPago = () => {
   const actualizarMetodoPago = async () => {
     if (!editarMetodo) return;
 
+    const metodoActualizar = {
+      nombreMetodoPago: nuevoMetodo.nombreMetodoPago,
+      factura: nuevoMetodo.factura,
+    };
+
     try {
       const response = await fetch(`http://localhost:3000/api/metodoPago/${editarMetodo._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editarMetodo),
+        body: JSON.stringify(metodoActualizar),
       });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+
       const updatedMetodo = await response.json();
       setMetodosPago(metodosPago.map((metodo) => (metodo._id === updatedMetodo._id ? updatedMetodo : metodo)));
       setSnackbarMessage('Método de pago actualizado con éxito');
@@ -91,7 +108,7 @@ const MetodoPago = () => {
       setNuevoMetodo({ nombreMetodoPago: '', factura: '' });
     } catch (error) {
       console.error('Error actualizando el método de pago:', error);
-      setSnackbarMessage('Error al actualizar el método de pago');
+      setSnackbarMessage('Error al actualizar el método de pago: ' + error.message);
       setOpenSnackbar(true);
     }
   };
@@ -136,7 +153,12 @@ const MetodoPago = () => {
 
   const handleEditClick = (metodo) => {
     setEditarMetodo(metodo);
-    setNuevoMetodo({ nombreMetodoPago: metodo.nombreMetodoPago, factura: metodo.factura });
+    setNuevoMetodo({ nombreMetodoPago: metodo.nombreMetodoPago, factura: metodo.factura._id || '' });
+  };
+
+  const handleDetailClick = (metodo) => {
+    setSelectedMetodo(metodo);
+    setOpenDetailDialog(true);
   };
 
   if (loading) {
@@ -144,7 +166,7 @@ const MetodoPago = () => {
   }
 
   const filteredMetodosPago = metodosPago.filter((metodo) =>
-    metodo.nombreMetodoPago.toLowerCase().includes(searchTerm.toLowerCase())
+    metodo.nombreMetodoPago && metodo.nombreMetodoPago.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const sortedMetodosPago = [...filteredMetodosPago].sort((a, b) => {
@@ -187,15 +209,15 @@ const MetodoPago = () => {
           <Box mb={4}>
             <TextField
               label="Nombre del Método de Pago"
-              value={nuevoMetodo.nombreMetodoPago || ''} // Asegurarse de que sea una cadena
-              onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, nombreMetodoPago: e.target.value || '' })}
+              value={nuevoMetodo.nombreMetodoPago}
+              onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, nombreMetodoPago: e.target.value })}
               fullWidth
               margin="normal"
             />
             <TextField
               label="Factura"
-              value={nuevoMetodo.factura || ''} // Asegurarse de que sea una cadena
-              onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, factura: e.target.value || '' })}
+              value={nuevoMetodo.factura}
+              onChange={(e) => setNuevoMetodo({ ...nuevoMetodo, factura: e.target.value })}
               fullWidth
               margin="normal"
             />
@@ -245,13 +267,19 @@ const MetodoPago = () => {
                 {sortedMetodosPago.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((metodo) => (
                   <TableRow key={metodo._id}>
                     <TableCell>{metodo.nombreMetodoPago}</TableCell>
-                    <TableCell>{metodo.factura || 'No disponible'}</TableCell>
+                    <TableCell>{metodo.factura ? metodo.factura._id : 'No disponible'}</TableCell>
                     <TableCell>
                       <IconButton onClick={() => handleEditClick(metodo)}>
                         <Edit />
                       </IconButton>
-                      <IconButton onClick={() => { setCurrentId(metodo._id); setOpenDeleteDialog(true); }}>
+                      <IconButton onClick={() => {
+                        setCurrentId(metodo._id);
+                        setOpenDeleteDialog(true);
+                      }}>
                         <Delete />
+                      </IconButton>
+                      <IconButton onClick={() => handleDetailClick(metodo)}>
+                        <Info />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -261,41 +289,58 @@ const MetodoPago = () => {
           </TableContainer>
 
           <TablePagination
-            rowsPerPageOptions={[10, 25, 50]}
+            rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={sortedMetodosPago.length}
+            count={filteredMetodosPago.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
 
+          {/* Snackbar para mostrar mensajes */}
+          <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Alert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+
+          {/* Diálogo de eliminación */}
           <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
-            <DialogTitle>Confirmar Eliminación</DialogTitle>
+            <DialogTitle>Eliminar Método de Pago</DialogTitle>
             <DialogContent>
               <DialogContentText>
                 ¿Estás seguro de que deseas eliminar este método de pago?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
-                Cancelar
-              </Button>
-              <Button onClick={eliminarMetodoPago} color="primary">
+              <Button onClick={() => setOpenDeleteDialog(false)}>Cancelar</Button>
+              <Button onClick={eliminarMetodoPago} color="error">
                 Eliminar
               </Button>
             </DialogActions>
           </Dialog>
 
-          <Snackbar
-            open={openSnackbar}
-            autoHideDuration={6000}
-            onClose={() => setOpenSnackbar(false)}
-          >
-            <Alert onClose={() => setOpenSnackbar(false)} severity="success">
-              {snackbarMessage}
-            </Alert>
-          </Snackbar>
+          {/* Diálogo de detalles */}
+          <Dialog open={openDetailDialog} onClose={() => setOpenDetailDialog(false)}>
+            <DialogTitle>Detalles del Método de Pago</DialogTitle>
+            <DialogContent>
+              {selectedMetodo && (
+                <DialogContentText>
+                  <strong>Nombre:</strong> {selectedMetodo.nombreMetodoPago} <br />
+                  <strong>ID Factura:</strong> {selectedMetodo.factura ? selectedMetodo.factura._id : 'N/A'} <br />
+                  <strong>Fecha de Creación Factura:</strong> {selectedMetodo.factura ? new Date(selectedMetodo.factura.fechaCreacionFactura).toLocaleDateString() : 'N/A'}<br />
+                  <strong>Hora de Creación Factura:</strong> {selectedMetodo.factura ? selectedMetodo.factura.horaCreacionFactura : 'N/A'} <br />
+                  <strong>ID Pedido:</strong> {selectedMetodo.factura ? selectedMetodo.factura.pedido : 'N/A'} <br />
+                  <strong>ID Cliente:</strong> {selectedMetodo.factura ? selectedMetodo.factura.cliente : 'N/A'} <br />
+                  <strong>ID Detalle Factura:</strong> {selectedMetodo.factura ? selectedMetodo.factura.detallesFactura : 'N/A'} <br />
+                </DialogContentText>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDetailDialog(false)}>Cerrar</Button>
+            </DialogActions>
+          </Dialog>
         </Container>
       </Box>
     </Box>
