@@ -1,4 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Snackbar,
+  Alert,
+  Box,
+  TablePagination,
+  Switch,
+} from '@mui/material';
+import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
+import '../PagesStyle.css';
 
 export default function Cliente() {
     const [clientes, setClientes] = useState([]);
@@ -107,82 +132,149 @@ export default function Cliente() {
     };
 
     return (
-        <div>
-            <h1>Lista de Clientes</h1>
-            {clientes.map(cliente => (
-                <div key={cliente._id}>
-                    <p>
-                        DNI: {cliente.dniCliente}, Nombre: {cliente.nombreCliente}, Teléfono: {cliente.telefonoCliente}, 
-                        Fecha de Nacimiento: {new Date(cliente.fechaNacimientoCliente).toLocaleDateString()}, 
-                        Apellido: {cliente.apellidoCliente}
+        <Box
+          sx={{
+            height: { xs: 'auto', md: '130vh' },
+            width: '100vw',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            margin: 0,
+            padding: 0,
+            py: 2,
+          }}
+        >
+          <Box
+            sx={{
+              width: '90%',
+              maxWidth: '100%',
+              padding: { xs: '20px', md: '50px' },
+              background:
+                'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+              borderRadius: '30px',
+              boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(8px)',
+              backgroundSize: '200% 200%',
+              animation: 'shimmer 10s infinite linear',
+            }}
+          >
+            <Container>
+              {/* Formulario de Crear o Editar Cliente */}
+              <h2>{selectedClientId ? 'Actualizar Cliente' : 'Crear Cliente'}</h2>
+              <form onSubmit={handleSubmit} noValidate autoComplete="off">
+                <TextField
+                  type="number"
+                  name="dniCliente"
+                  label="DNI del Cliente"
+                  value={formData.dniCliente}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  required
+                  variant="outlined"
+                  sx={{
+                    '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                    '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                  }}
+                />
+                <TextField
+                  type="text"
+                  name="nombreCliente"
+                  label="Nombre del Cliente"
+                  value={formData.nombreCliente}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  required
+                  variant="outlined"
+                  sx={{
+                    '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                    '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                  }}
+                />
+                <TextField
+                  type="text"
+                  name="telefonoCliente"
+                  label="Teléfono del Cliente"
+                  value={formData.telefonoCliente}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  required
+                  variant="outlined"
+                  sx={{
+                    '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                    '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                  }}
+                />
+                <TextField
+                  type="date"
+                  name="fechaNacimientoCliente"
+                  label="Fecha de Nacimiento"
+                  value={formData.fechaNacimientoCliente}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  required
+                  variant="outlined"
+                  sx={{
+                    '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                    '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                  }}
+                />
+                <TextField
+                  type="text"
+                  name="apellidoCliente"
+                  label="Apellido del Cliente"
+                  value={formData.apellidoCliente}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  variant="outlined"
+                  sx={{
+                    '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                    '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                  }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ marginTop: 2, fontSize: '1.2rem' }}
+                >
+                  {selectedClientId ? 'Actualizar Cliente' : 'Crear Cliente'}
+                </Button>
+              </form>
+      
+              {/* Mensajes de éxito o error */}
+              {successMessage && <Alert severity="success" sx={{ mt: 2 }}>{successMessage}</Alert>}
+              {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+      
+              {/* Lista de Clientes */}
+              <h1>Lista de Clientes</h1>
+              <Box mt={2}>
+                {clientes.map((cliente) => (
+                  <Box key={cliente._id} sx={{ mb: 2 }}>
+                    <p style={{ fontSize: '1.2rem' }}>
+                      DNI: {cliente.dniCliente}, Nombre: {cliente.nombreCliente}, Teléfono: {cliente.telefonoCliente}, 
+                      Fecha de Nacimiento: {new Date(cliente.fechaNacimientoCliente).toLocaleDateString()}, 
+                      Apellido: {cliente.apellidoCliente}
                     </p>
-                    <button onClick={() => handleEdit(cliente)}>Editar</button>
-                    <button onClick={() => eliminarCliente(cliente._id)}>Eliminar</button>
-                </div>
-            ))}
-
-            <h2>{selectedClientId ? 'Actualizar Cliente' : 'Crear Cliente'}</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    DNI del Cliente:
-                    <input
-                        type="number"
-                        name="dniCliente"
-                        value={formData.dniCliente}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <br />
-                <label>
-                    Nombre del Cliente:
-                    <input
-                        type="text"
-                        name="nombreCliente"
-                        value={formData.nombreCliente}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <br />
-                <label>
-                    Teléfono del Cliente:
-                    <input
-                        type="text"
-                        name="telefonoCliente"
-                        value={formData.telefonoCliente}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <br />
-                <label>
-                    Fecha de Nacimiento:
-                    <input
-                        type="date"
-                        name="fechaNacimientoCliente"
-                        value={formData.fechaNacimientoCliente}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <br />
-                <label>
-                    Apellido del Cliente:
-                    <input
-                        type="text"
-                        name="apellidoCliente"
-                        value={formData.apellidoCliente}
-                        onChange={handleChange}
-                    />
-                </label>
-                <br />
-                <button type="submit">{selectedClientId ? 'Actualizar Cliente' : 'Crear Cliente'}</button>
-            </form>
-
-            {/* Mensajes de éxito o error */}
-            {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-        </div>
-    );
+                    <Box>
+                      <IconButton onClick={() => handleEdit(cliente)} sx={{ fontSize: '1.2rem' }}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton onClick={() => eliminarCliente(cliente._id)} sx={{ fontSize: '1.2rem' }}>
+                        <Delete />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Container>
+          </Box>
+        </Box>
+      );
+      
+      
 }

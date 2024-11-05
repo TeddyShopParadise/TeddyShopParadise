@@ -1,4 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Snackbar,
+  Alert,
+  Box,
+  TablePagination,
+  Switch,
+} from '@mui/material';
+import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
+import '../PagesStyle.css';
 
 const Compania = () => {
   const [companias, setCompanias] = useState([]);
@@ -122,52 +147,145 @@ const Compania = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Gestión de Compañías</h1>
-      <form onSubmit={(e) => { e.preventDefault(); editingId ? actualizarCompania() : crearCompania(); }}>
-        <input
-          type="number"
-          placeholder="NIT"
-          value={NIT}
-          onChange={(e) => setNIT(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Teléfono de la empresa"
-          value={telefonoEmpresa}
-          onChange={(e) => setTelefonoEmpresa(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Nombre de la empresa"
-          value={nombreEmpresa}
-          onChange={(e) => setNombreEmpresa(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Dirección de la empresa"
-          value={direccionEmpresa}
-          onChange={(e) => setDireccionEmpresa(e.target.value)}
-          required
-        />
-        <button type="submit">{editingId ? 'Actualizar' : 'Crear'}</button>
-        <button type="button" onClick={resetForm}>Cancelar</button>
-      </form>
-      <h2>Lista de Compañías</h2>
-      <ul>
-        {companias.map((comp) => (
-          <li key={comp._id}>
-            {comp.nombreEmpresa} - {comp.telefonoEmpresa} - {comp.direccionEmpresa}
-            <button onClick={() => editarCompania(comp)}>Editar</button>
-            <button onClick={() => eliminarCompania(comp._id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box
+      sx={{
+        height: { xs: 'auto', md: '130vh' },
+        width: '100vw',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        margin: 0,
+        padding: 0,
+        py: 2,
+      }}
+    >
+      <Box
+        sx={{
+          width: '90%',
+          maxWidth: '100%',
+          padding: { xs: '20px', md: '50px' },
+          background:
+            'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+          borderRadius: '30px',
+          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(8px)',
+          backgroundSize: '200% 200%',
+          animation: 'shimmer 10s infinite linear',
+        }}
+      >
+        <Container>
+          <h1>Gestión de Compañías</h1>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              editingId ? actualizarCompania() : crearCompania();
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              type="number"
+              label="NIT"
+              value={NIT}
+              onChange={(e) => setNIT(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              label="Teléfono de la Empresa"
+              value={telefonoEmpresa}
+              onChange={(e) => setTelefonoEmpresa(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              label="Nombre de la Empresa"
+              value={nombreEmpresa}
+              onChange={(e) => setNombreEmpresa(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              label="Dirección de la Empresa"
+              value={direccionEmpresa}
+              onChange={(e) => setDireccionEmpresa(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <Box display="flex" justifyContent="space-between" mt={2}>
+              <Button type="submit" variant="contained" sx={{ fontSize: '1.2rem' }}>
+                {editingId ? 'Actualizar' : 'Crear'}
+              </Button>
+              <Button
+                type="button"
+                onClick={resetForm}
+                variant="outlined"
+                sx={{ fontSize: '1.2rem' }}
+              >
+                Cancelar
+              </Button>
+            </Box>
+          </form>
+  
+          <Box mt={4}>
+            <h2>Lista de Compañías</h2>
+            <ul style={{ listStyleType: 'none', padding: 0 }}>
+              {companias.map((comp) => (
+                <li
+                  key={comp._id}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    fontSize: '1.2rem',
+                  }}
+                >
+                  <span>{comp.nombreEmpresa}</span> - <span>{comp.telefonoEmpresa}</span> - <span>{comp.direccionEmpresa}</span>
+                  <Box>
+                    <IconButton onClick={() => editarCompania(comp)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton onClick={() => eliminarCompania(comp._id)}>
+                      <Delete />
+                    </IconButton>
+                  </Box>
+                </li>
+              ))}
+            </ul>
+          </Box>
+        </Container>
+      </Box>
+    </Box>
   );
+  
 };
 
 export default Compania;

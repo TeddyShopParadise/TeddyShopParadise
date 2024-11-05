@@ -1,4 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Snackbar,
+  Alert,
+  Box,
+  TablePagination,
+  Switch,
+} from '@mui/material';
+import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
+import '../PagesStyle.css';
 
 const Empleado = () => {
   const [empleados, setEmpleados] = useState([]);
@@ -83,31 +108,199 @@ const Empleado = () => {
   };
 
   return (
-    <div>
-      <h1>Empleados</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="number" name="dniEmpleado" value={formData.dniEmpleado} onChange={handleChange} placeholder="DNI" required />
-        <input type="text" name="telefonoEmpleado" value={formData.telefonoEmpleado} onChange={handleChange} placeholder="Teléfono" required />
-        <input type="text" name="codigoEmpleado" value={formData.codigoEmpleado} onChange={handleChange} placeholder="Código" required />
-        <input type="date" name="fechaNacimientoEmpleado" value={formData.fechaNacimientoEmpleado} onChange={handleChange} required />
-        <input type="text" name="nombreEmpleado" value={formData.nombreEmpleado} onChange={handleChange} placeholder="Nombre" required />
-        <input type="text" name="compania" value={formData.compania} onChange={handleChange} placeholder="Compañía" />
-        <input type="text" name="administrador" value={formData.administrador} onChange={handleChange} placeholder="Administrador" />
-        <input type="text" name="usuario" value={formData.usuario} onChange={handleChange} placeholder="Usuario" />
-        <input type="text" name="vendedor" value={formData.vendedor} onChange={handleChange} placeholder="Vendedor" />
-        <button type="submit">{editMode ? 'Actualizar' : 'Crear'}</button>
-      </form>
-      <ul>
-        {empleados.map((empleado) => (
-          <li key={empleado._id}>
-            {empleado.nombreEmpleado} - {empleado.telefonoEmpleado}
-            <button onClick={() => handleEdit(empleado)}>Editar</button>
-            <button onClick={() => handleDelete(empleado._id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box
+      sx={{
+        height: { xs: 'auto', md: '130vh' },
+        width: '100vw',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        margin: 0,
+        padding: 0,
+        py: 2,
+      }}
+    >
+      <Box
+        sx={{
+          width: '90%',
+          maxWidth: '100%',
+          padding: { xs: '20px', md: '50px' },
+          background:
+            'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+          borderRadius: '30px',
+          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(8px)',
+          backgroundSize: '200% 200%',
+          animation: 'shimmer 10s infinite linear',
+        }}
+      >
+        <Container>
+          <h1>Empleados</h1>
+          <form onSubmit={handleSubmit} noValidate autoComplete="off">
+            <TextField
+              type="number"
+              name="dniEmpleado"
+              label="DNI"
+              value={formData.dniEmpleado}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+              }}
+            />
+            <TextField
+              type="text"
+              name="telefonoEmpleado"
+              label="Teléfono"
+              value={formData.telefonoEmpleado}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              name="codigoEmpleado"
+              label="Código"
+              value={formData.codigoEmpleado}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="date"
+              name="fechaNacimientoEmpleado"
+              value={formData.fechaNacimientoEmpleado}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              name="nombreEmpleado"
+              label="Nombre"
+              value={formData.nombreEmpleado}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              name="compania"
+              label="Compañía"
+              value={formData.compania}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              name="administrador"
+              label="Administrador"
+              value={formData.administrador}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              name="usuario"
+              label="Usuario"
+              value={formData.usuario}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <TextField
+              type="text"
+              name="vendedor"
+              label="Vendedor"
+              value={formData.vendedor}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+              }}
+            />
+            <Button type="submit" variant="contained" sx={{ marginTop: 2, fontSize: '1.2rem' }}>
+              {editMode ? 'Actualizar' : 'Crear'}
+            </Button>
+          </form>
+  
+          <Box mt={4}>
+            <h2>Lista de Empleados</h2>
+            <ul style={{ listStyleType: 'none', padding: 0 }}>
+              {empleados.map((empleado) => (
+                <li key={empleado._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '1.2rem' }}>
+                    {empleado.nombreEmpleado} - {empleado.telefonoEmpleado}
+                  </span>
+                  <Box>
+                    <IconButton onClick={() => handleEdit(empleado)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(empleado._id)}>
+                      <Delete />
+                    </IconButton>
+                  </Box>
+                </li>
+              ))}
+            </ul>
+          </Box>
+        </Container>
+      </Box>
+    </Box>
   );
+  
 };
 
 export default Empleado;

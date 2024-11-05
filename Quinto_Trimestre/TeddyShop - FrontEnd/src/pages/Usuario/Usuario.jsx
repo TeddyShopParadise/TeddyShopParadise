@@ -23,7 +23,7 @@ import {
   Switch
 } from "@mui/material";
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from "@mui/icons-material";
-import './usuario.css';
+import '../PagesStyle.css';
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);

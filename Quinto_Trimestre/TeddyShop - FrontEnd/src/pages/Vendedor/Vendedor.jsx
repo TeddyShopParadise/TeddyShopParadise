@@ -23,7 +23,9 @@ import {
   Switch,
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
-import './vendedor.css';
+import '../PagesStyle.css';
+
+
 
 const Vendedores = () => {
   const [vendedores, setVendedores] = useState([]);

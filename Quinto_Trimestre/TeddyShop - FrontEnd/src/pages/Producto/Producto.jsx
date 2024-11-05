@@ -23,8 +23,7 @@ import {
   Switch
 } from "@mui/material";
 import { Edit, Delete, Info } from "@mui/icons-material";
-import './producto.css';
-
+import '../PagesStyle.css';
 const API_URL = 'http://localhost:3000/api/producto';
 
 const Producto = () => {

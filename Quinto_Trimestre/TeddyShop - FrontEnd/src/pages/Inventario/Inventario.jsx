@@ -1,4 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Snackbar,
+  Alert,
+  Box,
+  TablePagination,
+  Switch,
+  FormControlLabel, // Importar FormControlLabel
+  Checkbox, // Importar Checkbox
+} from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
+import '../PagesStyle.css';
 
 const Inventario = () => {
     const [inventarios, setInventarios] = useState([]);
@@ -77,109 +104,239 @@ const Inventario = () => {
     }, []);
 
     return (
-        <div>
-            <h1>Inventario</h1>
-
-            <h2>Crear Inventario</h2>
-            <input
+        <Box
+          sx={{
+            height: { xs: 'auto', md: '130vh' },
+            width: '100vw',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            margin: 0,
+            padding: 0,
+            py: 2,
+          }}
+        >
+          <Box
+            sx={{
+              width: '90%',
+              maxWidth: '100%',
+              padding: { xs: '20px', md: '50px' },
+              background:
+                'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+              borderRadius: '30px',
+              boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
+              backdropFilter: 'blur(8px)',
+              backgroundSize: '200% 200%',
+              animation: 'shimmer 10s infinite linear',
+            }}
+          >
+            <Container>
+              <h1>Inventario</h1>
+      
+              <h2>Crear Inventario</h2>
+              <TextField
                 type="number"
-                placeholder="Stock Mínimo"
+                label="Stock Mínimo"
                 value={nuevoInventario.stockMinimo}
                 onChange={(e) => setNuevoInventario({ ...nuevoInventario, stockMinimo: e.target.value })}
-            />
-            <input
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                  '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                  '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                }}
+              />
+              <TextField
                 type="number"
-                placeholder="Precio Venta"
+                label="Precio Venta"
                 value={nuevoInventario.precioVenta}
                 onChange={(e) => setNuevoInventario({ ...nuevoInventario, precioVenta: e.target.value })}
-            />
-            <input
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                  '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                  '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                }}
+              />
+              <TextField
                 type="number"
-                placeholder="Precio Compra"
+                label="Precio Compra"
                 value={nuevoInventario.precioCompra}
                 onChange={(e) => setNuevoInventario({ ...nuevoInventario, precioCompra: e.target.value })}
-            />
-            <input
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                  '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                  '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                }}
+              />
+              <TextField
                 type="number"
-                placeholder="Stock"
+                label="Stock"
                 value={nuevoInventario.stock}
                 onChange={(e) => setNuevoInventario({ ...nuevoInventario, stock: e.target.value })}
-            />
-            <input
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                  '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                  '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                }}
+              />
+              <TextField
                 type="number"
-                placeholder="Stock Máximo"
+                label="Stock Máximo"
                 value={nuevoInventario.stockMaximo}
                 onChange={(e) => setNuevoInventario({ ...nuevoInventario, stockMaximo: e.target.value })}
-            />
-            <input
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                  '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                  '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                }}
+              />
+              <TextField
                 type="text"
-                placeholder="ID Producto"
+                label="ID Producto"
                 value={nuevoInventario.productoIdProducto}
                 onChange={(e) => setNuevoInventario({ ...nuevoInventario, productoIdProducto: e.target.value })}
-            />
-            <button onClick={crearInventario}>Crear Inventario</button>
-
-            <h2>Lista de Inventarios</h2>
-            <ul>
-                {inventarios.map(inventario => (
-                    <li key={inventario.idInventario}>
-                        <p>ID: {inventario.idInventario}</p>
-                        <p>Stock Mínimo: {inventario.stockMinimo}</p>
-                        <p>Precio Venta: {inventario.precioVenta}</p>
-                        <p>Precio Compra: {inventario.precioCompra}</p>
-                        <p>Stock: {inventario.stock}</p>
-                        <p>Stock Máximo: {inventario.stockMaximo}</p>
-                        <button onClick={() => setSelectedInventario(inventario)}>Editar</button>
-                        <button onClick={() => eliminarInventario(inventario.idInventario)}>Eliminar</button>
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                  '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                  '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                }}
+              />
+              <Button variant="contained" onClick={crearInventario} sx={{ marginTop: 2, fontSize: '1.2rem' }}>
+                Crear Inventario
+              </Button>
+      
+              <h2>Lista de Inventarios</h2>
+              <Box mt={2}>
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                  {inventarios.map((inventario) => (
+                    <li key={inventario.idInventario} style={{ marginBottom: '1rem' }}>
+                      <p style={{ fontSize: '1.2rem' }}>ID: {inventario.idInventario}</p>
+                      <p style={{ fontSize: '1.2rem' }}>Stock Mínimo: {inventario.stockMinimo}</p>
+                      <p style={{ fontSize: '1.2rem' }}>Precio Venta: {inventario.precioVenta}</p>
+                      <p style={{ fontSize: '1.2rem' }}>Precio Compra: {inventario.precioCompra}</p>
+                      <p style={{ fontSize: '1.2rem' }}>Stock: {inventario.stock}</p>
+                      <p style={{ fontSize: '1.2rem' }}>Stock Máximo: {inventario.stockMaximo}</p>
+                      <Box>
+                        <IconButton onClick={() => setSelectedInventario(inventario)}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton onClick={() => eliminarInventario(inventario.idInventario)}>
+                          <Delete />
+                        </IconButton>
+                      </Box>
                     </li>
-                ))}
-            </ul>
-
-            {selectedInventario && (
-                <div>
-                    <h2>Actualizar Inventario</h2>
-                    <input
-                        type="number"
-                        placeholder="Stock Mínimo"
-                        value={selectedInventario.stockMinimo}
-                        onChange={(e) => setSelectedInventario({ ...selectedInventario, stockMinimo: e.target.value })}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Precio Venta"
-                        value={selectedInventario.precioVenta}
-                        onChange={(e) => setSelectedInventario({ ...selectedInventario, precioVenta: e.target.value })}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Precio Compra"
-                        value={selectedInventario.precioCompra}
-                        onChange={(e) => setSelectedInventario({ ...selectedInventario, precioCompra: e.target.value })}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Stock"
-                        value={selectedInventario.stock}
-                        onChange={(e) => setSelectedInventario({ ...selectedInventario, stock: e.target.value })}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Stock Máximo"
-                        value={selectedInventario.stockMaximo}
-                        onChange={(e) => setSelectedInventario({ ...selectedInventario, stockMaximo: e.target.value })}
-                    />
-                    <input
-                        type="text"
-                        placeholder="ID Producto"
-                        value={selectedInventario.productoIdProducto}
-                        onChange={(e) => setSelectedInventario({ ...selectedInventario, productoIdProducto: e.target.value })}
-                    />
-                    <button onClick={() => actualizarInventario(selectedInventario.idInventario)}>Actualizar Inventario</button>
-                    <button onClick={() => setSelectedInventario(null)}>Cancelar</button>
-                </div>
-            )}
-        </div>
-    );
+                  ))}
+                </ul>
+              </Box>
+      
+              {selectedInventario && (
+                <Box mt={4}>
+                  <h2>Actualizar Inventario</h2>
+                  <TextField
+                    type="number"
+                    label="Stock Mínimo"
+                    value={selectedInventario.stockMinimo}
+                    onChange={(e) => setSelectedInventario({ ...selectedInventario, stockMinimo: e.target.value })}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    sx={{
+                      '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                      '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                    }}
+                  />
+                  <TextField
+                    type="number"
+                    label="Precio Venta"
+                    value={selectedInventario.precioVenta}
+                    onChange={(e) => setSelectedInventario({ ...selectedInventario, precioVenta: e.target.value })}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    sx={{
+                      '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                      '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                    }}
+                  />
+                  <TextField
+                    type="number"
+                    label="Precio Compra"
+                    value={selectedInventario.precioCompra}
+                    onChange={(e) => setSelectedInventario({ ...selectedInventario, precioCompra: e.target.value })}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    sx={{
+                      '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                      '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                    }}
+                  />
+                  <TextField
+                    type="number"
+                    label="Stock"
+                    value={selectedInventario.stock}
+                    onChange={(e) => setSelectedInventario({ ...selectedInventario, stock: e.target.value })}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    sx={{
+                      '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                      '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                    }}
+                  />
+                  <TextField
+                    type="number"
+                    label="Stock Máximo"
+                    value={selectedInventario.stockMaximo}
+                    onChange={(e) => setSelectedInventario({ ...selectedInventario, stockMaximo: e.target.value })}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    sx={{
+                      '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                      '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                    }}
+                  />
+                  <TextField
+                    type="text"
+                    label="ID Producto"
+                    value={selectedInventario.productoIdProducto}
+                    onChange={(e) => setSelectedInventario({ ...selectedInventario, productoIdProducto: e.target.value })}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    sx={{
+                      '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                      '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                    }}
+                  />
+                  <Box mt={2}>
+                    <Button variant="contained" onClick={() => actualizarInventario(selectedInventario.idInventario)} sx={{ marginRight: 2 }}>
+                      Actualizar Inventario
+                    </Button>
+                    <Button variant="outlined" onClick={() => setSelectedInventario(null)}>
+                      Cancelar
+                    </Button>
+                  </Box>
+                </Box>
+              )}
+            </Container>
+          </Box>
+        </Box>
+      );
+      
 };
 
 export default Inventario;

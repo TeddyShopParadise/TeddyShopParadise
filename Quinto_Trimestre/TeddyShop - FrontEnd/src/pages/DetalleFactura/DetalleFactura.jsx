@@ -1,4 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Snackbar,
+  Alert,
+  Box,
+  TablePagination,
+  Switch,
+} from '@mui/material';
+import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
+import '../PagesStyle.css';
 
 const DetalleFactura = () => {
   const [detalles, setDetalles] = useState([]);
@@ -99,69 +124,163 @@ const DetalleFactura = () => {
   };
 
   return (
-    <div>
-      <h2>Detalles de Factura</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="number"
-          name="numDetalle"
-          value={detalle.numDetalle}
-          onChange={handleChange}
-          placeholder="Número de Detalle"
-          required
-        />
-        <input
-          type="number"
-          name="precioDetalleFactura"
-          value={detalle.precioDetalleFactura}
-          onChange={handleChange}
-          placeholder="Precio"
-          required
-        />
-        <input
-          type="number"
-          name="cantidadDetalleFactura"
-          value={detalle.cantidadDetalleFactura}
-          onChange={handleChange}
-          placeholder="Cantidad"
-          required
-        />
-        <input
-          type="text"
-          name="inventarioIdInventario"
-          value={detalle.inventarioIdInventario}
-          onChange={handleChange}
-          placeholder="ID de Inventario"
-        />
-        <input
-          type="text"
-          name="productoIdProducto"
-          value={detalle.productoIdProducto}
-          onChange={handleChange}
-          placeholder="ID de Producto"
-        />
-        <input
-          type="text"
-          name="facturaIdFactura"
-          value={detalle.facturaIdFactura}
-          onChange={handleChange}
-          placeholder="ID de Factura"
-        />
-        <button type="submit">{editingId ? 'Actualizar' : 'Crear'}</button>
-      </form>
-
-      <h3>Lista de Detalles</h3>
-      <ul>
-        {detalles.map((d) => (
-          <li key={d._id}>
-            <span>{`Detalle #${d.numDetalle}, Precio: ${d.precioDetalleFactura}, Cantidad: ${d.cantidadDetalleFactura}`}</span>
-            <button onClick={() => handleEdit(d)}>Editar</button>
-            <button onClick={() => handleDelete(d._id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box
+      sx={{
+        height: { xs: 'auto', md: '130vh' },
+        width: '100vw',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        margin: 0,
+        padding: 0,
+        py: 2,
+      }}
+    >
+      <Box
+        sx={{
+          width: '90%',
+          maxWidth: '100%',
+          padding: { xs: '20px', md: '50px' },
+          background:
+            'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+          borderRadius: '30px',
+          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(8px)',
+          backgroundSize: '200% 200%',
+          animation: 'shimmer 10s infinite linear',
+        }}
+      >
+        <Container>
+          <h1>Detalles de Factura</h1>
+          <form onSubmit={handleSubmit} noValidate autoComplete="off">
+            <TextField
+              type="number"
+              name="numDetalle"
+              label="Número de Detalle"
+              value={detalle.numDetalle}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+              }}
+            />
+            <TextField
+              type="number"
+              name="precioDetalleFactura"
+              label="Precio"
+              value={detalle.precioDetalleFactura}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+              }}
+            />
+            <TextField
+              type="number"
+              name="cantidadDetalleFactura"
+              label="Cantidad"
+              value={detalle.cantidadDetalleFactura}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+              }}
+            />
+            <TextField
+              type="text"
+              name="inventarioIdInventario"
+              label="ID de Inventario"
+              value={detalle.inventarioIdInventario}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+              }}
+            />
+            <TextField
+              type="text"
+              name="productoIdProducto"
+              label="ID de Producto"
+              value={detalle.productoIdProducto}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+              }}
+            />
+            <TextField
+              type="text"
+              name="facturaIdFactura"
+              label="ID de Factura"
+              value={detalle.facturaIdFactura}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              sx={{
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
+                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+              }}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ marginTop: 2, fontSize: '1.2rem' }}
+            >
+              {editingId ? 'Actualizar' : 'Crear'}
+            </Button>
+          </form>
+  
+          <Box mt={4}>
+            <h2>Lista de Detalles</h2>
+            <ul style={{ listStyleType: 'none', padding: 0 }}>
+              {detalles.map((d) => (
+                <li
+                  key={d._id}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    fontSize: '1.2rem',
+                  }}
+                >
+                  <span>{`Detalle #${d.numDetalle}, Precio: ${d.precioDetalleFactura}, Cantidad: ${d.cantidadDetalleFactura}`}</span>
+                  <Box>
+                    <IconButton onClick={() => handleEdit(d)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(d._id)}>
+                      <Delete />
+                    </IconButton>
+                  </Box>
+                </li>
+              ))}
+            </ul>
+          </Box>
+        </Container>
+      </Box>
+    </Box>
   );
+  
 };
 
 export default DetalleFactura;

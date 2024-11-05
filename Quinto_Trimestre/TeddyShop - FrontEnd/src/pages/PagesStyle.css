@@ -1,47 +1,43 @@
-/* roles.css */
-
-/* Fondo general para la vista */
+/* ---------- General Page Background and Typography ---------- */
 body {
     background: linear-gradient(135deg, rgba(201, 154, 201, 0.9), rgba(221, 160, 221, 0.5), rgba(216, 131, 216, 0.9), rgba(141, 80, 174, 0.7));
     font-family: 'Arial', sans-serif;
     font-size: large;
     margin: 0;
     padding: 0;
-  }
-  
-  /* Título de la página */
-  h1 {
+}
+
+/* ---------- Titles ---------- */
+h1, .page-title {
     color: #000000;
     font-size: 2em;
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  /* Formulario */
-  form {
+}
+
+/* ---------- Form Styles ---------- */
+form {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
-  }
-  
-  /* Campos de texto */
-  input[type="text"],
-  button {
+}
+
+input[type="text"], button {
     border-radius: 8px;
-  }
-  
-  /* Estilos específicos para el TextField de Material-UI */
-  .MuiInputBase-input {
-    color: #000000 !important; /* Color del texto negro */
-  }
-  
-  .MuiOutlinedInput-root {
-    background-color: #FFFFFF !important; /* Fondo blanco para el campo */
-  }
-  
-  /* Botones */
-  button {
+}
+
+/* Material-UI Specific Styles */
+.MuiInputBase-input {
+    color: #000000 !important; /* Black text color */
+}
+
+.MuiOutlinedInput-root {
+    background-color: #FFFFFF !important; /* White background for input */
+}
+
+/* ---------- Buttons ---------- */
+button, .btn-primary {
     background-color: #FFB6C1;
     color: white;
     font-weight: bold;
@@ -50,60 +46,58 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  /* Tabla */
-  table {
+}
+
+/* ---------- Tables ---------- */
+table {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
-  }
-  
-  th, td {
+}
+
+th, td {
     padding: 12px;
     text-align: center;
-  }
-  
-  th {
+}
+
+th {
     background-color: whitesmoke;
     color: white;
     font-weight: bold;
-  }
-  
-  tr:nth-child(even) {
+}
+
+tr:nth-child(even) {
     background-color: rgba(255, 228, 225, 0.5);
-  }
-  
-  /* Diálogo de eliminación */
-  .dialog-title {
+}
+
+/* ---------- Dialogs ---------- */
+.dialog-title {
     font-size: 1.5rem;
     font-weight: bold;
     color: #4a148c;
     text-align: center;
-  }
-  
-  .dialog-content {
+}
+
+.dialog-content {
     font-size: 1rem;
     color: #333;
     line-height: 1.6;
     padding: 20px;
     background-color: rgba(245, 245, 245, 0.9);
     border-radius: 10px;
-  }
-  
-  .dialog-actions {
+}
+
+.dialog-actions {
     display: flex;
     justify-content: center;
-  }
-  
-  .dialog-actions button {
+}
+
+.dialog-actions button {
     margin: 0 5px;
-  }
-  
-  
-  /* Snackbar */
-  .snackbar {
+}
+
+/* ---------- Snackbar ---------- */
+.snackbar {
     background-color: #FFB6C1;
     color: white;
-  }
-  
+}

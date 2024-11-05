@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    Container,
-    TextField,
-    Button,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Snackbar,
-    Alert,
-    Box,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    IconButton,
-    TablePagination,
+  Container,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Snackbar,
+  Alert,
+  Box,
+  TablePagination,
+  Switch,
 } from '@mui/material';
-import { Edit, Delete, ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
+import '../PagesStyle.css';
 
 const Devoluciones = () => {
     const [devoluciones, setDevoluciones] = useState([]);

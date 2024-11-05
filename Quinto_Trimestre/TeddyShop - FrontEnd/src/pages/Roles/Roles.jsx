@@ -24,7 +24,7 @@ import {
   TablePagination
 } from "@mui/material";
 import { Edit, Delete, ArrowUpward, ArrowDownward } from "@mui/icons-material";
-import './roles.css';
+import '../PagesStyle.css';
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);

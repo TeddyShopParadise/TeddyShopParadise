@@ -3,26 +3,27 @@ import {
   Container,
   TextField,
   Button,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Paper,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   Snackbar,
   Alert,
   Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  IconButton,
   TablePagination,
+  Switch,
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
-import './metodoPago.css';
+import '../PagesStyle.css';
 
 const MetodoPago = () => {
   const [metodosPago, setMetodosPago] = useState([]);
