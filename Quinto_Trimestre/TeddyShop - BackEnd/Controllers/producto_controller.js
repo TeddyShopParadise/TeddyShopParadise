@@ -36,8 +36,9 @@ const actualizarProducto = async (req, res) => {
     const { id } = req.params;
     const body = req.body;
 
-    const { error, value } = productoSchemaValidation.validate(body);
+    const { _id, __v, ...cleanedBody } = body;
 
+    const { error, value } = productoSchemaValidation.validate(cleanedBody);
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
     }
@@ -80,6 +81,7 @@ const eliminarProducto = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
 // Exportar los controladores
 module.exports = {
     listarProductos,
