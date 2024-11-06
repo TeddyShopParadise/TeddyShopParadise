@@ -140,8 +140,8 @@ router.put('/:id', actualizarDevolucion);
 /**
  * @swagger
  * /devoluciones/{id}:
- *   get:
- *     summary: Obtiene una devolución por su ID
+ *   put:
+ *     summary: Actualiza una devolución por su ID
  *     tags:
  *       - Devoluciones
  *     parameters:
@@ -151,15 +151,39 @@ router.put('/:id', actualizarDevolucion);
  *         description: ID de la devolución
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               numDevolucion:
+ *                 type: number
+ *                 example: 1
+ *               motivoDevolucion:
+ *                 type: string
+ *                 example: "Producto defectuoso"
+ *               fechaDevolucion:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-10-22"
+ *               productoId:
+ *                 type: string
+ *                 example: "60d2b6e3e6b0f99dbe0c5a7a"
+ *               detalleDevolucion:
+ *                 type: string
+ *                 example: "Descripción detallada de la razón de devolución"
  *     responses:
  *       200:
- *         description: Devolución encontrada
+ *         description: Devolución actualizada exitosamente
+ *       400:
+ *         description: Error en los datos enviados
  *       404:
  *         description: Devolución no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-
 // Ruta para obtener una devolución por su ID
 router.get('/:id', obtenerDevolucionPorId);
 
