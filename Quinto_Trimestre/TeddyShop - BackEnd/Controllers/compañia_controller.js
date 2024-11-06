@@ -5,6 +5,7 @@ const { compañiaSchemaValidation } = require('../validations/compañia_validati
 
 // Controlador para listar todas las compañías
 const listarCompañias = async (req, res) => {
+    
     try {
         const compañias = await logic.listarCompañias();
         res.json(compañias);
