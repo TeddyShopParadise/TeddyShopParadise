@@ -31,6 +31,8 @@ const Compania = () => {
   const [telefonoEmpresa, setTelefonoEmpresa] = useState('');
   const [nombreEmpresa, setNombreEmpresa] = useState('');
   const [direccionEmpresa, setDireccionEmpresa] = useState('');
+  const [catalogos, setCatalogos] = useState([]); // Agregado para catalogos
+  const [empleados, setEmpleados] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [sortedBy, setSortedBy] = useState('nombreEmpresa');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -79,7 +81,7 @@ const Compania = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ NIT, telefonoEmpresa, nombreEmpresa, direccionEmpresa }),
+        body: JSON.stringify({ NIT, telefonoEmpresa, nombreEmpresa, direccionEmpresa, catalogos, empleados }),
       });
 
       if (!response.ok) {
@@ -107,7 +109,7 @@ const Compania = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ NIT, telefonoEmpresa, nombreEmpresa, direccionEmpresa }),
+        body: JSON.stringify({ NIT, telefonoEmpresa, nombreEmpresa, direccionEmpresa, catalogos, empleados }),
       });
   
       if (!response.ok) {
@@ -150,6 +152,8 @@ const Compania = () => {
     setTelefonoEmpresa(compania.telefonoEmpresa);
     setNombreEmpresa(compania.nombreEmpresa);
     setDireccionEmpresa(compania.direccionEmpresa);
+    setCatalogos(compania.catalogos || []); // Cargar catalogos
+    setEmpleados(compania.empleados || []);
   };
 
   // Mostrar detalles de la compañía
@@ -176,6 +180,32 @@ const Compania = () => {
   useEffect(() => {
     fetchCompanias();
   }, []);
+
+  // Funciones para gestionar catalogos
+const addCatalogo = () => setCatalogos([...catalogos, ""]);
+const handleCatalogoChange = (index, value) => {
+  const newCatalogos = [...catalogos];
+  newCatalogos[index] = value;
+  setCatalogos(newCatalogos);
+};
+const removeCatalogo = (index) => {
+  const newCatalogos = catalogos.filter((_, i) => i !== index);
+  setCatalogos(newCatalogos);
+};
+
+// Funciones para gestionar empleados
+const addEmpleado = () => setEmpleados([...empleados, ""]);
+const handleEmpleadoChange = (index, value) => {
+  const newEmpleados = [...empleados];
+  newEmpleados[index] = value;
+  setEmpleados(newEmpleados);
+};
+const removeEmpleado = (index) => {
+  const newEmpleados = empleados.filter((_, i) => i !== index);
+  setEmpleados(newEmpleados);
+};
+
+
 
   return (
     <Box
@@ -271,6 +301,59 @@ const Compania = () => {
                 '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
+
+             {/* Campos para Catalogos */}
+          <h3>Catálogos</h3>
+          {catalogos.map((catalogo, index) => (
+            <Box display="flex" alignItems="center" key={index} mt={1}>
+              <TextField
+                label={`Catálogo ${index + 1}`}
+                value={catalogo}
+                onChange={(e) => handleCatalogoChange(index, e.target.value)}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                  '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                  '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                }}
+              />
+              <IconButton onClick={() => removeCatalogo(index)} color="secondary">
+                <Delete />
+              </IconButton>
+            </Box>
+          ))}
+          <Button variant="outlined" onClick={addCatalogo} sx={{ mt: 1 }}>
+            Añadir Catálogo
+          </Button>
+
+           {/* Campos para Empleados */}
+           <h3>Empleados</h3>
+          {empleados.map((empleado, index) => (
+            <Box display="flex" alignItems="center" key={index} mt={1}>
+              <TextField
+                label={`Empleado ${index + 1}`}
+                value={empleado}
+                onChange={(e) => handleEmpleadoChange(index, e.target.value)}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                  '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                  '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                }}
+              />
+              <IconButton onClick={() => removeEmpleado(index)} color="secondary">
+                <Delete />
+              </IconButton>
+            </Box>
+          ))}
+          <Button variant="outlined" onClick={addEmpleado} sx={{ mt: 1 }}>
+            Añadir Empleado
+          </Button>
+
+
+
             <Box display="flex" justifyContent="space-between" mt={2}>
               <Button type="submit" variant="contained" sx={{ fontSize: '1.2rem' }}>
                 {editingId ? 'Actualizar' : 'Crear'}
@@ -285,7 +368,7 @@ const Compania = () => {
               </Button>
             </Box>
           </form>
-
+  
           <Box mt={4}>
             <h2>Lista de Compañías</h2>
             <TableContainer component={Paper}>
@@ -309,6 +392,8 @@ const Compania = () => {
                       </Box>
                     </TableCell>
                     <TableCell>Dirección</TableCell>
+                    <TableCell>Catálogos</TableCell>
+                    <TableCell>Empleados</TableCell>
                     <TableCell>Acciones</TableCell>
                   </TableRow>
                 </TableHead>
@@ -318,6 +403,8 @@ const Compania = () => {
                       <TableCell>{comp.nombreEmpresa}</TableCell>
                       <TableCell>{comp.telefonoEmpresa}</TableCell>
                       <TableCell>{comp.direccionEmpresa}</TableCell>
+                      <TableCell>{comp.catalogos.join(", ")}</TableCell> {/* Mostrar catalogos */}
+                      <TableCell>{comp.empleados.join(", ")}</TableCell> {/* Mostrar empleados */}
                       <TableCell>
                         <IconButton onClick={() => verDetalles(comp)}>
                           <Info />
@@ -335,7 +422,7 @@ const Compania = () => {
               </Table>
             </TableContainer>
           </Box>
-
+  
           {/* Diálogo de detalles */}
           {selectedCompania && (
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
@@ -349,6 +436,10 @@ const Compania = () => {
                   <strong>Teléfono:</strong> {selectedCompania.telefonoEmpresa}
                   <br />
                   <strong>Dirección:</strong> {selectedCompania.direccionEmpresa}
+                  <br />
+                  <strong>Catálogos:</strong> {selectedCompania.catalogos.join(", ")}
+                  <br />
+                  <strong>Empleados:</strong> {selectedCompania.empleados.join(", ")}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -362,6 +453,7 @@ const Compania = () => {
       </Box>
     </Box>
   );
+  
 };
 
 export default Compania;
