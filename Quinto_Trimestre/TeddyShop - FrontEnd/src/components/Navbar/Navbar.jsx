@@ -21,6 +21,7 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorElRoles, setAnchorElRoles] = useState(null);
   const [anchorElUsuarios, setAnchorElUsuarios] = useState(null);
+  const [anchorElVerProoductos, setAnchorElVerProductos] = useState(null);
   const [anchorElPedidos, setAnchorElPedidos] = useState(null);
   const [anchorElProductos, setAnchorElProductos] = useState(null);
 
@@ -50,6 +51,13 @@ export default function Navbar() {
 
   const handlePedidosMenuClose = () => {
     setAnchorElPedidos(null);
+  };
+  const handleVerProductosMenuOpen = (event) => {
+    setAnchorElVerProductos(event.currentTarget);
+  };
+
+  const handleVerProductosMenuClose = () => {
+    setAnchorElVerProductos(null);
   };
 
   const handleProductosMenuOpen = (event) => {
@@ -137,6 +145,7 @@ export default function Navbar() {
               <MenuItem component={LinkBehavior} to="/vendedores">Vendedores</MenuItem>
               <MenuItem component={LinkBehavior} to="/empleado">Empleados</MenuItem>
               <MenuItem component={LinkBehavior} to="/cliente">Clientes</MenuItem>
+              <MenuItem component={LinkBehavior} to="/compania">Compañia</MenuItem>
             </Menu>
 
             <Button
@@ -174,16 +183,25 @@ export default function Navbar() {
               <MenuItem component={LinkBehavior} to="/inventario">Inventario</MenuItem>
               <MenuItem component={LinkBehavior} to="/MetodoPago">Método de Pago</MenuItem>
               <MenuItem component={LinkBehavior} to="/movimiento">Movimientos</MenuItem>
+              <MenuItem component={LinkBehavior} to="/catalogo">Catalogos</MenuItem>
             </Menu>
 
             <Button
               color="inherit"
-              component={LinkBehavior}
-              to="/productos"
+              onClick={handleVerProductosMenuOpen}
               style={{ color: '#2F2F2F', fontSize: '20px' }}
             >
               Ver Productos
             </Button>
+            <Menu
+              anchorEl={anchorElVerProoductos}
+              open={Boolean(anchorElVerProoductos)}
+              onClose={handleVerProductosMenuClose}
+            >
+              <MenuItem component={LinkBehavior} to="/productos">Productos</MenuItem>
+              <MenuItem component={LinkBehavior} to="/categoria">Categoria</MenuItem>
+
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
@@ -193,3 +211,4 @@ export default function Navbar() {
     </>
   );
 }
+

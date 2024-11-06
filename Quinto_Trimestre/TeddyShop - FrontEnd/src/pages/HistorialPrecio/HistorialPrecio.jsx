@@ -21,10 +21,10 @@ import {
   Box,
   TablePagination,
   Switch,
-  FormControlLabel, // Importar FormControlLabel
-  Checkbox, // Importar Checkbox
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
 
 // Componente principal
@@ -38,6 +38,10 @@ const HistorialPrecios = () => {
     producto: '',
   });
   const [editingId, setEditingId] = useState(null);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const [selectedHistorial, setSelectedHistorial] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Obtener historial de precios
   const fetchHistorialPrecios = async () => {
@@ -128,6 +132,27 @@ const HistorialPrecios = () => {
   const iniciarEdicion = (historial) => {
     setNuevoHistorial(historial);
     setEditingId(historial._id);
+  };
+
+  // Paginación de la tabla
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Abrir el diálogo de detalles
+  const handleOpenDetails = (historial) => {
+    setSelectedHistorial(historial);
+    setOpenDetailsDialog(true);
+  };
+
+  const handleCloseDetails = () => {
+    setOpenDetailsDialog(false);
+    setSelectedHistorial(null);
   };
 
   return (
@@ -236,29 +261,81 @@ const HistorialPrecios = () => {
   
           <Box mt={4}>
             <h2>Lista de Historial de Precios</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {historialPrecios.map((historial) => (
-                <li key={historial._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '1.2rem' }}>
-                    Precio: {historial.precio} - Desde: {new Date(historial.fechaInicio).toLocaleDateString()} - Hasta: {new Date(historial.fechaFin).toLocaleDateString()} - Estado: {historial.estadoPrecio ? 'Activo' : 'Inactivo'}
-                  </span>
-                  <Box>
-                    <IconButton onClick={() => iniciarEdicion(historial)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => eliminarHistorialPrecio(historial._id)}>
-                      <Delete />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Precio</TableCell>
+                    <TableCell>Fecha Inicio</TableCell>
+                    <TableCell>Fecha Fin</TableCell>
+                    <TableCell>Estado</TableCell>
+                    <TableCell>Producto</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {historialPrecios.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((historial) => (
+                    <TableRow key={historial._id}>
+                      <TableCell>{historial.precio}</TableCell>
+                      <TableCell>{new Date(historial.fechaInicio).toLocaleDateString()}</TableCell>
+                      <TableCell>{new Date(historial.fechaFin).toLocaleDateString()}</TableCell>
+                      <TableCell>{historial.estadoPrecio ? 'Activo' : 'Inactivo'}</TableCell>
+                      <TableCell>{historial.producto}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => iniciarEdicion(historial)}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton onClick={() => eliminarHistorialPrecio(historial._id)}>
+                          <Delete />
+                        </IconButton>
+                        <IconButton onClick={() => handleOpenDetails(historial)}>
+                          <Info />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={historialPrecios.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Box>
         </Container>
       </Box>
+
+      {/* Diálogo de detalles */}
+      {selectedHistorial && (
+        <Dialog open={openDetailsDialog} onClose={handleCloseDetails}>
+          <DialogTitle>Detalles del Historial de Precio</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <strong>Precio:</strong> {selectedHistorial.precio}
+              <br />
+              <strong>Fecha Inicio:</strong> {new Date(selectedHistorial.fechaInicio).toLocaleDateString()}
+              <br />
+              <strong>Fecha Fin:</strong> {new Date(selectedHistorial.fechaFin).toLocaleDateString()}
+              <br />
+              <strong>Estado:</strong> {selectedHistorial.estadoPrecio ? 'Activo' : 'Inactivo'}
+              <br />
+              <strong>Producto:</strong> {selectedHistorial.producto}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDetails} color="primary">
+              Cerrar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Box>
   );
-  
 };
 
 export default HistorialPrecios;

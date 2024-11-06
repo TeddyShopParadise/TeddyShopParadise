@@ -3,27 +3,26 @@ import {
   Container,
   TextField,
   Button,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
   Snackbar,
   Alert,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  IconButton,
   TablePagination,
-  Switch,
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
-import '../PagesStyle.css';
+import '../PagesStyle.css'
 
 const Pedido = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -44,48 +43,51 @@ const Pedido = () => {
     vendedores: []
   });
   const [pedidoEdicion, setPedidoEdicion] = useState(null);
-  const [error, setError] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
+  const [selectedPedido, setSelectedPedido] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState('nombreComprador');
+  const [sortOrder, setSortOrder] = useState('asc');
 
-  // Cargar pedidos al montar el componente
-  useEffect(() => {
-    const obtenerPedidos = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/pedido');
-        if (!response.ok) {
-          throw new Error('Error al obtener pedidos');
-        }
-        const data = await response.json();
-        setPedidos(data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    obtenerPedidos();
-  }, []);
-
-  // Manejar cambios en el formulario
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNuevoPedido({ ...nuevoPedido, [name]: value });
+  const fetchPedidos = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/pedido');
+      const data = await response.json();
+      setPedidos(data);
+    } catch (error) {
+      console.error('Error fetching pedidos:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Crear nuevo pedido
-  const crearPedido = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchPedidos();
+  }, []);
+
+  const crearPedido = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/pedido', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(nuevoPedido)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevoPedido),
       });
 
       if (!response.ok) {
-        throw new Error('Error al crear pedido');
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
       }
-      const data = await response.json();
-      setPedidos([...pedidos, data]);
+
+      const newPedido = await response.json();
+      setPedidos([...pedidos, newPedido]);
+      setSnackbarMessage('Pedido creado con éxito');
+      setOpenSnackbar(true);
       setNuevoPedido({
         tamañoOso: '',
         nombreComprador: '',
@@ -102,53 +104,111 @@ const Pedido = () => {
         facturas: [],
         vendedores: []
       });
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      console.error('Error creando pedido:', error);
+      setSnackbarMessage('Error al crear el pedido: ' + error.message);
+      setOpenSnackbar(true);
     }
   };
 
-  // Actualizar pedido
-  const actualizarPedido = async (id) => {
+  const actualizarPedido = async () => {
+    if (!pedidoEdicion) return;
+
+    const pedidoActualizar = {
+      ...pedidoEdicion
+    };
+
     try {
-      const response = await fetch(`http://localhost:3000/api/pedido/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/pedido/${pedidoEdicion._id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(pedidoEdicion)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pedidoActualizar),
       });
 
       if (!response.ok) {
-        throw new Error('Error al actualizar pedido');
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
       }
+
       const updatedPedido = await response.json();
-      setPedidos(pedidos.map((pedido) => (pedido._id === id ? updatedPedido : pedido)));
+      setPedidos(pedidos.map((pedido) => (pedido._id === updatedPedido._id ? updatedPedido : pedido)));
+      setSnackbarMessage('Pedido actualizado con éxito');
+      setOpenSnackbar(true);
       setPedidoEdicion(null);
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      console.error('Error actualizando el pedido:', error);
+      setSnackbarMessage('Error al actualizar el pedido: ' + error.message);
+      setOpenSnackbar(true);
     }
   };
 
-  // Eliminar pedido
-  const eliminarPedido = async (id) => {
+  const eliminarPedido = async () => {
+    if (!currentId) return;
+
     try {
-      const response = await fetch(`http://localhost:3000/api/pedido/${id}`, {
-        method: 'DELETE'
+      await fetch(`http://localhost:3000/api/pedido/${currentId}`, {
+        method: 'DELETE',
       });
-
-      if (!response.ok) {
-        throw new Error('Error al eliminar pedido');
-      }
-      setPedidos(pedidos.filter((pedido) => pedido._id !== id));
-    } catch (err) {
-      setError(err.message);
+      setPedidos((prevPedidos) => prevPedidos.filter((pedido) => pedido._id !== currentId));
+      setSnackbarMessage('Pedido eliminado con éxito');
+      setOpenSnackbar(true);
+    } catch (error) {
+      console.error('Error eliminando el pedido:', error);
+      setSnackbarMessage('Error al eliminar el pedido');
+      setOpenSnackbar(true);
+    } finally {
+      setOpenDeleteDialog(false);
     }
   };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSort = (field) => {
+    const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newSortOrder);
+    setSortBy(field);
+  };
+
+  const handleEditClick = (pedido) => {
+    setPedidoEdicion(pedido);
+  };
+
+  const handleDetailClick = (pedido) => {
+    setSelectedPedido(pedido);
+    setOpenDetailDialog(true);
+  };
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  const filteredPedidos = pedidos.filter((pedido) =>
+    pedido.nombreComprador && pedido.nombreComprador.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortedPedidos = [...filteredPedidos].sort((a, b) => {
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
+
+    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
 
   return (
     <Box
       sx={{
-        height: { xs: 'auto', md: '130vh' },
+        height: 'auto',
         width: '100vw',
         display: 'flex',
         alignItems: 'center',
@@ -163,106 +223,245 @@ const Pedido = () => {
         sx={{
           width: '90%',
           maxWidth: '100%',
-          padding: { xs: '20px', md: '50px' },
-          background:
-            'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+          padding: '50px',
+          background: 'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
           borderRadius: '30px',
           boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
           backdropFilter: 'blur(8px)',
-          backgroundSize: '200% 200%',
           animation: 'shimmer 10s infinite linear',
         }}
       >
         <Container>
           <h1>Gestión de Pedidos</h1>
-          {error && <Alert severity="error">{error}</Alert>}
-          <form onSubmit={crearPedido} noValidate autoComplete="off">
+          <Box mb={4}>
             <TextField
-              type="text"
-              name="tamañoOso"
               label="Tamaño del Oso"
+              name="tamañoOso"
               value={nuevoPedido.tamañoOso}
-              onChange={handleChange}
+              onChange={(e) => handleChange(e)}
               fullWidth
               margin="normal"
-              required
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
             />
             <TextField
-              type="text"
-              name="nombreComprador"
               label="Nombre del Comprador"
+              name="nombreComprador"
               value={nuevoPedido.nombreComprador}
-              onChange={handleChange}
+              onChange={(e) => handleChange(e)}
               fullWidth
               margin="normal"
-              required
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
+            />
+            <TextField
+              label="Apellido del Comprador"
+              name="apellidoComprador"
+              value={nuevoPedido.apellidoComprador}
+              onChange={(e) => handleChange(e)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Numero del Comprador"
+              name="numeroComprador"
+              value={nuevoPedido.numeroComprador}
+              onChange={(e) => handleChange(e)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Nombre del Agendador"
+              name="nombreAgendador"
+              value={nuevoPedido.nombreAgendador}
+              onChange={(e) => handleChange(e)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Apellido del Agendador"
+              name="apellidoAgendador"
+              value={nuevoPedido.apellidoAgendador}
+              onChange={(e) => handleChange(e)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Numero del Agendador"
+              name="numeroAgendador"
+              value={nuevoPedido.numeroAgendador}
+              onChange={(e) => handleChange(e)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Localidad"
+              name="localidad"
+              value={nuevoPedido.localidad}
+              onChange={(e) => handleChange(e)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Dirección"
+              name="direccion"
+              value={nuevoPedido.direccion}
+              onChange={(e) => handleChange(e)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Barrio"
+              name="barrio"
+              value={nuevoPedido.barrio}
+              onChange={(e) => handleChange(e)}
+              fullWidth
+              margin="normal"
             />
             {/* Agregar más campos según sea necesario */}
-            <Button type="submit" variant="contained" sx={{ marginTop: 2, fontSize: '1.2rem' }}>
-              Crear Pedido
-            </Button>
-          </form>
-  
-          <Box mt={4}>
-            <h2>Lista de Pedidos</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {pedidos.map((pedido) => (
-                <li key={pedido._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '1.2rem' }}>{pedido.nombreComprador}</span>
-                  <Box>
-                    <IconButton onClick={() => setPedidoEdicion(pedido)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => eliminarPedido(pedido._id)}>
-                      <Delete />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            {pedidoEdicion ? (
+              <Button variant="contained" onClick={actualizarPedido}>
+                Actualizar
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={crearPedido}>
+                Crear
+              </Button>
+            )}
           </Box>
-  
-          {pedidoEdicion && (
-            <Box mt={4}>
-              <h3>Editar Pedido</h3>
-              <form onSubmit={() => actualizarPedido(pedidoEdicion._id)}>
-                <TextField
-                  type="text"
-                  name="nombreComprador"
-                  label="Nombre del Comprador"
-                  value={pedidoEdicion.nombreComprador}
-                  onChange={(e) => setPedidoEdicion({ ...pedidoEdicion, nombreComprador: e.target.value })}
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  sx={{
-                    '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                    '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-                  }}
-                />
-                {/* Agregar más campos según sea necesario */}
-                <Button type="submit" variant="contained" sx={{ marginTop: 2, fontSize: '1.2rem' }}>
-                  Actualizar Pedido
-                </Button>
-              </form>
-            </Box>
-          )}
+
+          <Box display="flex" justifyContent="space-between" alignItems="center" mt={4}>
+            <h2>Lista de Pedidos</h2>
+            <TextField
+              label="Buscar por nombre"
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              style={{ width: 250 }}
+            />
+          </Box>
+
+          <TableContainer component={Paper} style={{ marginTop: 20 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Box display="flex" alignItems="center" onClick={() => handleSort('nombreComprador')}>
+                      Nombre del Comprador
+                      {sortBy === 'nombreComprador' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box display="flex" alignItems="center" onClick={() => handleSort('apellidoComprador')}>
+                      Apellido del Comprador
+                      {sortBy === 'apellidoComprador' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box display="flex" alignItems="center" onClick={() => handleSort('tamañoOso')}>
+                      Tamaño del Oso
+                      {sortBy === 'tamañoOso' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box display="flex" alignItems="center" onClick={() => handleSort('direccion')}>
+                      Direccón
+                      {sortBy === 'direccion' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+                    </Box>
+                  </TableCell>
+                  <TableCell align="right">Acciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {sortedPedidos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pedido) => (
+                  <TableRow key={pedido._id}>
+                    <TableCell>{pedido.nombreComprador}</TableCell>
+                    <TableCell>{pedido.apellidoComprador}</TableCell>
+                    <TableCell>{pedido.tamañoOso}</TableCell>
+                    <TableCell>{pedido.direccion}</TableCell>
+                    <TableCell align="right">
+                      <IconButton onClick={() => handleEditClick(pedido)}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton onClick={() => {
+                        setCurrentId(pedido._id);
+                        setOpenDeleteDialog(true);
+                      }}>
+                        <Delete />
+                      </IconButton>
+                      <IconButton onClick={() => handleDetailClick(pedido)}>
+                        <Info />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={sortedPedidos.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSnackbar(false)}
+          >
+            <Alert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+
+          <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
+            <DialogTitle>Eliminar Pedido</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                ¿Estás seguro de que deseas eliminar este pedido?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+                Cancelar
+              </Button>
+              <Button onClick={eliminarPedido} color="primary">
+                Eliminar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          {/* Diálogo de detalles */}
+          <Dialog open={openDetailDialog} onClose={() => setOpenDetailDialog(false)}>
+            <DialogTitle>Detalles de Pedidos</DialogTitle>
+            <DialogContent>
+              {selectedPedido && (
+                <DialogContentText>
+                  <strong>Nombre del Comprador:</strong> {selectedPedido.nombreComprador} <br />
+                  <strong>Apellido del Comprador:</strong> {selectedPedido.apellidoComprador} <br />
+                  <strong>Numero del Comprador:</strong> {selectedPedido.numeroComprador}<br /> <br />
+                  <strong>Nombre del Agendador:</strong> {selectedPedido.nombreAgendador} <br />
+                  <strong>Apellido del Agendador:</strong> {selectedPedido.apellidoAgendador} <br />
+                  <strong>Numero del Agendador:</strong> {selectedPedido.numeroAgendador} <br /> <br />
+                  <strong>Localidad:</strong> {selectedPedido.localidad} <br />
+                  <strong>Barrio:</strong> {selectedPedido.barrio } <br />
+                  <strong>Cliente:</strong> {selectedPedido.cliente} <br />
+                  <strong>Detalles del Pedido:</strong> {selectedPedido.detallesPedido } <br />
+                  <strong>Facturas:</strong> {selectedPedido.facturas } <br />
+                  <strong>Vendedores:</strong> {selectedPedido.vendedores } <br />
+                </DialogContentText>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDetailDialog(false)}>Cerrar</Button>
+            </DialogActions>
+          </Dialog>
         </Container>
       </Box>
     </Box>
   );
-  
-  
 };
 
 export default Pedido;

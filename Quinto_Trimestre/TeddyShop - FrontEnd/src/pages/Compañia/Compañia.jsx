@@ -32,6 +32,10 @@ const Compania = () => {
   const [nombreEmpresa, setNombreEmpresa] = useState('');
   const [direccionEmpresa, setDireccionEmpresa] = useState('');
   const [editingId, setEditingId] = useState(null);
+  const [sortedBy, setSortedBy] = useState('nombreEmpresa');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedCompania, setSelectedCompania] = useState(null);
 
   // Obtener la lista de compañías
   const fetchCompanias = async () => {
@@ -46,6 +50,20 @@ const Compania = () => {
       console.error(error);
       alert(error.message);
     }
+  };
+
+  // Ordenar compañías
+  const sortCompanias = (field) => {
+    const order = sortedBy === field && sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortedBy(field);
+    setSortOrder(order);
+
+    const sortedData = [...companias].sort((a, b) => {
+      if (a[field] < b[field]) return order === 'asc' ? -1 : 1;
+      if (a[field] > b[field]) return order === 'asc' ? 1 : -1;
+      return 0;
+    });
+    setCompanias(sortedData);
   };
 
   // Crear nueva compañía
@@ -132,6 +150,18 @@ const Compania = () => {
     setTelefonoEmpresa(compania.telefonoEmpresa);
     setNombreEmpresa(compania.nombreEmpresa);
     setDireccionEmpresa(compania.direccionEmpresa);
+  };
+
+  // Mostrar detalles de la compañía
+  const verDetalles = (compania) => {
+    setSelectedCompania(compania);
+    setDialogOpen(true);
+  };
+
+  // Cerrar el diálogo de detalles
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedCompania(null);
   };
 
   // Restablecer formulario
@@ -255,38 +285,83 @@ const Compania = () => {
               </Button>
             </Box>
           </form>
-  
+
           <Box mt={4}>
             <h2>Lista de Compañías</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {companias.map((comp) => (
-                <li
-                  key={comp._id}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    fontSize: '1.2rem',
-                  }}
-                >
-                  <span>{comp.nombreEmpresa}</span> - <span>{comp.telefonoEmpresa}</span> - <span>{comp.direccionEmpresa}</span>
-                  <Box>
-                    <IconButton onClick={() => editarCompania(comp)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => eliminarCompania(comp._id)}>
-                      <Delete />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        Nombre
+                        <IconButton onClick={() => sortCompanias('nombreEmpresa')}>
+                          {sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />}
+                        </IconButton>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        Teléfono
+                        <IconButton onClick={() => sortCompanias('telefonoEmpresa')}>
+                          {sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />}
+                        </IconButton>
+                      </Box>
+                    </TableCell>
+                    <TableCell>Dirección</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {companias.map((comp) => (
+                    <TableRow key={comp._id}>
+                      <TableCell>{comp.nombreEmpresa}</TableCell>
+                      <TableCell>{comp.telefonoEmpresa}</TableCell>
+                      <TableCell>{comp.direccionEmpresa}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => verDetalles(comp)}>
+                          <Info />
+                        </IconButton>
+                        <IconButton onClick={() => editarCompania(comp)}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton onClick={() => eliminarCompania(comp._id)}>
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Box>
+
+          {/* Diálogo de detalles */}
+          {selectedCompania && (
+            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+              <DialogTitle>Detalles de la Compañía</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  <strong>Nombre:</strong> {selectedCompania.nombreEmpresa}
+                  <br />
+                  <strong>NIT:</strong> {selectedCompania.NIT}
+                  <br />
+                  <strong>Teléfono:</strong> {selectedCompania.telefonoEmpresa}
+                  <br />
+                  <strong>Dirección:</strong> {selectedCompania.direccionEmpresa}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDialog} color="primary">
+                  Cerrar
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )}
         </Container>
       </Box>
     </Box>
   );
-  
 };
 
 export default Compania;

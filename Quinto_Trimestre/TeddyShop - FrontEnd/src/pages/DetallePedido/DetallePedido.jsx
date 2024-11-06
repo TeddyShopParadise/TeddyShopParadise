@@ -22,7 +22,7 @@ import {
   TablePagination,
   Switch,
 } from '@mui/material';
-import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
+import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
 
 const DetallePedido = () => {
@@ -35,6 +35,10 @@ const DetallePedido = () => {
     productoIdProducto: '',
   });
   const [editingId, setEditingId] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [detalleSeleccionado, setDetalleSeleccionado] = useState(null);
 
   // Función para obtener los detalles de pedido
   const fetchDetalles = async () => {
@@ -123,6 +127,28 @@ const DetallePedido = () => {
     }
   };
 
+  // Función para abrir el diálogo de detalles
+  const handleOpenDialog = (detalle) => {
+    setDetalleSeleccionado(detalle);
+    setOpenDialog(true);
+  };
+
+  // Función para cerrar el diálogo de detalles
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setDetalleSeleccionado(null);
+  };
+
+  // Función para manejar la paginación
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <Box
       sx={{
@@ -154,6 +180,7 @@ const DetallePedido = () => {
         <Container>
           <h1>Detalles de Pedido</h1>
           <form onSubmit={handleSubmit} noValidate autoComplete="off">
+            {/* Formulario de creación/actualización */}
             <TextField
               type="number"
               name="numDetalle"
@@ -164,10 +191,6 @@ const DetallePedido = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
             />
             <TextField
               type="number"
@@ -179,10 +202,6 @@ const DetallePedido = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
             />
             <TextField
               type="number"
@@ -194,10 +213,6 @@ const DetallePedido = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
             />
             <TextField
               type="text"
@@ -209,10 +224,6 @@ const DetallePedido = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
             />
             <TextField
               type="text"
@@ -224,41 +235,86 @@ const DetallePedido = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
             />
-            <Button type="submit" variant="contained" sx={{ marginTop: 2, fontSize: '1.2rem' }}>
+            <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>
               {editingId ? 'Actualizar' : 'Crear'}
             </Button>
           </form>
-  
+
+          {/* Data Table */}
           <Box mt={4}>
             <h2>Lista de Detalles</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {detalles.map((d) => (
-                <li key={d._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '1.2rem' }}>
-                    {`Detalle #${d.numDetalle}, Precio: ${d.precioDetallePedido}, Cantidad: ${d.cantidadDetallePedido}`}
-                  </span>
-                  <Box>
-                    <IconButton onClick={() => handleEdit(d)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(d._id)}>
-                      <Delete />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Detalle #</TableCell>
+                    <TableCell>Precio</TableCell>
+                    <TableCell>Cantidad</TableCell>
+                    <TableCell>ID Pedido</TableCell>
+                    <TableCell>ID Producto</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {detalles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((d) => (
+                    <TableRow key={d._id}>
+                      <TableCell>{d.numDetalle}</TableCell>
+                      <TableCell>{d.precioDetallePedido}</TableCell>
+                      <TableCell>{d.cantidadDetallePedido}</TableCell>
+                      <TableCell>{d.pedidoNumPedido}</TableCell>
+                      <TableCell>{d.productoIdProducto}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => handleEdit(d)}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton onClick={() => handleDelete(d._id)}>
+                          <Delete />
+                        </IconButton>
+                        <IconButton onClick={() => handleOpenDialog(d)}>
+                          <Info />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            {/* Paginación */}
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={detalles.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Box>
         </Container>
+
+        {/* Diálogo de detalles */}
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
+          <DialogTitle>Detalles del Pedido</DialogTitle>
+          <DialogContent>
+            {detalleSeleccionado && (
+              <DialogContentText>
+                <p><strong>Detalle #:</strong> {detalleSeleccionado.numDetalle}</p>
+                <p><strong>Precio:</strong> {detalleSeleccionado.precioDetallePedido}</p>
+                <p><strong>Cantidad:</strong> {detalleSeleccionado.cantidadDetallePedido}</p>
+                <p><strong>ID Pedido:</strong> {detalleSeleccionado.pedidoNumPedido}</p>
+                <p><strong>ID Producto:</strong> {detalleSeleccionado.productoIdProducto}</p>
+              </DialogContentText>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">Cerrar</Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Box>
   );
-  
 };
 
 export default DetallePedido;

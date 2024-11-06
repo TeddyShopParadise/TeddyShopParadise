@@ -22,7 +22,7 @@ import {
   TablePagination,
   Switch,
 } from '@mui/material';
-import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
+import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
 
 const Empleado = () => {
@@ -39,7 +39,14 @@ const Empleado = () => {
     vendedor: ''
   });
   const [editMode, setEditMode] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentId, setCurrentId] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedEmpleado, setSelectedEmpleado] = useState(null);
+  const [page, setPage] = useState(0);
+  const [sortBy, setSortBy] = useState('codigoEmpleado');
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [sortOrder, setSortOrder] = useState('asc');
 
   // Fetch empleados from the API
   const fetchEmpleados = async () => {
@@ -107,10 +114,49 @@ const Empleado = () => {
     fetchEmpleados();
   };
 
+  // Handle open dialog for details
+  const handleDetails = (empleado) => {
+    setSelectedEmpleado(empleado);
+    setOpenDialog(true);
+  };
+
+  // Handle close dialog
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedEmpleado(null);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Handle pagination change
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const filteredEmpleados = empleados.filter((empleado) =>
+    empleado.codigoEmpleado && empleado.codigoEmpleado.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortedEmpleados = [...filteredEmpleados].sort((a, b) => {
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
+
+    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
+
   return (
     <Box
       sx={{
-        height: { xs: 'auto', md: '130vh' },
+        height: { xs: 'auto', md: '200vh' },
         width: '100vw',
         display: 'flex',
         alignItems: 'center',
@@ -275,32 +321,87 @@ const Empleado = () => {
               {editMode ? 'Actualizar' : 'Crear'}
             </Button>
           </form>
-  
-          <Box mt={4}>
+
+          <Box display="flex" justifyContent="space-between" alignItems="center" mt={4}>
             <h2>Lista de Empleados</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {empleados.map((empleado) => (
-                <li key={empleado._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '1.2rem' }}>
-                    {empleado.nombreEmpleado} - {empleado.telefonoEmpleado}
-                  </span>
-                  <Box>
-                    <IconButton onClick={() => handleEdit(empleado)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(empleado._id)}>
-                      <Delete />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            <TextField
+              label="Buscar por nombre"
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              style={{ width: 250 }}
+            />
           </Box>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Codigo</TableCell>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Teléfono</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {empleados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((empleado) => (
+                    <TableRow key={empleado._id}>
+                      <TableCell>{empleado.codigoEmpleado}</TableCell>
+                      <TableCell>{empleado.nombreEmpleado}</TableCell>
+                      <TableCell>{empleado.telefonoEmpleado}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => handleEdit(empleado)}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton onClick={() => handleDelete(empleado._id)}>
+                          <Delete />
+                        </IconButton>
+                        <IconButton onClick={() => handleDetails(empleado)}>
+                          <Info />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={sortedEmpleados.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </Container>
       </Box>
+
+      {/* Dialog for employee details */}
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Detalles del Empleado</DialogTitle>
+        <DialogContent>
+          {selectedEmpleado && (
+            <DialogContentText>
+              <strong>Nombre:</strong> {selectedEmpleado.nombreEmpleado}<br />
+              <strong>DNI:</strong> {selectedEmpleado.dniEmpleado}<br />
+              <strong>Teléfono:</strong> {selectedEmpleado.telefonoEmpleado}<br />
+              <strong>Código:</strong> {selectedEmpleado.codigoEmpleado}<br />
+              {/*<strong>Compañía:</strong> {selectedEmpleado.compania}<br />*/}
+              <strong>Administrador:</strong> {selectedEmpleado.administrador}<br />
+              <strong>Usuario:</strong> {selectedEmpleado.usuario}<br />
+              <strong>Vendedor:</strong> {selectedEmpleado.vendedor}
+            </DialogContentText>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
-  
 };
 
 export default Empleado;

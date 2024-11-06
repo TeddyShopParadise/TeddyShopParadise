@@ -219,26 +219,40 @@ const Inventario = () => {
       
               <h2>Lista de Inventarios</h2>
               <Box mt={2}>
-                <ul style={{ listStyleType: 'none', padding: 0 }}>
-                  {inventarios.map((inventario) => (
-                    <li key={inventario.idInventario} style={{ marginBottom: '1rem' }}>
-                      <p style={{ fontSize: '1.2rem' }}>ID: {inventario.idInventario}</p>
-                      <p style={{ fontSize: '1.2rem' }}>Stock Mínimo: {inventario.stockMinimo}</p>
-                      <p style={{ fontSize: '1.2rem' }}>Precio Venta: {inventario.precioVenta}</p>
-                      <p style={{ fontSize: '1.2rem' }}>Precio Compra: {inventario.precioCompra}</p>
-                      <p style={{ fontSize: '1.2rem' }}>Stock: {inventario.stock}</p>
-                      <p style={{ fontSize: '1.2rem' }}>Stock Máximo: {inventario.stockMaximo}</p>
-                      <Box>
-                        <IconButton onClick={() => setSelectedInventario(inventario)}>
-                          <Edit />
-                        </IconButton>
-                        <IconButton onClick={() => eliminarInventario(inventario.idInventario)}>
-                          <Delete />
-                        </IconButton>
-                      </Box>
-                    </li>
-                  ))}
-                </ul>
+              <ul style={{ listStyleType: 'none', padding: 0 }}>
+                {inventarios.map((inventario) => (
+                  <li key={inventario.idInventario} style={{ marginBottom: '1rem' }}>
+                    <p style={{ fontSize: '1.2rem' }}>ID: {inventario.idInventario}</p>
+                    <p style={{ fontSize: '1.2rem' }}>Stock Mínimo: {inventario.stockMinimo}</p>
+                    
+                    {/* Verificamos que los precios no sean objetos antes de renderizarlos */}
+                    <p style={{ fontSize: '1.2rem' }}>
+                      Precio Venta: {inventario.precioVenta && inventario.precioVenta.$numberDecimal
+                        ? inventario.precioVenta.$numberDecimal
+                        : inventario.precioVenta
+                      }
+                    </p>
+                    
+                    <p style={{ fontSize: '1.2rem' }}>
+                      Precio Compra: {inventario.precioCompra && inventario.precioCompra.$numberDecimal
+                        ? inventario.precioCompra.$numberDecimal
+                        : inventario.precioCompra
+                      }
+                    </p>
+
+                    <p style={{ fontSize: '1.2rem' }}>Stock: {inventario.stock}</p>
+                    <p style={{ fontSize: '1.2rem' }}>Stock Máximo: {inventario.stockMaximo}</p>
+                    <Box>
+                      <IconButton onClick={() => setSelectedInventario(inventario)}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton onClick={() => eliminarInventario(inventario.idInventario)}>
+                        <Delete />
+                      </IconButton>
+                    </Box>
+                  </li>
+                ))}
+              </ul>
               </Box>
       
               {selectedInventario && (

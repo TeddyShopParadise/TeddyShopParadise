@@ -36,6 +36,9 @@ const DetalleFactura = () => {
     facturaIdFactura: '',
   });
   const [editingId, setEditingId] = useState(null);
+  const [detalleDialog, setDetalleDialog] = useState(null); // Para mostrar los detalles
+  const [page, setPage] = useState(0); // Para paginación
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Para paginación
 
   // Función para obtener los detalles de factura
   const fetchDetalles = async () => {
@@ -123,10 +126,29 @@ const DetalleFactura = () => {
     }
   };
 
+  // Manejar la paginación de la tabla
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Función para abrir el diálogo con los detalles del pedido
+  const handleOpenDetalleDialog = (detalle) => {
+    setDetalleDialog(detalle);
+  };
+
+  const handleCloseDetalleDialog = () => {
+    setDetalleDialog(null);
+  };
+
   return (
     <Box
       sx={{
-        height: { xs: 'auto', md: '130vh' },
+        height: { xs: 'auto', md: '140vh' },
         width: '100vw',
         display: 'flex',
         alignItems: 'center',
@@ -165,8 +187,8 @@ const DetalleFactura = () => {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -180,8 +202,8 @@ const DetalleFactura = () => {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -195,8 +217,8 @@ const DetalleFactura = () => {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -209,8 +231,8 @@ const DetalleFactura = () => {
               margin="normal"
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -223,8 +245,8 @@ const DetalleFactura = () => {
               margin="normal"
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -237,8 +259,8 @@ const DetalleFactura = () => {
               margin="normal"
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <Button
@@ -249,38 +271,83 @@ const DetalleFactura = () => {
               {editingId ? 'Actualizar' : 'Crear'}
             </Button>
           </form>
-  
+
           <Box mt={4}>
             <h2>Lista de Detalles</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {detalles.map((d) => (
-                <li
-                  key={d._id}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    fontSize: '1.2rem',
-                  }}
-                >
-                  <span>{`Detalle #${d.numDetalle}, Precio: ${d.precioDetalleFactura}, Cantidad: ${d.cantidadDetalleFactura}`}</span>
-                  <Box>
-                    <IconButton onClick={() => handleEdit(d)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(d._id)}>
-                      <Delete />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Detalle #</TableCell>
+                    <TableCell>Precio</TableCell>
+                    <TableCell>Cantidad</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {detalles
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((d) => (
+                      <TableRow key={d._id}>
+                        <TableCell>{d.numDetalle}</TableCell>
+                        <TableCell>{d.precioDetalleFactura}</TableCell>
+                        <TableCell>{d.cantidadDetalleFactura}</TableCell>
+                        <TableCell>
+                          <IconButton onClick={() => handleEdit(d)}>
+                            <Edit />
+                          </IconButton>
+                          <IconButton onClick={() => handleDelete(d._id)}>
+                            <Delete />
+                          </IconButton>
+                          <IconButton onClick={() => handleOpenDetalleDialog(d)}>
+                            <Info />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={detalles.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Box>
         </Container>
       </Box>
+
+      {/* Diálogo de detalles */}
+      <Dialog open={detalleDialog !== null} onClose={handleCloseDetalleDialog}>
+        <DialogTitle>Detalles del Pedido</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <strong>Detalle #</strong> {detalleDialog?.numDetalle}
+            <br />
+            <strong>Precio:</strong> {detalleDialog?.precioDetalleFactura}
+            <br />
+            <strong>Cantidad:</strong> {detalleDialog?.cantidadDetalleFactura}
+            <br />
+            <strong>ID Inventario:</strong> {detalleDialog?.inventarioIdInventario}
+            <br />
+            <strong>ID Producto:</strong> {detalleDialog?.productoIdProducto}
+            <br />
+            <strong>ID Factura:</strong> {detalleDialog?.facturaIdFactura}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDetalleDialog} color="primary">
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
-  
 };
 
 export default DetalleFactura;

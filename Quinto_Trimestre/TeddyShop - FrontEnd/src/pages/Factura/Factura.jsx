@@ -16,15 +16,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  Snackbar,
-  Alert,
   Box,
   TablePagination,
-  Switch,
-  FormControlLabel, // Importar FormControlLabel
-  Checkbox, // Importar Checkbox
 } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
 
 const Facturas = () => {
@@ -39,6 +34,10 @@ const Facturas = () => {
   });
   const [editing, setEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [selectedFactura, setSelectedFactura] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     listarFacturas();
@@ -157,6 +156,25 @@ const Facturas = () => {
     }
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const openDetailDialog = (factura) => {
+    setSelectedFactura(factura);
+    setOpenDetails(true);
+  };
+
+  const closeDetailDialog = () => {
+    setOpenDetails(false);
+    setSelectedFactura(null);
+  };
+
   return (
     <Box
       sx={{
@@ -197,9 +215,6 @@ const Facturas = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
             />
             <TextField
               type="time"
@@ -210,9 +225,6 @@ const Facturas = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
             />
             <TextField
               type="text"
@@ -224,10 +236,6 @@ const Facturas = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
             />
             <TextField
               type="text"
@@ -239,10 +247,6 @@ const Facturas = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
             />
             <TextField
               type="text"
@@ -254,10 +258,6 @@ const Facturas = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
             />
             <TextField
               type="text"
@@ -269,41 +269,89 @@ const Facturas = () => {
               margin="normal"
               required
               variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
             />
-            <Button type="submit" variant="contained" sx={{ marginTop: 2, fontSize: '1.2rem' }}>
+            <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>
               {editing ? 'Actualizar' : 'Crear'}
             </Button>
           </form>
-  
+
           <Box mt={4}>
             <h2>Lista de Facturas</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {facturas.map((factura) => (
-                <li key={factura._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '1.2rem' }}>
-                    {`${factura.fechaCreacionFactura} - ${factura.horaCreacionFactura}`}
-                  </span>
-                  <Box>
-                    <IconButton onClick={() => obtenerFacturaPorId(factura._id)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => eliminarFactura(factura._id)}>
-                      <Delete />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Fecha</TableCell>
+                    <TableCell>Hora</TableCell>
+                    <TableCell>Pedido</TableCell>
+                    <TableCell>Cliente</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {facturas.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((factura) => (
+                    <TableRow key={factura._id}>
+                      <TableCell>{new Date(factura.fechaCreacionFactura).toLocaleDateString()}</TableCell>
+                      <TableCell>{factura.horaCreacionFactura}</TableCell>
+                      <TableCell>{factura.pedido}</TableCell>
+                      <TableCell>{factura.cliente}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => obtenerFacturaPorId(factura._id)}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton onClick={() => eliminarFactura(factura._id)}>
+                          <Delete />
+                        </IconButton>
+                        <IconButton onClick={() => openDetailDialog(factura)}>
+                          <Info />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={facturas.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Box>
         </Container>
+
+        {/* Detalle Dialog */}
+        <Dialog open={openDetails} onClose={closeDetailDialog}>
+          <DialogTitle>Detalles de la Factura</DialogTitle>
+          <DialogContent>
+            {selectedFactura && (
+              <DialogContentText>
+                <strong>Pedido:</strong> {selectedFactura.pedido}
+                <br />
+                <strong>Cliente:</strong> {selectedFactura.cliente}
+                <br />
+                <strong>Detalles:</strong> {selectedFactura.detallesFactura.join(', ')}
+                <br />
+                <strong>Método de Pago:</strong> {selectedFactura.metodoPago}
+                <br />
+                <strong>Fecha:</strong> {new Date(selectedFactura.fechaCreacionFactura).toLocaleDateString()}
+                <br />
+                <strong>Hora:</strong> {selectedFactura.horaCreacionFactura}
+              </DialogContentText>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeDetailDialog} color="primary">
+              Cerrar
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Box>
   );
-  
 };
 
 export default Facturas;

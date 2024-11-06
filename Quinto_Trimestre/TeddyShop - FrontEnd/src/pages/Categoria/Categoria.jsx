@@ -22,7 +22,7 @@ import {
   TablePagination,
   Switch,
 } from '@mui/material';
-import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
+import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
 
 const CategoriaComponent = () => {
@@ -30,6 +30,9 @@ const CategoriaComponent = () => {
   const [nombreCategoria, setNombreCategoria] = useState('');
   const [descripcionCategoria, setDescripcionCategoria] = useState('');
   const [editingId, setEditingId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [selectedCategoria, setSelectedCategoria] = useState(null);
 
   const fetchCategorias = async () => {
     try {
@@ -130,6 +133,23 @@ const CategoriaComponent = () => {
     setEditingId(null);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(0);
+  };
+
+  const openDetailsDialog = (categoria) => {
+    setSelectedCategoria(categoria);
+  };
+
+  const closeDetailsDialog = () => {
+    setSelectedCategoria(null);
+  };
+
   useEffect(() => {
     fetchCategorias();
   }, []);
@@ -224,39 +244,72 @@ const CategoriaComponent = () => {
               </Button>
             </Box>
           </form>
-  
+
           <Box mt={4}>
             <h2>Lista de Categorías</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {categorias.map((cat) => (
-                <li
-                  key={cat._id}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
-                  <span style={{ fontSize: '1.2rem' }}>
-                    {cat.nombreCategoria} - {cat.descripcionCategoria}
-                  </span>
-                  <Box>
-                    <IconButton onClick={() => editarCategoria(cat)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => eliminarCategoria(cat._id)}>
-                      <Delete />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Descripción</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {categorias.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((categoria) => (
+                    <TableRow key={categoria._id}>
+                      <TableCell>{categoria.nombreCategoria}</TableCell>
+                      <TableCell>{categoria.descripcionCategoria}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => editarCategoria(categoria)}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton onClick={() => eliminarCategoria(categoria._id)}>
+                          <Delete />
+                        </IconButton>
+                        <IconButton onClick={() => openDetailsDialog(categoria)}>
+                          <Info />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={categorias.length}
+                rowsPerPage={rowsPerPage}
+                page={currentPage}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </TableContainer>
           </Box>
         </Container>
       </Box>
+
+      {selectedCategoria && (
+        <Dialog open={true} onClose={closeDetailsDialog}>
+          <DialogTitle>Detalles de la Categoría</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <strong>Nombre:</strong> {selectedCategoria.nombreCategoria}
+            </DialogContentText>
+            <DialogContentText>
+              <strong>Descripción:</strong> {selectedCategoria.descripcionCategoria}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeDetailsDialog} color="primary">
+              Cerrar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Box>
   );
-  
 };
 
 export default CategoriaComponent;

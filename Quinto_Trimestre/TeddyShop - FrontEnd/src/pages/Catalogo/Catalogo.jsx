@@ -3,13 +3,6 @@ import {
   Container,
   TextField,
   Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   IconButton,
   Dialog,
   DialogTitle,
@@ -19,16 +12,21 @@ import {
   Snackbar,
   Alert,
   Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   TablePagination,
-  Switch,
-  FormControlLabel, // Importar FormControlLabel
-  Checkbox, // Importar Checkbox
 } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
 
 export default function Catalogo() {
   const [catalogos, setCatalogos] = useState([]);
+  const [currentId, setCurrentId] = useState(null);
   const [nombreCatalogo, setNombreCatalogo] = useState('');
   const [descripcionCatalogo, setDescripcionCatalogo] = useState('');
   const [disponibilidadCatalogo, setDisponibilidadCatalogo] = useState(true);
@@ -37,6 +35,10 @@ export default function Catalogo() {
   const [productos, setProductos] = useState([]);
   const [vendedoresCatalogo, setVendedoresCatalogo] = useState([]);
   const [selectedCatalogoId, setSelectedCatalogoId] = useState(null);
+  const [selectedCatalogo, setSelectedCatalogo] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
     listarCatalogos();
@@ -103,6 +105,25 @@ export default function Catalogo() {
     }
   };
 
+  const eliminarCatalogo = async () => {
+    if (!currentId) return;
+
+    try {
+      await fetch(`http://localhost:3000/api/catalogo/${currentId}`, {
+        method: 'DELETE',
+      });
+      setCatalogos((prevCatalogos) => prevCatalogos.filter((catalogo) => catalogo._id !== currentId));
+      setSnackbarMessage('Catalogo eliminado con éxito');
+      setOpenSnackbar(true);
+    } catch (error) {
+      console.error('Error eliminando el Catalogo:', error);
+      setSnackbarMessage('Error al eliminar el Catalogo');
+      setOpenSnackbar(true);
+    } finally {
+      setOpenDeleteDialog(false);
+    }
+  };
+
   const limpiarFormulario = () => {
     setNombreCatalogo('');
     setDescripcionCatalogo('');
@@ -113,10 +134,23 @@ export default function Catalogo() {
     setVendedoresCatalogo([]);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleDetalles = (catalogo) => {
+    setSelectedCatalogo(catalogo);
+  };
+
   return (
     <Box
       sx={{
-        height: { xs: 'auto', md: '130vh' },
+        height: { xs: 'auto', md: '180vh' },
         width: '100vw',
         display: 'flex',
         alignItems: 'center',
@@ -143,7 +177,7 @@ export default function Catalogo() {
       >
         <Container>
           <h1>Catálogos</h1>
-  
+
           <form onSubmit={selectedCatalogoId ? actualizarCatalogo : crearCatalogo} noValidate autoComplete="off">
             <h2>{selectedCatalogoId ? 'Actualizar Catálogo' : 'Crear Catálogo'}</h2>
             <TextField
@@ -202,84 +236,117 @@ export default function Catalogo() {
                 '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
-            <TextField
-              type="text"
-              label="Productos (IDs separados por comas)"
-              value={productos.join(', ')}
-              onChange={(e) => setProductos(e.target.value.split(',').map(p => p.trim()))}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="text"
-              label="Vendedores (IDs separados por comas)"
-              value={vendedoresCatalogo.join(', ')}
-              onChange={(e) => setVendedoresCatalogo(e.target.value.split(',').map(v => v.trim()))}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={disponibilidadCatalogo}
-                  onChange={() => setDisponibilidadCatalogo(!disponibilidadCatalogo)}
-                  sx={{ '& .MuiSvgIcon-root': { fontSize: '1.5rem' } }}
-                />
-              }
-              label="Disponibilidad"
-              sx={{ fontSize: '1.2rem' }}
-            />
             <Button type="submit" variant="contained" sx={{ marginTop: 2, fontSize: '1.2rem' }}>
               {selectedCatalogoId ? 'Actualizar' : 'Crear'}
             </Button>
           </form>
-  
+
           <Box mt={4}>
             <h2>Lista de Catálogos Activos</h2>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {catalogos.map((catalogo) => (
-                <li key={catalogo._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Box>
-                    <p style={{ fontSize: '1.2rem' }}>Nombre: {catalogo.nombreCatalogo}</p>
-                    <p style={{ fontSize: '1.2rem' }}>Descripción: {catalogo.descripcionCatalogo}</p>
-                    <p style={{ fontSize: '1.2rem' }}>
-                      Disponibilidad: {catalogo.disponibilidadCatalogo ? 'Sí' : 'No'}
-                    </p>
-                    <p style={{ fontSize: '1.2rem' }}>Estilo: {catalogo.estiloCatalogo}</p>
-                  </Box>
-                  <Box>
-                    <IconButton
-                      onClick={() => {
-                        setSelectedCatalogoId(catalogo._id);
-                        setNombreCatalogo(catalogo.nombreCatalogo);
-                        setDescripcionCatalogo(catalogo.descripcionCatalogo);
-                        setDisponibilidadCatalogo(catalogo.disponibilidadCatalogo);
-                        setEstiloCatalogo(catalogo.estiloCatalogo);
-                        setCompania(catalogo.compania);
-                        setProductos(catalogo.productos);
-                        setVendedoresCatalogo(catalogo.vendedoresCatalogo);
-                      }}
-                    >
-                      <Edit />
-                    </IconButton>
-                  </Box>
-                </li>
-              ))}
-            </ul>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Descripción</TableCell>
+                    <TableCell>Disponibilidad</TableCell>
+                    <TableCell>Estilo</TableCell>
+                    <TableCell>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {catalogos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((catalogo) => (
+                    <TableRow key={catalogo._id}>
+                      <TableCell>{catalogo.nombreCatalogo}</TableCell>
+                      <TableCell>{catalogo.descripcionCatalogo}</TableCell>
+                      <TableCell>{catalogo.disponibilidadCatalogo ? 'Sí' : 'No'}</TableCell>
+                      <TableCell>{catalogo.estiloCatalogo}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => handleDetalles(catalogo)}>
+                          <Info />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => {
+                            setSelectedCatalogoId(catalogo._id);
+                            setNombreCatalogo(catalogo.nombreCatalogo);
+                            setDescripcionCatalogo(catalogo.descripcionCatalogo);
+                            setDisponibilidadCatalogo(catalogo.disponibilidadCatalogo);
+                            setEstiloCatalogo(catalogo.estiloCatalogo);
+                            setCompania(catalogo.compania);
+                          }}
+                        >
+                          <Edit />
+                        </IconButton>
+                        <IconButton onClick={() => {
+                        setCurrentId(catalogo._id);
+                        setOpenDeleteDialog(true);
+                      }}>
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={catalogos.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Box>
         </Container>
       </Box>
+
+      <Dialog open={Boolean(selectedCatalogo)} onClose={() => setSelectedCatalogo(null)}>
+        <DialogTitle>Detalles del Catálogo</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <strong>Nombre:</strong> {selectedCatalogo?.nombreCatalogo}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Descripción:</strong> {selectedCatalogo?.descripcionCatalogo}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Disponibilidad:</strong> {selectedCatalogo?.disponibilidadCatalogo ? 'Sí' : 'No'}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Estilo:</strong> {selectedCatalogo?.estiloCatalogo}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Compañia:</strong> {selectedCatalogo?.compania}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Productos:</strong> {selectedCatalogo?.productos}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Vendedor:</strong> {selectedCatalogo?.vendedoresCatalogo}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSelectedCatalogo(null)}>Cerrar</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Diálogo de eliminación */}
+      <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
+            <DialogTitle>Eliminar Catalogo</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                ¿Estás seguro de que deseas eliminar este Catalogo?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDeleteDialog(false)}>Cancelar</Button>
+              <Button onClick={eliminarCatalogo} color="error">
+                Eliminar
+              </Button>
+            </DialogActions>
+          </Dialog>
     </Box>
   );
-  
 }
