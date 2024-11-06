@@ -25,7 +25,7 @@ const compañiaSchemaValidation = Joi.object({
         .min(3)
         .max(100)
         .required()
-        .pattern(/^[A-Za-záéíóúÁÉÍÓÚñÑ0-9 ]+$/)
+        .pattern(/^[A-Za-záéíóúÁÉÍÓÚñÑ0-9 .]+$/) 
         .messages({
             'string.base': 'El nombre de la empresa debe ser un texto',
             'string.empty': 'El nombre de la empresa no puede estar vacío',

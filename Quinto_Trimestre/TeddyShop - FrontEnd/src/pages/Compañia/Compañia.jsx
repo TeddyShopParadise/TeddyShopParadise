@@ -82,7 +82,7 @@ const Compania = () => {
       alert('Por favor, completa todos los campos.');
       return;
     }
-
+  
     try {
       const response = await fetch(`http://localhost:3000/api/compania/${editingId}`, {
         method: 'PUT',
@@ -91,15 +91,16 @@ const Compania = () => {
         },
         body: JSON.stringify({ NIT, telefonoEmpresa, nombreEmpresa, direccionEmpresa }),
       });
-
+  
       if (!response.ok) {
-        throw new Error('Error al actualizar la compañía');
+        const errorMessage = await response.text();
+        throw new Error(`Error al actualizar la compañía: ${errorMessage}`);
       }
-
+  
       fetchCompanias();
       resetForm();
     } catch (error) {
-      console.error(error);
+      console.error('Error en actualizarCompania:', error.message);
       alert(error.message);
     }
   };
