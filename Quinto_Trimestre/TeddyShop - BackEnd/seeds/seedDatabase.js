@@ -8,6 +8,8 @@ const detalleFacturaSeed = require('./detalleFactura_seed');
 const facturaSeed = require('./factura_seed.js');
 const historialPrecioSeed = require('./historialPrecio_seed.js');
 const vendedorSeed = require('./vendedor_seed.js');
+const rolesSeed = require('./roles_seed.js');
+const usuarioSeed = require('./usuario_seed.js');
 
 
 async function runAllSeeds() {
@@ -23,6 +25,8 @@ async function runAllSeeds() {
    await facturaSeed;
    await historialPrecioSeed;
    await vendedorSeed;
+   await rolesSeed;
+   await usuarioSeed;
     // Llama a otras funciones de semilla aquí...
     
     console.log("Semillas completadas correctamente.");
