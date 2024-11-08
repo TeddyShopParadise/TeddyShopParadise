@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -12,72 +12,59 @@ import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Modal from '@mui/material/Modal';
 import normalizeText from '../../utils/textUtils';
 import { Link } from 'react-router-dom';
 import LinkBehavior from './LinkBehavior';
 import logoTeddyShop from '../../assets/img/LogoTeddyShop.jpg';
+import Login from '../../pages/login/login';
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorElRoles, setAnchorElRoles] = useState(null);
   const [anchorElUsuarios, setAnchorElUsuarios] = useState(null);
-  const [anchorElVerProoductos, setAnchorElVerProductos] = useState(null);
-  const [anchorElPedidos, setAnchorElPedidos] = useState(null);
   const [anchorElProductos, setAnchorElProductos] = useState(null);
+  const [anchorElPedidos, setAnchorElPedidos] = useState(null);
+  const [anchorElVerProductos, setAnchorElVerProductos] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('authToken'));
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    // Obtener el rol del usuario desde el token
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      setUserRole(decodedToken.roles && decodedToken.roles[0]);
+    }
+  }, [isAuthenticated]);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const handleRolesMenuOpen = (event) => {
-    setAnchorElRoles(event.currentTarget);
+  const handleLoginOpen = () => {
+    setLoginModalOpen(true);
   };
 
-  const handleRolesMenuClose = () => {
-    setAnchorElRoles(null);
+  const handleLoginClose = () => {
+    setLoginModalOpen(false);
   };
 
-  const handleUsuariosMenuOpen = (event) => {
-    setAnchorElUsuarios(event.currentTarget);
-  };
-
-  const handleUsuariosMenuClose = () => {
-    setAnchorElUsuarios(null);
-  };
-
-  const handlePedidosMenuOpen = (event) => {
-    setAnchorElPedidos(event.currentTarget);
-  };
-
-  const handlePedidosMenuClose = () => {
-    setAnchorElPedidos(null);
-  };
-  const handleVerProductosMenuOpen = (event) => {
-    setAnchorElVerProductos(event.currentTarget);
-  };
-
-  const handleVerProductosMenuClose = () => {
-    setAnchorElVerProductos(null);
-  };
-
-  const handleProductosMenuOpen = (event) => {
-    setAnchorElProductos(event.currentTarget);
-  };
-
-  const handleProductosMenuClose = () => {
-    setAnchorElProductos(null);
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    setIsAuthenticated(false);
+    setUserRole(null);
   };
 
   const drawer = (
-    <div>
-      <List>
-        {['Realizar Reporte', 'Agregar Producto', 'Modificar Producto', 'Registrar Usuario', 'Proveedores', 'Clientes'].map((text) => (
-          <ListItem button component={LinkBehavior} to={`/${normalizeText(text)}`} key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
+    <List>
+      {['Realizar Reporte', 'Agregar Producto', 'Modificar Producto', 'Registrar Usuario', 'Proveedores', 'Clientes'].map((text) => (
+        <ListItem button component={LinkBehavior} to={`/${normalizeText(text)}`} key={text}>
+          <ListItemText primary={text} />
+        </ListItem>
+      ))}
+    </List>
   );
 
   return (
@@ -114,101 +101,97 @@ export default function Navbar() {
             <MenuIcon />
           </IconButton>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* Menús desplegables para pantallas grandes */}
-            <Button
-              color="inherit"
-              onClick={handleRolesMenuOpen}
-              style={{ color: '#2F2F2F', fontSize: '20px' }}
-            >
-              Administrador de Roles
-            </Button>
-            <Menu
-              anchorEl={anchorElRoles}
-              open={Boolean(anchorElRoles)}
-              onClose={handleRolesMenuClose}
-            >
-              <MenuItem component={LinkBehavior} to="/roles">Administrar roles</MenuItem>
-            </Menu>
+            {/* Mostrar opciones según el rol del usuario */}
+            {userRole === 'Administrador' && (
+              <>
+                <Button
+                  color="inherit"
+                  onClick={() => setAnchorElRoles(true)}
+                  style={{ color: '#2F2F2F', fontSize: '20px' }}
+                >
+                  Administrador de Roles
+                </Button>
+                <Menu
+                  anchorEl={anchorElRoles}
+                  open={Boolean(anchorElRoles)}
+                  onClose={() => setAnchorElRoles(false)}
+                >
+                  <MenuItem component={LinkBehavior} to="/roles">Administrar roles</MenuItem>
+                </Menu>
 
-            <Button
-              color="inherit"
-              onClick={handleUsuariosMenuOpen}
-              style={{ color: '#2F2F2F', fontSize: '20px' }}
-            >
-              Administrador de Usuarios
-            </Button>
-            <Menu
-              anchorEl={anchorElUsuarios}
-              open={Boolean(anchorElUsuarios)}
-              onClose={handleUsuariosMenuClose}
-            >
-              <MenuItem component={LinkBehavior} to="/vendedores">Vendedores</MenuItem>
-              <MenuItem component={LinkBehavior} to="/empleado">Empleados</MenuItem>
-              <MenuItem component={LinkBehavior} to="/cliente">Clientes</MenuItem>
-              <MenuItem component={LinkBehavior} to="/compania">Compañia</MenuItem>
-            </Menu>
+                <Button
+                  color="inherit"
+                  onClick={() => setAnchorElUsuarios(true)}
+                  style={{ color: '#2F2F2F', fontSize: '20px' }}
+                >
+                  Administrador de Usuarios
+                </Button>
+                <Menu
+                  anchorEl={anchorElUsuarios}
+                  open={Boolean(anchorElUsuarios)}
+                  onClose={() => setAnchorElUsuarios(false)}
+                >
+                  <MenuItem component={LinkBehavior} to="/vendedores">Vendedores</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/empleado">Empleados</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/cliente">Clientes</MenuItem>
+                </Menu>
+              </>
+            )}
 
-            <Button
-              color="inherit"
-              onClick={handlePedidosMenuOpen}
-              style={{ color: '#2F2F2F', fontSize: '20px' }}
-            >
-              Administrador de Pedidos
-            </Button>
-            <Menu
-              anchorEl={anchorElPedidos}
-              open={Boolean(anchorElPedidos)}
-              onClose={handlePedidosMenuClose}
-            >
-              <MenuItem component={LinkBehavior} to="/pedido">Pedidos</MenuItem>
-              <MenuItem component={LinkBehavior} to="/factura">Facturas</MenuItem>
-              <MenuItem component={LinkBehavior} to="/DetalleFactura">Detalle de la Factura</MenuItem>
-              <MenuItem component={LinkBehavior} to="/DetallePedido">Detalle del Pedido</MenuItem>
-              <MenuItem component={LinkBehavior} to="/devoluciones">Devoluciones</MenuItem>
-            </Menu>
+            {(userRole === 'Administrador' || userRole === 'Empleado') && (
+              <>
+                <Button
+                  color="inherit"
+                  onClick={() => setAnchorElProductos(true)}
+                  style={{ color: '#2F2F2F', fontSize: '20px' }}
+                >
+                  Administrador de Productos
+                </Button>
+                <Menu
+                  anchorEl={anchorElProductos}
+                  open={Boolean(anchorElProductos)}
+                  onClose={() => setAnchorElProductos(false)}
+                >
+                  <MenuItem component={LinkBehavior} to="/inventario">Inventario</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/catalogo">Catálogos</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/productos">Productos</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/categoria">Categorías</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/HistorialPrecio">Historial de Precios</MenuItem>
+                </Menu>
+              </>
+            )}
 
-            <Button
-              color="inherit"
-              onClick={handleProductosMenuOpen}
-              style={{ color: '#2F2F2F', fontSize: '20px' }}
-            >
-              Administrador de Productos
-            </Button>
-            <Menu
-              anchorEl={anchorElProductos}
-              open={Boolean(anchorElProductos)}
-              onClose={handleProductosMenuClose}
-            >
-              <MenuItem component={LinkBehavior} to="/HistorialPrecio">Historial del Precio</MenuItem>
-              <MenuItem component={LinkBehavior} to="/inventario">Inventario</MenuItem>
-              <MenuItem component={LinkBehavior} to="/MetodoPago">Método de Pago</MenuItem>
-              <MenuItem component={LinkBehavior} to="/movimiento">Movimientos</MenuItem>
-              <MenuItem component={LinkBehavior} to="/catalogo">Catalogos</MenuItem>
-            </Menu>
-
-            <Button
-              color="inherit"
-              onClick={handleVerProductosMenuOpen}
-              style={{ color: '#2F2F2F', fontSize: '20px' }}
-            >
-              Ver Productos
-            </Button>
-            <Menu
-              anchorEl={anchorElVerProoductos}
-              open={Boolean(anchorElVerProoductos)}
-              onClose={handleVerProductosMenuClose}
-            >
-              <MenuItem component={LinkBehavior} to="/productos">Productos</MenuItem>
-              <MenuItem component={LinkBehavior} to="/categoria">Categoria</MenuItem>
-
-            </Menu>
+            {/* Botón de login/logout */}
+            {!isAuthenticated ? (
+              <Button
+                color="inherit"
+                onClick={handleLoginOpen}
+                style={{ color: '#2F2F2F', fontSize: '20px' }}
+              >
+                Iniciar sesión
+              </Button>
+            ) : (
+              <Button
+                color="inherit"
+                onClick={handleLogout}
+                style={{ color: '#2F2F2F', fontSize: '20px' }}
+              >
+                Cerrar sesión
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
+
       <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle}>
         {drawer}
       </Drawer>
+
+      <Modal open={loginModalOpen} onClose={handleLoginClose}>
+        <Box>
+          <Login onClose={handleLoginClose} setIsAuthenticated={setIsAuthenticated} />
+        </Box>
+      </Modal>
     </>
   );
 }
-
