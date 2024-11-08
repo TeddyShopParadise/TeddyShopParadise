@@ -6,6 +6,8 @@ const http = require('http');
 const fs = require('fs');
 const runAllSeeds = require('./seeds/seedDatabase');
 const cors = require('cors');
+
+require('dotenv').config();
 // const https = require('https');
 
 //Importar todas las rutas 
@@ -27,6 +29,7 @@ const productoRoutes = require('./routes/productos_routes');
 const rolesRoutes = require('./routes/roles_routes');
 const usuarioRoutes = require('./routes/usuarios_routes');
 const vendedorRoutes = require('./routes/vendedores_routes');
+const loginRoute = require('./routes/login_routes');
 
 // Middleware
 const app = express();
@@ -65,7 +68,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-// Integrar las rutas de cursos
+// Integrar las rutas
 app.use('/api/catalogos', catalogoRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/clientes', clienteRoutes);
@@ -85,6 +88,8 @@ app.use('/api/producto', productoRoutes);
 app.use('/api/roles', rolesRoutes);
 app.use('/api/usuario', usuarioRoutes);
 app.use('/api/vendedor', vendedorRoutes);
+app.use('/api/auth', loginRoute);
+
 // Puerto
 const port = process.env.PORT || 3000;
 
