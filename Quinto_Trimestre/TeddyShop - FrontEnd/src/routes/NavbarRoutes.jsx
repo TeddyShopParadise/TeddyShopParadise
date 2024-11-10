@@ -21,6 +21,7 @@ import Roles from "../pages/Roles/Roles";
 import Usuarios from "../pages/Usuario/Usuario";
 import Vendedores from "../pages/Vendedor/Vendedor";
 import Login from "../pages/login/login";
+import ProductoUsuario from "../pages/Producto/ProductoUsuario";
 
 const NavbarRoutes = () => {
   return (
@@ -46,6 +47,7 @@ const NavbarRoutes = () => {
       <Route path="/usuarios" element={<Usuarios />} />
       <Route path="/vendedores" element={<Vendedores />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/productos-usuario" element={<ProductoUsuario />} />
     </Routes>
   );
 };

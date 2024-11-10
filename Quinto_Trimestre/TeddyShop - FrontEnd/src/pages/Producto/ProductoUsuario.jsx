@@ -1,0 +1,378 @@
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Container,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Snackbar,
+  Alert
+} from '@mui/material';
+
+const API_URL = 'http://localhost:3000/api/producto';
+
+const ProductoUsuario = () => {
+  const [productos, setProductos] = useState([]);
+  const [openCarritoDialog, setOpenCarritoDialog] = useState(false);
+  const [openDetalleDialog, setOpenDetalleDialog] = useState(false);
+  const [pedido, setPedido] = useState({
+    tamañoOso: '',
+    nombreComprador: '',
+    apellidoComprador: '',
+    numeroComprador: '',
+    nombreAgendador: '',
+    apellidoAgendador: '',
+    numeroAgendador: '',
+    localidad: '',
+    direccion: '',
+    barrio: '',
+    cliente: '',
+  });
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const fetchProductos = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setProductos(data);
+    } catch (error) {
+      console.error('Error fetching productos:', error);
+      setSnackbarMessage('Error al obtener los productos');
+      setOpenSnackbar(true);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductos();
+  }, []);
+
+  const handleCarritoClick = (producto) => {
+    setProductoSeleccionado(producto);
+    setOpenCarritoDialog(true);
+  };
+
+  const handleCloseCarritoDialog = () => {
+    setOpenCarritoDialog(false);
+    setPedido({
+      tamañoOso: '',
+      nombreComprador: '',
+      apellidoComprador: '',
+      numeroComprador: '',
+      nombreAgendador: '',
+      apellidoAgendador: '',
+      numeroAgendador: '',
+      localidad: '',
+      direccion: '',
+      barrio: '',
+      cliente: '',
+    });
+  };
+
+  const handleDetalleClick = (producto) => {
+    setProductoSeleccionado(producto);
+    setOpenDetalleDialog(true);
+  };
+
+  const handleCloseDetalleDialog = () => {
+    setOpenDetalleDialog(false);
+    setProductoSeleccionado(null);
+  };
+
+  const handleInputChange = (e) => {
+    setPedido({ ...pedido, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmitPedido = () => {
+    // Construir el mensaje de WhatsApp con los detalles del pedido y el producto
+    const mensaje = `
+      ¡Hola! Me gustaría realizar el siguiente pedido:
+      - ID del Producto: ${productoSeleccionado?._id || 'No disponible'}
+      - Producto: ${productoSeleccionado?.estiloProducto || ''}
+      - Tamaño: ${productoSeleccionado?.tamañoProducto || ''}
+      - Material: ${productoSeleccionado?.materialProducto || ''}
+      
+      **Datos del Pedido**
+      - Nombre del Comprador: ${pedido.nombreComprador}
+      - Apellido del Comprador: ${pedido.apellidoComprador}
+      - Número del Comprador: ${pedido.numeroComprador}
+      - Nombre del Agendador: ${pedido.nombreAgendador}
+      - Apellido del Agendador: ${pedido.apellidoAgendador}
+      - Número del Agendador: ${pedido.numeroAgendador}
+      - Localidad: ${pedido.localidad}
+      - Dirección: ${pedido.direccion}
+      - Barrio: ${pedido.barrio}
+    `;
+
+    // Codificar el mensaje para URL
+    const mensajeCodificado = encodeURIComponent(mensaje.trim());
+    
+    // Número de WhatsApp de la empresa
+    const numeroWhatsApp = "573232084899";
+    
+    // URL de WhatsApp
+    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+    
+    // Abrir WhatsApp en una nueva pestaña
+    window.open(urlWhatsApp, "_blank");
+
+    // Mostrar Snackbar de éxito
+    setSnackbarMessage('Pedido realizado exitosamente');
+    setOpenSnackbar(true);
+
+    // Cerrar el diálogo y limpiar el formulario
+    handleCloseCarritoDialog();
+  };
+
+  return (
+    <Box sx={{ height: { xs: "auto", md: "auto" }, width: "100vw", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", margin: 0, padding: 0, py: 2 }}>
+    <Box sx={{ width: "90%", maxWidth: "100%", padding: { xs: "20px", md: "50px" }, background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))", borderRadius: "30px", boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)", backdropFilter: "blur(8px)", backgroundSize: "200% 200%", animation: "shimmer 10s infinite linear" }}>
+    <Container>
+      <Typography variant="h3" align="center" gutterBottom>
+        PRODUCTOS
+      </Typography>
+      <Grid container spacing={3}>
+        {productos.map((producto) => (
+          <Grid item xs={12} sm={6} md={4} key={producto._id}>
+            <Card
+              sx={{
+                transition: 'transform 0.3s',
+                '&:hover': { transform: 'scale(1.05)' },
+                borderRadius: 3,
+                boxShadow: 3
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="350"
+                image={producto.imagen || 'default-image-url.jpg'}
+                alt={producto.estiloProducto}
+                sx={{ borderRadius: '12px 12px 0 0' }}
+              />
+              <CardContent sx={{ textAlign: 'left' }}>
+                <Typography variant="h5" gutterBottom>{producto.estiloProducto}</Typography>
+                <Typography variant="body1" color="text.secondary">
+                  <strong>Material:</strong> {producto.materialProducto}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                <strong>Tamaño:</strong> {producto.tamañoProducto}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                <strong>Disponibilidad:</strong> {producto.disponibilidadProducto}
+                </Typography>
+                <Box mt={2} display="flex" justifyContent="space-between">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => handleDetalleClick(producto)}
+                  >
+                    Ver Detalles
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleCarritoClick(producto)}
+                  >
+                    Comprar
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* Diálogo para detalles del producto */}
+        <Dialog open={openDetalleDialog} onClose={handleCloseDetalleDialog} maxWidth="sm" fullWidth>
+          <DialogContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: 4,
+              textAlign: "center",
+              position: "relative",
+            }}
+          >
+            {productoSeleccionado && (
+              <>
+                <CardMedia
+                  component="img"
+                  height="600"
+                  image={productoSeleccionado.imagen || 'default-image-url.jpg'}
+                  alt={productoSeleccionado.estiloProducto}
+                  sx={{
+                    borderRadius: "10px",
+                    width: "100%",
+                    objectFit: "cover",
+                    boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+                    marginBottom: 3,
+                  }}
+                />
+                <Typography variant="h4" gutterBottom>
+                  {productoSeleccionado.estiloProducto}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1.5,
+                    width: "100%",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <Typography variant="body1">
+                    <strong>Material:</strong> {productoSeleccionado.materialProducto}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Tamaño:</strong> {productoSeleccionado.tamañoProducto}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>medida de Cabeza a Cola:</strong> {productoSeleccionado.cmCabezaColaProducto}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>medida de Cola a Pata:</strong> {productoSeleccionado.cmColaPataProducto}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Disponibilidad:</strong> {productoSeleccionado.disponibilidadProducto}
+                  </Typography>
+                </Box>
+              </>
+            )}
+            <Button
+              onClick={handleCloseDetalleDialog}
+              variant="contained"
+              color="secondary"
+              sx={{
+                mt: 3,
+                borderRadius: "20px",
+                px: 4,
+                py: 1,
+                boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              Cerrar
+            </Button>
+          </DialogContent>
+        </Dialog>
+
+      {/* Diálogo para llenar datos de pedido */}
+      <Dialog open={openCarritoDialog} onClose={handleCloseCarritoDialog}>
+        <DialogTitle>Datos del Pedido</DialogTitle>
+        <DialogContent>
+          <TextField
+            name="nombreComprador"
+            label="Nombre del Comprador"
+            fullWidth
+            margin="normal"
+            value={pedido.nombreComprador}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            name="apellidoComprador"
+            label="Apellido del Comprador"
+            fullWidth
+            margin="normal"
+            value={pedido.apellidoComprador}
+            onChange={handleInputChange}
+          />
+          <TextField
+            name="numeroComprador"
+            label="Número del Comprador"
+            fullWidth
+            margin="normal"
+            value={pedido.numeroComprador}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            name="nombreAgendador"
+            label="Nombre del Agendador"
+            fullWidth
+            margin="normal"
+            value={pedido.nombreAgendador}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            name="apellidoAgendador"
+            label="Apellido del Agendador"
+            fullWidth
+            margin="normal"
+            value={pedido.apellidoAgendador}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            name="numeroAgendador"
+            label="Número del Agendador"
+            fullWidth
+            margin="normal"
+            value={pedido.numeroAgendador}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            name="localidad"
+            label="Localidad"
+            fullWidth
+            margin="normal"
+            value={pedido.localidad}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            name="direccion"
+            label="Dirección"
+            fullWidth
+            margin="normal"
+            value={pedido.direccion}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            name="barrio"
+            label="Barrio"
+            fullWidth
+            margin="normal"
+            value={pedido.barrio}
+            onChange={handleInputChange}
+            required
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCarritoDialog} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleSubmitPedido} color="primary">
+            Confirmar Pedido
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </Container>
+    </Box>
+    </Box>
+  );
+};
+
+export default ProductoUsuario;
