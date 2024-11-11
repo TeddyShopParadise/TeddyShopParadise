@@ -14,7 +14,8 @@ import {
   DialogActions,
   TextField,
   Snackbar,
-  Alert
+  Alert,
+  Pagination
 } from '@mui/material';
 
 const API_URL = 'http://localhost:3000/api/producto';
@@ -23,6 +24,7 @@ const ProductoUsuario = () => {
   const [productos, setProductos] = useState([]);
   const [openCarritoDialog, setOpenCarritoDialog] = useState(false);
   const [openDetalleDialog, setOpenDetalleDialog] = useState(false);
+
   const [pedido, setPedido] = useState({
     tamañoOso: '',
     nombreComprador: '',
@@ -36,9 +38,12 @@ const ProductoUsuario = () => {
     barrio: '',
     cliente: '',
   });
+
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productosPerPage = 9;
 
   const fetchProductos = async () => {
     try {
@@ -55,6 +60,11 @@ const ProductoUsuario = () => {
   useEffect(() => {
     fetchProductos();
   }, []);
+
+  // Obtener productos de la página actual
+  const indexOfLastProduct = currentPage * productosPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productosPerPage;
+  const currentProductos = productos.slice(indexOfFirstProduct, indexOfLastProduct);
 
   const handleCarritoClick = (producto) => {
     setProductoSeleccionado(producto);
@@ -133,6 +143,11 @@ const ProductoUsuario = () => {
     handleCloseCarritoDialog();
   };
 
+    // Manejar el cambio de página
+    const handlePageChange = (event, value) => {
+      setCurrentPage(value);
+    };
+
   return (
     <Box sx={{ height: { xs: "auto", md: "auto" }, width: "100vw", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", margin: 0, padding: 0, py: 2 }}>
     <Box sx={{ width: "90%", maxWidth: "100%", padding: { xs: "20px", md: "50px" }, background: "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))", borderRadius: "30px", boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)", backdropFilter: "blur(8px)", backgroundSize: "200% 200%", animation: "shimmer 10s infinite linear" }}>
@@ -141,7 +156,7 @@ const ProductoUsuario = () => {
         PRODUCTOS
       </Typography>
       <Grid container spacing={3}>
-        {productos.map((producto) => (
+        {currentProductos.map((producto) => (
           <Grid item xs={12} sm={6} md={4} key={producto._id}>
             <Card
               sx={{
@@ -190,6 +205,11 @@ const ProductoUsuario = () => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Componente de Paginación */}
+      <Box mt={4} display="flex" justifyContent="center">
+        <Pagination count={Math.ceil(productos.length / productosPerPage)} page={currentPage} onChange={handlePageChange} color="primary" />
+      </Box>
 
       {/* Diálogo para detalles del producto */}
         <Dialog open={openDetalleDialog} onClose={handleCloseDetalleDialog} maxWidth="sm" fullWidth>
