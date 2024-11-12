@@ -7,10 +7,15 @@ import {
   Grid,
   CardMedia,
   Box,
+  FormControl, 
+  InputLabel, 
+  Select, 
+  MenuItem
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export default function CategoriaUsuario() {
+  const [tamañoFiltro, setTamañoFiltro] = useState("todos");
   const [categorias, setCategorias] = useState([]);
   const navigate = useNavigate(); // Hook para navegar entre rutas
 
@@ -28,15 +33,20 @@ export default function CategoriaUsuario() {
     }
   };
 
-    /*// Función para manejar la redirección al hacer clic en una categoría
-    const handleCategoriaClick = async (categoriaId) => {
-    try {
-        // Navega a una nueva ruta pasando el ID de la categoría
-        navigate(`/productos-usuario?categoria=${categoriaId}`);
-    } catch (error) {
-        console.error('Error al obtener los productos:', error);
-    }
-    };*/
+    // Función para manejar el cambio en el filtro de tamaño
+    const handleTamañoFiltroChange = (event) => {
+      setTamañoFiltro(event.target.value);
+  
+      // Redirige con el filtro de tamaño y la categoría seleccionada
+      const categoriaId = new URLSearchParams(window.location.search).get('categoria');
+      navigate(`/productos-usuario?categoria=${categoriaId}&tamaño=${event.target.value}`);
+    };
+  
+    // Función para manejar el clic en una categoría
+    const handleCategoriaClick = (categoriaId) => {
+      navigate(`/productos-usuario?categoria=${categoriaId}&tamaño=${tamañoFiltro}`);
+    };
+
 
   return (
     <Box

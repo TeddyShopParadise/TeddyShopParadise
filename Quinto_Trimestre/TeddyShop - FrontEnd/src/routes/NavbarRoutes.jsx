@@ -23,7 +23,6 @@ import Vendedores from "../pages/Vendedor/Vendedor";
 import Login from "../pages/login/login";
 import ProductoUsuario from "../pages/Producto/ProductoUsuario";
 import CatalogoUsuario from "../pages/Catalogo/CatalogoUsuario";
-import CategoriaUsuario from "../pages/Categoria/CategoriaUsuario";
 
 const NavbarRoutes = () => {
   return (
@@ -51,7 +50,6 @@ const NavbarRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/productos-usuario" element={<ProductoUsuario />} />
       <Route path="/catalogos-usuario" element={<CatalogoUsuario />} />
-      <Route path="/categorias-usuario" element={<CategoriaUsuario />} />
     </Routes>
   );
 };

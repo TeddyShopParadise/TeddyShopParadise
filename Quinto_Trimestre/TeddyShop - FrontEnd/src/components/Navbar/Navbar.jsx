@@ -181,7 +181,6 @@ export default function Navbar() {
                 >
                   <MenuItem component={LinkBehavior} to="/catalogos-usuario" onClick={() => setAnchorElProductos(null)}>Catálogos</MenuItem>
                   <MenuItem component={LinkBehavior} to="/productos-usuario" onClick={() => setAnchorElProductos(null)}>Productos</MenuItem>
-                  <MenuItem component={LinkBehavior} to="/categorias-usuario" onClick={() => setAnchorElProductos(null)}>Categorías</MenuItem>
                 </Menu>   
 
             {/* Botón de login/logout */}
