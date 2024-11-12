@@ -56,27 +56,42 @@ const Devoluciones = () => {
 
     const handleSubmit = async () => {
         try {
+            // Elimina el campo '_id' para evitar el error del servidor
+            const devolucionData = { ...devolucion };
+            delete devolucionData._id;
+            delete devolucionData.__v;
+    
+            console.log("Datos enviados:", devolucionData);
+    
             const method = isEditing ? 'PUT' : 'POST';
             const url = isEditing
                 ? `http://localhost:3000/api/devoluciones/${currentId}`
                 : 'http://localhost:3000/api/devoluciones';
+    
             const response = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(devolucion),
+                body: JSON.stringify(devolucionData),
             });
-            if (!response.ok) throw new Error('Error al crear/actualizar la devolución');
-
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Error del servidor:", errorData);
+                throw new Error('Error al crear/actualizar la devolución');
+            }
+    
             setSnackbarMessage(isEditing ? 'Devolución actualizada' : 'Devolución creada');
             setOpenSnackbar(true);
             fetchDevoluciones();
             resetForm();
         } catch (error) {
-            console.error('Error submitting devolucion:', error);
+            console.error('Error submitting devolucion:', error.message);
             setSnackbarMessage('Error al crear/actualizar la devolución');
             setOpenSnackbar(true);
         }
     };
+    
+
 
     const handleDelete = async () => {
         try {
@@ -138,100 +153,119 @@ const Devoluciones = () => {
 
     return (
         <Box
-        sx={{
-          height: 'auto',
-          width: '100vw',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          margin: 0,
-          padding: 0,
-          py: 2,
-        }}
-      >
-        <Box
-          sx={{
-            width: '90%',
-            maxWidth: '100%',
-            padding: '50px',
-            background: 'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
-            borderRadius: '30px',
-            boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
-            backdropFilter: 'blur(8px)',
-            animation: 'shimmer 10s infinite linear',
-          }}
+            sx={{
+                height: 'auto',
+                width: '100vw',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                margin: 0,
+                padding: 0,
+                py: 2,
+            }}
         >
-            <Container>
-                <h1>Devoluciones</h1>
-                <TextField
-                    label="Detalle de Devolución"
-                    value={devolucion.detalleDevolucion}
-                    onChange={(e) => setDevolucion({ ...devolucion, detalleDevolucion: e.target.value })}
-                    fullWidth
-                    margin="normal"
-                />
-                <Button variant="contained" onClick={handleSubmit}>
-                    {isEditing ? 'Actualizar' : 'Crear'}
-                </Button>
-                <TableContainer component={Paper} style={{ marginTop: 20 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    <Box display="flex" alignItems="center" onClick={() => handleSort('detalleDevolucion')}>
-                                        Detalle de Devolución
-                                        {sortBy === 'detalleDevolucion' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-                                    </Box>
-                                </TableCell>
-                                <TableCell>Acciones</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {sortedDevoluciones.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((devolucion) => (
-                                <TableRow key={devolucion._id}>
-                                    <TableCell>{devolucion.detalleDevolucion}</TableCell>
+            <Box
+                sx={{
+                    width: '90%',
+                    maxWidth: '100%',
+                    padding: '50px',
+                    background: 'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
+                    borderRadius: '30px',
+                    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
+                    backdropFilter: 'blur(8px)',
+                    animation: 'shimmer 10s infinite linear',
+                }}
+            >
+                <Container>
+                    <h1>Devoluciones</h1>
+                    <TextField
+                        label="Detalle de Devolución"
+                        value={devolucion.detalleDevolucion}
+                        onChange={(e) => setDevolucion({ ...devolucion, detalleDevolucion: e.target.value })}
+                        fullWidth
+                        margin="normal"
+                    />
+                    <TextField
+                        label="Inventarios (catálogo)"
+                        value={devolucion.inventarios}
+                        onChange={(e) => setDevolucion({ ...devolucion, inventarios: e.target.value.split(',') })}
+                        fullWidth
+                        margin="normal"
+                        placeholder="Separar valores con coma"
+                    />
+                    <Box display="flex" justifyContent="space-between" mt={2}>
+                        <Button variant="contained" onClick={handleSubmit}>
+                            {isEditing ? 'Actualizar' : 'Crear'}
+                        </Button>
+                        {isEditing && (
+                            <Button variant="outlined" onClick={resetForm}>
+                                Cancelar
+                            </Button>
+                        )}
+                    </Box>
+                    <TableContainer component={Paper} style={{ marginTop: 20 }}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
                                     <TableCell>
-                                        <IconButton onClick={() => handleEditClick(devolucion)}>
-                                            <Edit />
-                                        </IconButton>
-                                        <IconButton onClick={() => {
-                                            setCurrentId(devolucion._id);
-                                            setOpenDeleteDialog(true);
-                                        }}>
-                                            <Delete />
-                                        </IconButton>
+                                        <Box display="flex" alignItems="center" onClick={() => handleSort('detalleDevolucion')}>
+                                            Detalle de Devolución
+                                            {sortBy === 'detalleDevolucion' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+                                        </Box>
                                     </TableCell>
+                                    <TableCell>Inventarios</TableCell>
+                                    <TableCell>Acciones</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={filteredDevoluciones.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-                <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
-                    <Alert severity="success" onClose={() => setOpenSnackbar(false)}>
-                        {snackbarMessage}
-                    </Alert>
-                </Snackbar>
-                <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
-                    <DialogTitle>Confirmar eliminación</DialogTitle>
-                    <DialogContent>¿Estás seguro de que deseas eliminar esta devolución?</DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setOpenDeleteDialog(false)}>Cancelar</Button>
-                        <Button color="error" onClick={handleDelete}>Eliminar</Button>
-                    </DialogActions>
-                </Dialog>
-            </Container>
+                            </TableHead>
+                            <TableBody>
+                                {sortedDevoluciones.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((devolucion) => (
+                                    <TableRow key={devolucion._id}>
+                                        <TableCell>{devolucion.detalleDevolucion}</TableCell>
+                                        <TableCell>{devolucion.inventarios.join(', ')}</TableCell>
+                                        <TableCell>
+                                            <IconButton onClick={() => handleEditClick(devolucion)}>
+                                                <Edit />
+                                            </IconButton>
+                                            <IconButton onClick={() => {
+                                                setCurrentId(devolucion._id);
+                                                setOpenDeleteDialog(true);
+                                            }}>
+                                                <Delete />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={filteredDevoluciones.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                    <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+                        <Alert severity="success" onClose={() => setOpenSnackbar(false)}>
+                            {snackbarMessage}
+                        </Alert>
+                    </Snackbar>
+                    <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
+                        <DialogTitle>Eliminar Devolución</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>¿Estás seguro de que deseas eliminar esta devolución?</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setOpenDeleteDialog(false)}>Cancelar</Button>
+                            <Button color="error" onClick={handleDelete}>Eliminar</Button>
+                        </DialogActions>
+                    </Dialog>
+                </Container>
+            </Box>
         </Box>
-    </Box>
     );
 };
 
