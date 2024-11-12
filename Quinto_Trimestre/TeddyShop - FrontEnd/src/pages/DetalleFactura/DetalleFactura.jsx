@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Container,
   TextField,
@@ -21,36 +21,90 @@ import {
   Box,
   TablePagination,
   Switch,
-} from '@mui/material';
-import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
-import '../PagesStyle.css';
+} from "@mui/material";
+import {
+  Edit,
+  Delete,
+  ArrowUpward,
+  ArrowDownward,
+  Info,
+} from "@mui/icons-material";
+import "../PagesStyle.css";
 
 const DetalleFactura = () => {
   const [detalles, setDetalles] = useState([]);
   const [detalle, setDetalle] = useState({
-    numDetalle: '',
-    precioDetalleFactura: '',
-    cantidadDetalleFactura: '',
-    inventarioIdInventario: '',
-    productoIdProducto: '',
-    facturaIdFactura: '',
+    numDetalle: "",
+    precioDetalleFactura: "",
+    cantidadDetalleFactura: "",
+    inventarioIdInventario: "",
+    productoIdProducto: "",
+    facturaIdFactura: "",
   });
   const [editingId, setEditingId] = useState(null);
   const [detalleDialog, setDetalleDialog] = useState(null); // Para mostrar los detalles
   const [page, setPage] = useState(0); // Para paginación
   const [rowsPerPage, setRowsPerPage] = useState(5); // Para paginación
+  const [productos, setProductos] = useState([]);
+  const [inventarios, setInventarios] = useState([]);
+  const [facturas, setFacturas] = useState([]);
+  const [productoSeleccionado, setProductoSeleccionado] = useState("");
+  const [inventarioSeleccionado, setInventarioSeleccionado] = useState("");
+  const [facturaSeleccionada, setFacturaSeleccionada] = useState("");
+
+  const fetchProductos = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/productos");
+      if (!response.ok) {
+        throw new Error("Error al obtener los productos");
+      }
+      const data = await response.json();
+      setProductos(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchInventarios = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/inventarios");
+      if (!response.ok) {
+        throw new Error("Error al obtener los inventarios");
+      }
+      const data = await response.json();
+      setInventarios(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchFacturas = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/facturas");
+      if (!response.ok) {
+        throw new Error("Error al obtener las facturas");
+      }
+      const data = await response.json();
+      setFacturas(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Función para obtener los detalles de factura
   const fetchDetalles = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/detallesFactura', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/detallesFactura",
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
       if (!response.ok) {
-        throw new Error('Error al obtener los detalles');
+        throw new Error("Error al obtener los detalles");
       }
       const data = await response.json();
       setDetalles(data);
@@ -62,6 +116,9 @@ const DetalleFactura = () => {
   // Efecto para cargar detalles al montar el componente
   useEffect(() => {
     fetchDetalles();
+    fetchProductos();
+    fetchInventarios();
+    fetchFacturas();
   }, []);
 
   // Manejar cambios en los campos del formulario
@@ -72,34 +129,50 @@ const DetalleFactura = () => {
   // Manejar el envío del formulario para crear o actualizar un detalle
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const method = editingId ? 'PUT' : 'POST';
-    const url = editingId ? `http://localhost:3000/api/detallesFactura/${editingId}` : 'http://localhost:3000/api/detallesFactura';
+
+    // Verifica el contenido de detalleConDatos antes de enviarlo
+    const detalleConDatos = {
+      ...detalle,
+      productoIdProducto: productoSeleccionado,
+      inventarioIdInventario: inventarioSeleccionado,
+      facturaIdFactura: facturaSeleccionada,
+    };
+
+    console.log(detalleConDatos); // Verifica que todos los campos estén correctos
+
+    const method = editingId ? "PUT" : "POST";
+    const url = editingId
+      ? `http://localhost:3000/api/detallesFactura/${editingId}`
+      : "http://localhost:3000/api/detallesFactura";
 
     try {
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(detalle),
+        body: JSON.stringify(detalleConDatos),
       });
 
       if (!response.ok) {
-        throw new Error('Error al guardar el detalle de la factura');
+        throw new Error("Error al guardar el detalle de la factura");
       }
 
       fetchDetalles();
       setDetalle({
-        numDetalle: '',
-        precioDetalleFactura: '',
-        cantidadDetalleFactura: '',
-        inventarioIdInventario: '',
-        productoIdProducto: '',
-        facturaIdFactura: '',
+        numDetalle: "",
+        precioDetalleFactura: "",
+        cantidadDetalleFactura: "",
+        inventarioIdInventario: "",
+        productoIdProducto: "",
+        facturaIdFactura: "",
       });
+      setProductoSeleccionado("");
+      setInventarioSeleccionado("");
+      setFacturaSeleccionada("");
       setEditingId(null);
     } catch (error) {
-      console.error(error);
+      console.error("Error al guardar el detalle:", error);
     }
   };
 
@@ -112,12 +185,15 @@ const DetalleFactura = () => {
   // Manejar la eliminación de un detalle
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/detallesFactura/${id}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/detallesFactura/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Error al eliminar el detalle de la factura');
+        throw new Error("Error al eliminar el detalle de la factura");
       }
 
       fetchDetalles();
@@ -148,12 +224,12 @@ const DetalleFactura = () => {
   return (
     <Box
       sx={{
-        height: { xs: 'auto', md: '140vh' },
-        width: '100vw',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
+        height: { xs: "auto", md: "140vh" },
+        width: "100vw",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
         margin: 0,
         padding: 0,
         py: 2,
@@ -161,16 +237,16 @@ const DetalleFactura = () => {
     >
       <Box
         sx={{
-          width: '90%',
-          maxWidth: '100%',
-          padding: { xs: '20px', md: '50px' },
+          width: "90%",
+          maxWidth: "100%",
+          padding: { xs: "20px", md: "50px" },
           background:
-            'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
-          borderRadius: '30px',
-          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
-          backdropFilter: 'blur(8px)',
-          backgroundSize: '200% 200%',
-          animation: 'shimmer 10s infinite linear',
+            "linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))",
+          borderRadius: "30px",
+          boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)",
+          backdropFilter: "blur(8px)",
+          backgroundSize: "200% 200%",
+          animation: "shimmer 10s infinite linear",
         }}
       >
         <Container>
@@ -187,8 +263,8 @@ const DetalleFactura = () => {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                "& .MuiInputLabel-root": { fontSize: "1.2rem" },
+                "& .MuiInputBase-input": { fontSize: "1.2rem" },
               }}
             />
             <TextField
@@ -202,8 +278,8 @@ const DetalleFactura = () => {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                "& .MuiInputLabel-root": { fontSize: "1.2rem" },
+                "& .MuiInputBase-input": { fontSize: "1.2rem" },
               }}
             />
             <TextField
@@ -217,58 +293,63 @@ const DetalleFactura = () => {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                "& .MuiInputLabel-root": { fontSize: "1.2rem" },
+                "& .MuiInputBase-input": { fontSize: "1.2rem" },
               }}
             />
             <TextField
-              type="text"
-              name="inventarioIdInventario"
-              label="ID de Inventario"
-              value={detalle.inventarioIdInventario}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="text"
+              label="ID Producto"
               name="productoIdProducto"
-              label="ID de Producto"
-              value={detalle.productoIdProducto}
-              onChange={handleChange}
+              value={productoSeleccionado}
+              onChange={(e) => setProductoSeleccionado(e.target.value)}
               fullWidth
               margin="normal"
+              required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                "& .MuiInputLabel-root": { fontSize: "1.2rem" },
+                "& .MuiInputBase-input": { fontSize: "1.2rem" },
               }}
-            />
-            <TextField
+              helperText="Ingresa la ID del producto"
               type="text"
-              name="facturaIdFactura"
-              label="ID de Factura"
-              value={detalle.facturaIdFactura}
-              onChange={handleChange}
+            />
+
+            <TextField
+              label="ID Inventario"
+              name="inventarioIdInventario"
+              value={inventarioSeleccionado}
+              onChange={(e) => setInventarioSeleccionado(e.target.value)}
               fullWidth
               margin="normal"
+              required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
+                "& .MuiInputLabel-root": { fontSize: "1.2rem" },
+                "& .MuiInputBase-input": { fontSize: "1.2rem" },
               }}
             />
+
+            <TextField
+              label="ID Factura"
+              name="facturaIdFactura"
+              value={facturaSeleccionada}
+              onChange={(e) => setFacturaSeleccionada(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+              variant="outlined"
+              sx={{
+                "& .MuiInputLabel-root": { fontSize: "1.2rem" },
+                "& .MuiInputBase-input": { fontSize: "1.2rem" },
+              }}
+            />
+
             <Button
               type="submit"
               variant="contained"
-              sx={{ marginTop: 2, fontSize: '1.2rem' }}
+              sx={{ marginTop: 2, fontSize: "1.2rem" }}
             >
-              {editingId ? 'Actualizar' : 'Crear'}
+              {editingId ? "Actualizar" : "Crear"}
             </Button>
           </form>
 
@@ -299,7 +380,9 @@ const DetalleFactura = () => {
                           <IconButton onClick={() => handleDelete(d._id)}>
                             <Delete />
                           </IconButton>
-                          <IconButton onClick={() => handleOpenDetalleDialog(d)}>
+                          <IconButton
+                            onClick={() => handleOpenDetalleDialog(d)}
+                          >
                             <Info />
                           </IconButton>
                         </TableCell>
@@ -333,11 +416,13 @@ const DetalleFactura = () => {
             <br />
             <strong>Cantidad:</strong> {detalleDialog?.cantidadDetalleFactura}
             <br />
-            <strong>ID Inventario:</strong> {detalleDialog?.inventarioIdInventario}
+            <strong>ID Inventario:</strong>{" "}
+            {detalleDialog?.inventarioIdInventario?._id}
             <br />
-            <strong>ID Producto:</strong> {detalleDialog?.productoIdProducto}
+            <strong>ID Producto:</strong>{" "}
+            {detalleDialog?.productoIdProducto?._id}
             <br />
-            <strong>ID Factura:</strong> {detalleDialog?.facturaIdFactura}
+            <strong>ID Factura:</strong> {detalleDialog?.facturaIdFactura?._id}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
