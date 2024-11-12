@@ -58,10 +58,16 @@ export default function Navbar() {
   };
 
   const drawer = (
-    <List>
-      {['Realizar Reporte', 'Agregar Producto', 'Modificar Producto', 'Registrar Usuario', 'Proveedores', 'Clientes'].map((text) => (
-        <ListItem button component={LinkBehavior} to={`/${normalizeText(text)}`} key={text}>
-          <ListItemText primary={text} />
+    <List sx={{ width: 250 }}>
+      {['Productos-usuario', 'Categorias-usuario', 'Catalogos-usuario'].map((text, index) => (
+        <ListItem 
+          button 
+          component={LinkBehavior} 
+          to={`/${normalizeText(text)}`} 
+          key={text} 
+          sx={{ padding: '12px 20px' }} 
+        >
+          <ListItemText primary={text} sx={{ textAlign: 'center', color:'black' }} />
         </ListItem>
       ))}
     </List>
@@ -106,7 +112,7 @@ export default function Navbar() {
               <>
                 <Button
                   color="inherit"
-                  onClick={() => setAnchorElRoles(true)}
+                  onClick={(event) => setAnchorElRoles(event.currentTarget)}
                   style={{ color: '#2F2F2F', fontSize: '20px' }}
                 >
                   Administrador de Roles
@@ -114,14 +120,14 @@ export default function Navbar() {
                 <Menu
                   anchorEl={anchorElRoles}
                   open={Boolean(anchorElRoles)}
-                  onClose={() => setAnchorElRoles(false)}
+                  onClose={() => setAnchorElRoles(null)}
                 >
-                  <MenuItem component={LinkBehavior} to="/roles">Administrar roles</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/roles" onClick={() => setAnchorElRoles(null)}>Administrar roles</MenuItem>
                 </Menu>
 
                 <Button
                   color="inherit"
-                  onClick={() => setAnchorElUsuarios(true)}
+                  onClick={(event) => setAnchorElUsuarios(event.currentTarget)}
                   style={{ color: '#2F2F2F', fontSize: '20px' }}
                 >
                   Administrador de Usuarios
@@ -129,11 +135,11 @@ export default function Navbar() {
                 <Menu
                   anchorEl={anchorElUsuarios}
                   open={Boolean(anchorElUsuarios)}
-                  onClose={() => setAnchorElUsuarios(false)}
+                  onClose={() => setAnchorElUsuarios(null)}
                 >
-                  <MenuItem component={LinkBehavior} to="/vendedores">Vendedores</MenuItem>
-                  <MenuItem component={LinkBehavior} to="/empleado">Empleados</MenuItem>
-                  <MenuItem component={LinkBehavior} to="/cliente">Clientes</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/vendedores" onClick={() => setAnchorElUsuarios(null)}>Vendedores</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/empleado" onClick={() => setAnchorElUsuarios(null)}>Empleados</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/cliente" onClick={() => setAnchorElUsuarios(null)}>Clientes</MenuItem>
                 </Menu>
               </>
             )}
@@ -142,7 +148,7 @@ export default function Navbar() {
               <>
                 <Button
                   color="inherit"
-                  onClick={() => setAnchorElProductos(true)}
+                  onClick={(event) => setAnchorElProductos(event.currentTarget)}
                   style={{ color: '#2F2F2F', fontSize: '20px' }}
                 >
                   Administrador de Productos
@@ -150,16 +156,33 @@ export default function Navbar() {
                 <Menu
                   anchorEl={anchorElProductos}
                   open={Boolean(anchorElProductos)}
-                  onClose={() => setAnchorElProductos(false)}
+                  onClose={() => setAnchorElProductos(null)}
                 >
-                  <MenuItem component={LinkBehavior} to="/inventario">Inventario</MenuItem>
-                  <MenuItem component={LinkBehavior} to="/catalogo">Catálogos</MenuItem>
-                  <MenuItem component={LinkBehavior} to="/productos">Productos</MenuItem>
-                  <MenuItem component={LinkBehavior} to="/categoria">Categorías</MenuItem>
-                  <MenuItem component={LinkBehavior} to="/HistorialPrecio">Historial de Precios</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/inventario" onClick={() => setAnchorElProductos(null)}>Inventario</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/catalogo" onClick={() => setAnchorElProductos(null)}>Catálogos</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/productos" onClick={() => setAnchorElProductos(null)}>Productos</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/categoria" onClick={() => setAnchorElProductos(null)}>Categorías</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/HistorialPrecio" onClick={() => setAnchorElProductos(null)}>Historial de Precios</MenuItem>
                 </Menu>
               </>
             )}
+
+                <Button
+                  color="inherit"
+                  onClick={(event) => setAnchorElProductos(event.currentTarget)}
+                  style={{ color: '#2F2F2F', fontSize: '20px' }}
+                >
+                  Menu de Productos
+                </Button>
+                <Menu
+                  anchorEl={anchorElProductos}
+                  open={Boolean(anchorElProductos)}
+                  onClose={() => setAnchorElProductos(null)}
+                >
+                  <MenuItem component={LinkBehavior} to="/catalogos-usuario" onClick={() => setAnchorElProductos(null)}>Catálogos</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/productos-usuario" onClick={() => setAnchorElProductos(null)}>Productos</MenuItem>
+                  <MenuItem component={LinkBehavior} to="/categorias-usuario" onClick={() => setAnchorElProductos(null)}>Categorías</MenuItem>
+                </Menu>   
 
             {/* Botón de login/logout */}
             {!isAuthenticated ? (
@@ -183,7 +206,22 @@ export default function Navbar() {
         </Toolbar>
       </AppBar>
 
-      <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle}>
+      {/* Drawer personalizado para móviles */}
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Mejora el rendimiento en móviles al mantener el Drawer montado
+        }}
+        PaperProps={{
+          sx: {
+            backgroundColor: '#F3E5F5', // Cambia el color de fondo
+            width: '70vw', // Ajusta el ancho del Drawer en móviles
+            color: 'black', // Color de texto de las opciones
+          },
+        }}
+      >
         {drawer}
       </Drawer>
 
