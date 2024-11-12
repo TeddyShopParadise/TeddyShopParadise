@@ -20,7 +20,6 @@ import {
   Alert,
   Box,
   TablePagination,
-  Switch,
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
@@ -34,6 +33,8 @@ export default function Cliente() {
     fechaNacimientoCliente: '',
     apellidoCliente: '',
   });
+  const [pedidos, setPedidos] = useState([]); // Estado para manejar los pedidos
+  const [facturas, setFacturas] = useState([]); // Estado para manejar las facturas
   const [selectedClientId, setSelectedClientId] = useState(null);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -64,47 +65,82 @@ export default function Cliente() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Función para crear o actualizar un cliente
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const url = selectedClientId
-        ? `http://localhost:3000/api/clientes/${selectedClientId}`
-        : 'http://localhost:3000/api/clientes';
-      const method = selectedClientId ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        await listarClientes(); // Refresca la lista después de crear o actualizar un cliente
-        setFormData({
-          dniCliente: '',
-          nombreCliente: '',
-          telefonoCliente: '',
-          fechaNacimientoCliente: '',
-          apellidoCliente: '',
-          pedidos: '',
-          facturas: '',
-        }); // Limpia el formulario
-        setSelectedClientId(null); // Resetea el cliente seleccionado
-        setSuccessMessage(`Cliente ${selectedClientId ? 'actualizado' : 'creado'} exitosamente!`);
-        setError(''); // Limpia el mensaje de error
-      } else {
-        const errorResponse = await response.json();
-        setError(errorResponse.message || 'Error en los datos enviados.');
-        setSuccessMessage(''); // Limpia el mensaje de éxito
-      }
-    } catch (error) {
-      console.error(error);
-      setError('Error en la solicitud');
-    }
+  // Funciones para manejar los pedidos
+  const addPedido = () => setPedidos([...pedidos, ""]);
+  const handlePedidoChange = (index, value) => {
+    const newPedidos = [...pedidos];
+    newPedidos[index] = value;
+    setPedidos(newPedidos);
   };
+  const removePedido = (index) => {
+    const newPedidos = pedidos.filter((_, i) => i !== index);
+    setPedidos(newPedidos);
+  };
+
+  // Funciones para manejar las facturas
+  const addFactura = () => setFacturas([...facturas, ""]);
+  const handleFacturaChange = (index, value) => {
+    const newFacturas = [...facturas];
+    newFacturas[index] = value;
+    setFacturas(newFacturas);
+  };
+  const removeFactura = (index) => {
+    const newFacturas = facturas.filter((_, i) => i !== index);
+    setFacturas(newFacturas);
+  };
+
+  // Función para crear o actualizar un cliente
+// ...
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Crea una copia del formData sin fechaNacimientoCliente
+  const { fechaNacimientoCliente, ...dataToSend } = formData;
+
+  console.log("Datos enviados:", { ...dataToSend, pedidos, facturas });
+
+  try {
+    const url = selectedClientId
+      ? `http://localhost:3000/api/clientes/${selectedClientId}`
+      : 'http://localhost:3000/api/clientes';
+    const method = selectedClientId ? 'PUT' : 'POST';
+
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...dataToSend, pedidos, facturas }),
+    });
+
+    // Procesamiento de la respuesta
+    if (response.ok) {
+      await listarClientes();
+      setFormData({
+        dniCliente: '',
+        nombreCliente: '',
+        telefonoCliente: '',
+        fechaNacimientoCliente: '',
+        apellidoCliente: '',
+      });
+      setPedidos([]);
+      setFacturas([]);
+      setSelectedClientId(null);
+      setSuccessMessage(`Cliente ${selectedClientId ? 'actualizado' : 'creado'} exitosamente!`);
+      setError('');
+    } else {
+      const errorResponse = await response.json();
+      console.log("Error en la respuesta del servidor:", errorResponse);
+      setError(errorResponse.message || 'Error en los datos enviados.');
+      setSuccessMessage('');
+    }
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    setError('Error en la solicitud');
+  }
+};
+
+// ...
 
   // Función para seleccionar un cliente para actualizar
   const handleEdit = (cliente) => {
@@ -115,9 +151,9 @@ export default function Cliente() {
       telefonoCliente: cliente.telefonoCliente,
       fechaNacimientoCliente: cliente.fechaNacimientoCliente.split('T')[0], // Formato de fecha YYYY-MM-DD
       apellidoCliente: cliente.apellidoCliente,
-      pedidos: cliente.pedidos,
-      facturas: cliente.facturas,
     });
+    setPedidos(cliente.pedidos || []); // Cargar los pedidos asociados
+    setFacturas(cliente.facturas || []); // Cargar las facturas asociadas
   };
 
   // Función para eliminar un cliente
@@ -203,8 +239,8 @@ export default function Cliente() {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -218,8 +254,8 @@ export default function Cliente() {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -233,8 +269,8 @@ export default function Cliente() {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -248,8 +284,8 @@ export default function Cliente() {
               required
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
             <TextField
@@ -262,10 +298,50 @@ export default function Cliente() {
               margin="normal"
               variant="outlined"
               sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
+                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
+                '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
+            <div>
+              <h3>Pedidos</h3>
+              {pedidos.map((pedido, index) => (
+                <div key={index}>
+                  <TextField
+                    type="text"
+                    value={pedido}
+                    onChange={(e) => handlePedidoChange(index, e.target.value)}
+                    label={`Pedido ${index + 1}`}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <Button onClick={() => removePedido(index)} variant="outlined" color="error">
+                    Eliminar Pedido
+                  </Button>
+                </div>
+              ))}
+              <Button onClick={addPedido} variant="contained">Agregar Pedido</Button>
+            </div>
+
+            <div>
+              <h3>Facturas</h3>
+              {facturas.map((factura, index) => (
+                <div key={index}>
+                  <TextField
+                    type="text"
+                    value={factura}
+                    onChange={(e) => handleFacturaChange(index, e.target.value)}
+                    label={`Factura ${index + 1}`}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <Button onClick={() => removeFactura(index)} variant="outlined" color="error">
+                    Eliminar Factura
+                  </Button>
+                </div>
+              ))}
+              <Button onClick={addFactura} variant="contained">Agregar Factura</Button>
+            </div>
+
             <Button
               type="submit"
               variant="contained"
@@ -350,10 +426,10 @@ export default function Cliente() {
                   <strong>Apellido:</strong> {selectedCliente.apellidoCliente}
                 </DialogContentText>
                 <DialogContentText>
-                  <strong>Pedidos:</strong> {selectedCliente.pedido}
+                  <strong>Pedidos:</strong> {selectedCliente.pedidos.join(", ")}
                 </DialogContentText>
                 <DialogContentText>
-                  <strong>Facturas:</strong> {selectedCliente.facturas}
+                  <strong>Facturas:</strong> {selectedCliente.facturas.join(", ")}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
