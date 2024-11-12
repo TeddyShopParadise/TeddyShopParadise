@@ -16,11 +16,13 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  Snackbar,
-  Alert,
   Box,
   TablePagination,
   Switch,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
@@ -34,6 +36,8 @@ const DetallePedido = () => {
     pedidoNumPedido: '',
     productoIdProducto: '',
   });
+  const [pedidos, setPedidos] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -59,9 +63,49 @@ const DetallePedido = () => {
     }
   };
 
-  // Efecto para cargar detalles al montar el componente
+  // Función para obtener los pedidos
+  const fetchPedidos = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/pedidos', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los pedidos');
+      }
+      const data = await response.json();
+      setPedidos(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Función para obtener los productos
+  const fetchProductos = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/productos', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los productos');
+      }
+      const data = await response.json();
+      setProductos(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Efecto para cargar detalles, pedidos y productos al montar el componente
   useEffect(() => {
     fetchDetalles();
+    fetchPedidos();
+    fetchProductos();
   }, []);
 
   // Manejar cambios en los campos del formulario
@@ -72,11 +116,22 @@ const DetallePedido = () => {
   // Manejar el envío del formulario para crear o actualizar un detalle
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Log para ver si estamos en modo edición o no
+    console.log('Modo:', editingId ? 'Edición' : 'Nuevo');
+    
     const method = editingId ? 'PUT' : 'POST';
-    const url = editingId 
-      ? `http://localhost:3000/api/detallesPedido/${editingId}` 
+    const url = editingId
+      ? `http://localhost:3000/api/detallesPedido/${editingId}`
       : 'http://localhost:3000/api/detallesPedido';
-
+  
+    // Log para ver la URL y el método de la solicitud
+    console.log('Método:', method);
+    console.log('URL:', url);
+  
+    // Log para revisar el objeto detalle antes de enviarlo
+    console.log('Datos a enviar:', detalle);
+  
     try {
       const response = await fetch(url, {
         method,
@@ -85,12 +140,19 @@ const DetallePedido = () => {
         },
         body: JSON.stringify(detalle),
       });
-
+  
+      // Log para ver la respuesta del servidor
+      console.log('Respuesta del servidor:', response);
+  
       if (!response.ok) {
         throw new Error('Error al guardar el detalle de pedido');
       }
-
+  
+      // Llamada a fetchDetalles() para obtener los detalles actualizados
       fetchDetalles();
+  
+      // Log para confirmar que los campos han sido limpiados
+      console.log('Campos limpiados después de la actualización');
       setDetalle({
         numDetalle: '',
         precioDetallePedido: '',
@@ -100,9 +162,11 @@ const DetallePedido = () => {
       });
       setEditingId(null);
     } catch (error) {
-      console.error(error);
+      // Log para mostrar el error completo
+      console.error('Error en la solicitud:', error);
     }
   };
+  
 
   // Manejar la edición de un detalle
   const handleEdit = (detalle) => {
@@ -214,105 +278,111 @@ const DetallePedido = () => {
               required
               variant="outlined"
             />
-            <TextField
-              type="text"
-              name="pedidoNumPedido"
-              label="ID de Pedido"
-              value={detalle.pedidoNumPedido}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-              variant="outlined"
-            />
-            <TextField
-              type="text"
-              name="productoIdProducto"
-              label="ID de Producto"
-              value={detalle.productoIdProducto}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-              variant="outlined"
-            />
-            <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>
-              {editingId ? 'Actualizar' : 'Crear'}
+
+
+// Para Pedido
+<TextField
+  type="text"
+  name="pedidoNumPedido"
+  label="Pedido (ID)"
+  value={detalle.pedidoNumPedido}
+  onChange={handleChange}
+  fullWidth
+  margin="normal"
+  required
+  variant="outlined"
+/>
+
+// Para Producto
+<TextField
+  type="text"
+  name="productoIdProducto"
+  label="Producto (ID)"
+  value={detalle.productoIdProducto}
+  onChange={handleChange}
+  fullWidth
+  margin="normal"
+  required
+  variant="outlined"
+/>
+
+
+
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              {editingId ? 'Actualizar' : 'Crear'} Detalle
             </Button>
           </form>
-
-          {/* Data Table */}
-          <Box mt={4}>
-            <h2>Lista de Detalles</h2>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Detalle #</TableCell>
-                    <TableCell>Precio</TableCell>
-                    <TableCell>Cantidad</TableCell>
-                    <TableCell>ID Pedido</TableCell>
-                    <TableCell>ID Producto</TableCell>
-                    <TableCell>Acciones</TableCell>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Num Detalle</TableCell>
+                  <TableCell>Precio</TableCell>
+                  <TableCell>Cantidad</TableCell>
+                  <TableCell>Pedido</TableCell>
+                  <TableCell>Producto</TableCell>
+                  <TableCell>Acciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {detalles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((detalle) => (
+                  <TableRow key={detalle._id}>
+                    <TableCell>{detalle.numDetalle}</TableCell>
+                    <TableCell>{detalle.precioDetallePedido}</TableCell>
+                    <TableCell>{detalle.cantidadDetallePedido}</TableCell>
+                    <TableCell>{detalle.pedidoNumPedido}</TableCell>
+                    <TableCell>{detalle.productoIdProducto}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => handleEdit(detalle)}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton onClick={() => handleDelete(detalle._id)}>
+                        <Delete />
+                      </IconButton>
+                      <IconButton onClick={() => handleOpenDialog(detalle)}>
+                        <Info />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {detalles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((d) => (
-                    <TableRow key={d._id}>
-                      <TableCell>{d.numDetalle}</TableCell>
-                      <TableCell>{d.precioDetallePedido}</TableCell>
-                      <TableCell>{d.cantidadDetallePedido}</TableCell>
-                      <TableCell>{d.pedidoNumPedido}</TableCell>
-                      <TableCell>{d.productoIdProducto}</TableCell>
-                      <TableCell>
-                        <IconButton onClick={() => handleEdit(d)}>
-                          <Edit />
-                        </IconButton>
-                        <IconButton onClick={() => handleDelete(d._id)}>
-                          <Delete />
-                        </IconButton>
-                        <IconButton onClick={() => handleOpenDialog(d)}>
-                          <Info />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-
-            {/* Paginación */}
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={detalles.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Box>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={detalles.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Container>
-
-        {/* Diálogo de detalles */}
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle>Detalles del Pedido</DialogTitle>
-          <DialogContent>
-            {detalleSeleccionado && (
-              <DialogContentText>
-                <p><strong>Detalle #:</strong> {detalleSeleccionado.numDetalle}</p>
-                <p><strong>Precio:</strong> {detalleSeleccionado.precioDetallePedido}</p>
-                <p><strong>Cantidad:</strong> {detalleSeleccionado.cantidadDetallePedido}</p>
-                <p><strong>ID Pedido:</strong> {detalleSeleccionado.pedidoNumPedido}</p>
-                <p><strong>ID Producto:</strong> {detalleSeleccionado.productoIdProducto}</p>
-              </DialogContentText>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog} color="primary">Cerrar</Button>
-          </DialogActions>
-        </Dialog>
       </Box>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Detalles del Pedido</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <strong>Num Detalle:</strong> {detalleSeleccionado?.numDetalle}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Precio:</strong> {detalleSeleccionado?.precioDetallePedido}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Cantidad:</strong> {detalleSeleccionado?.cantidadDetallePedido}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Pedido:</strong> {detalleSeleccionado?.pedidoNumPedido}
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Producto:</strong> {detalleSeleccionado?.productoIdProducto}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cerrar</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
