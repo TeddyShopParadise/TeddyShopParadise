@@ -35,11 +35,12 @@ const loginRoute = require('./routes/login_routes');
 const app = express();
 
 app.use(cors({
-  origin: '*', //reemplaza con el dominio permitido 
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], 
-  allowedHeaders: ['Content-Type', 'Authorization'], //encabezados permitidos
-  credentials: true 
+  origin: '*', // Origen permitido
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // No incluyas application/json, es redundante
+  credentials: true
 }));
+
 
 // Conexión a la base de datos MongoDB
 mongoose.connect('mongodb+srv://sa:PM02s8wkGc77jfO3@cluster0.hhmn9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')

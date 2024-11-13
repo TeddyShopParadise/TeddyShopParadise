@@ -48,11 +48,11 @@ const faqData: FaqCategory[] = [
     questions: [
       {
         question: "¿Qué métodos de pago aceptan?",
-        answer: "Aceptamos tarjetas de crédito/débito, transferencias bancarias, PayPal y pagos en efectivo contra entrega en zonas seleccionadas."
+        answer: "Aceptamos Nequi, Bancolombia, Daviplata, Efecty, Wester Union y pagos en efectivo contra entrega en zonas seleccionadas."
       },
       {
-        question: "¿Los pagos son seguros?",
-        answer: "Sí, todos nuestros pagos están protegidos con encriptación SSL y procesados por pasarelas de pago certificadas."
+        question: "¿Qué métodos de pago se manejan para fuera de la ciudad?",
+        answer: "Para pagos fuera de la ciudad se pedirá el pago comepleto por nuestaras cuentas bancarias y se hará envio por transportadora."
       }
     ]
   },
@@ -62,11 +62,11 @@ const faqData: FaqCategory[] = [
     questions: [
       {
         question: "¿Cuánto tiempo tarda el envío?",
-        answer: "Los envíos locales tardan 1-2 días hábiles. Para envíos nacionales, 2-5 días hábiles dependiendo de la ubicación."
+        answer: "Para agendamientos en Bogotá y Soacha antes del medio día, sin adicionales o accesorios se despachará ese mismo día y llegará en el transcurso del día "
       },
       {
-        question: "¿Hacen envíos internacionales?",
-        answer: "Sí, realizamos envíos internacionales a países seleccionados con un tiempo estimado de entrega de 7-15 días hábiles."
+        question: "¿Hacen envíos fuera de la ciudad?",
+        answer: "Sí, realizamos envíos fuera de Bogotá y Soacha  a ciudades seleccionadas con un tiempo estimado de entrega de 2 - 3 días hábiles, pero se debe pagar el producto por adelantado."
       }
     ]
   },
@@ -90,11 +90,11 @@ const faqData: FaqCategory[] = [
     questions: [
       {
         question: "¿Cómo creo una cuenta?",
-        answer: "Puedes crear una cuenta fácilmente desde nuestra página principal haciendo clic en 'Registrarse' y siguiendo los pasos."
+        answer: "Actualmente las cuentas para ingresar al sistema son solo para nuestros vendedores."
       },
       {
         question: "¿Puedo comprar sin crear una cuenta?",
-        answer: "Sí, ofrecemos la opción de compra como invitado, aunque una cuenta te permite seguir tus pedidos y acceder a beneficios exclusivos."
+        answer: "Sí, ofrecemos la opción de compra como invitado."
       }
     ]
   }

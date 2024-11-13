@@ -36,6 +36,7 @@ const Producto = () => {
     disponibilidadProducto: '', 
     cmColaPataProducto: '', 
     tamañoProducto: '',
+    imagen: '',
     historialPrecios: [],
     catalogos: [],
     categorias: []
@@ -92,6 +93,7 @@ const Producto = () => {
           disponibilidadProducto: '', 
           cmColaPataProducto: '', 
           tamañoProducto: '',
+          imagen: '',
           historialPrecios: [],
           catalogos: [],
           categorias: []
@@ -110,9 +112,10 @@ const Producto = () => {
 
   const handleEditClick = (producto) => {
     setProducto({ ...producto });
-    setEditMode(true);
-    setSelectedId(producto._id);
+    setEditMode(true);  
+    setSelectedId(producto._id);  
   };
+  
 
   const handleDeleteClick = (id) => {
     setSelectedId(id);
@@ -187,6 +190,14 @@ const Producto = () => {
             <TextField label="Disponibilidad" name="disponibilidadProducto" value={producto.disponibilidadProducto} onChange={handleInputChange} fullWidth margin="normal" required />
             <TextField label="CM Cola Pata" name="cmColaPataProducto" value={producto.cmColaPataProducto} onChange={handleInputChange} fullWidth margin="normal" required />
             <TextField label="Tamaño" name="tamañoProducto" value={producto.tamañoProducto} onChange={handleInputChange} fullWidth margin="normal" required />
+            <TextField
+  label="Imagen"
+  name="imagen"
+  value={producto.imagen}
+  onChange={handleInputChange}
+  fullWidth
+  margin="normal"
+/>
             <Button variant="contained" onClick={handleSaveProducto} style={{ marginTop: 16 }}>{editMode ? "Actualizar Producto" : "Crear Producto"}</Button>
           </form>
 
@@ -200,7 +211,7 @@ const Producto = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Estilo</TableCell>
-                  <TableCell>CM Cabeza Cola</TableCell>
+                  <TableCell>Tamaño Oso</TableCell>
                   <TableCell>Material</TableCell>
                   <TableCell>Disponibilidad</TableCell>
                   <TableCell>Acciones</TableCell>
@@ -210,7 +221,7 @@ const Producto = () => {
                 {filteredProductos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((producto) => (
                   <TableRow key={producto._id}>
                     <TableCell>{producto.estiloProducto}</TableCell>
-                    <TableCell>{producto.cmCabezaColaProducto}</TableCell>
+                    <TableCell>{producto.tamañoProducto}</TableCell>
                     <TableCell>{producto.materialProducto}</TableCell>
                     <TableCell>{producto.disponibilidadProducto}</TableCell>
                     <TableCell>

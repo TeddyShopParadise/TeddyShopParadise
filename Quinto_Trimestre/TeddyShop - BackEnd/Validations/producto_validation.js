@@ -38,14 +38,22 @@ const productoSchemaValidation = Joi.object({
             'string.base': 'El tamaño del producto debe ser un texto',
             'any.required': 'El tamaño del producto es un campo requerido'
         }),
-        imagen: Joi.string()
-        .uri()
-        .optional()
-        .allow('')
-        .pattern(/^https?:\/\/[a-zA-Z0-9\-\.]+\.[a-z]{2,}([\/\w \.-]*)*\/?$/)
+        imagen: Joi.alternatives().try(
+            Joi.string().uri({ allowRelative: false }), // Acepta URL válida
+            Joi.string().allow(''), // Permite cadenas vacías
+            Joi.number(), // Acepta números
+            Joi.boolean(), // Acepta valores booleanos
+            Joi.object(), // Permite objetos
+            Joi.array() // Permite arrays
+        ).optional()
         .messages({
-            'string.base': 'La imagen debe ser una URL válida',
-            'string.uri': 'La imagen debe tener un formato de URL válido'
+            'alternatives.base': 'El parámetro imagen puede ser de cualquier tipo de datos (cadena, número, booleano, objeto, array).',
+            'string.base': 'La imagen debe ser una cadena de texto válida',
+            'string.uri': 'La imagen debe tener una URL válida',
+            'boolean.base': 'La imagen debe ser un valor booleano válido',
+            'number.base': 'La imagen debe ser un número',
+            'object.base': 'La imagen debe ser un objeto',
+            'array.base': 'La imagen debe ser un array'
         }),
     historialPrecios: Joi.array()
         .items(Joi.string().length(24).hex())
