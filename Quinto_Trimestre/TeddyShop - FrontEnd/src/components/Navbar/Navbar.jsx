@@ -15,12 +15,14 @@ import MenuItem from '@mui/material/MenuItem';
 import Modal from '@mui/material/Modal';
 import normalizeText from '../../utils/textUtils';
 import { Link } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom'; // Cambiar nombre de Link a RouterLink
 import LinkBehavior from './LinkBehavior';
 import logoTeddyShop from '../../assets/img/LogoTeddyShop.jpg';
 import Login from '../../pages/login/login';
 
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorElRoles, setAnchorElRoles] = useState(null);
   const [anchorElUsuarios, setAnchorElUsuarios] = useState(null);
@@ -53,6 +55,7 @@ export default function Navbar() {
     localStorage.removeItem('authToken');
     setIsAuthenticated(false);
     setUserRole(null);
+    navigate('/'); // Redirigir al home después de cerrar sesión
   };
 
   const drawer = (
@@ -86,7 +89,7 @@ export default function Navbar() {
         <Toolbar>
           <Typography variant="h6" style={{ flexGrow: 1, color: '#2F2F2F' }}>
             <Button
-              component={LinkBehavior}
+              component={RouterLink}
               to="/Home"
               size="large"
               color="inherit"
