@@ -6,7 +6,7 @@ const {
     actualizarUsuario,
     obtenerUsuarioPorId,
     eliminarUsuario
-} = require('../controllers/usuario_controller'); // Asegúrate de importar los controladores
+} = require('../Controllers/usuario_controller'); // Asegúrate de importar los controladores
 
 /**
  * @swagger

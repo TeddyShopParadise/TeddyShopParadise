@@ -6,7 +6,7 @@ const {
     actualizarCompañia,
     obtenerCompañiaPorId,
     eliminarCompañia
-} = require('../controllers/compañia_controller'); // Asegúrate de importar los controladores
+} = require('../Controllers/compañia_controller'); // Asegúrate de importar los controladores
 
 /**
  * @swagger

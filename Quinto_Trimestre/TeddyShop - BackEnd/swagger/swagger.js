@@ -1,5 +1,16 @@
+// Eliminar cualquier valor residual de CODESPACE_URL antes de cargar el .env
+delete process.env.CODESPACE_URL;
+
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+// Cargar variables de entorno desde el archivo .env
+require('dotenv').config();
+
+// Verificar si estamos en Codespace
+const isInCodespace = process.env.CODESPACE_URL !== undefined;
+
+console.log('Is in Codespace?', isInCodespace);
+console.log('CODESPACE_URL:', process.env.CODESPACE_URL);
 
 // Configuración básica de Swagger
 const swaggerDefinition = {
@@ -11,8 +22,10 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'http://localhost:3000/api',
-        },
+            url: isInCodespace
+                ? process.env.CODESPACE_URL // Si estamos en Codespace
+                : 'http://localhost:3000/api', // Si estamos en local
+        }
     ]
 };
 
@@ -22,7 +35,6 @@ const options = {
 };
 
 const swaggerSpec = swaggerJSDoc(options);
-
 
 module.exports = {
     swaggerUi,

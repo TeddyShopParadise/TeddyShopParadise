@@ -6,7 +6,7 @@ const {
     actualizarRol,
     obtenerRolPorId,
     eliminarRol
-} = require('../controllers/roles_controller'); // Importa los controladores
+} = require('../Controllers/roles_controller'); // Importa los controladores
 
 /**
  * @swagger

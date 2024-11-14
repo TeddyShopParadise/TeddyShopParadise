@@ -6,7 +6,7 @@ const {
     actualizarEmpleado,
     obtenerEmpleadoPorId,
     eliminarEmpleado
-} = require('../controllers/empleado_controller'); // Importa los controladores
+} = require('../Controllers/empleado_controller'); // Importa los controladores
 
 /**
  * @swagger

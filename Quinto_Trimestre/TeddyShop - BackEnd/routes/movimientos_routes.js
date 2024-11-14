@@ -6,7 +6,7 @@ const {
     actualizarMovimiento,
     obtenerMovimientoPorId,
     eliminarMovimiento
-} = require('../controllers/movimiento_controller'); // Importa los controladores
+} = require('../Controllers/movimiento_controller'); // Importa los controladores
 /**
  * @swagger
  * /movimiento:

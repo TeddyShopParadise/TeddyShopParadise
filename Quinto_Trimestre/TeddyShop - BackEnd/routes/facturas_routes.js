@@ -6,7 +6,7 @@ const {
     actualizarFactura,
     obtenerFacturaPorId,
     eliminarFactura
-} = require('../controllers/factura_controller'); // Importa los controladores
+} = require('../Controllers/factura_controller'); // Importa los controladores
 
 /**
  * @swagger

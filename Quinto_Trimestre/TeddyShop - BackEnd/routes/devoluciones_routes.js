@@ -6,7 +6,7 @@ const {
     actualizarDevolucion,
     obtenerDevolucionPorId,
     eliminarDevolucion
-} = require('../controllers/devoluciones_controller'); // Importa los controladores
+} = require('../Controllers/devoluciones_controller'); // Importa los controladores
 
 /**
  * @swagger
