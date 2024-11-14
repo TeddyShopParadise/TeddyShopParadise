@@ -66,8 +66,8 @@ const Footer = () => {
               </Typography>
               <Box component="ul" sx={{ listStyle: "none", padding: 0 }}>
                 <li><a href="/" style={{ color: "white", textDecoration: "none" }}>Inicio</a></li>
-                <li><a href="/Devoluciones" style={{ color: "white", textDecoration: "none" }}>Devoluciones</a></li>
-                <li><a href="/Catalogos" style={{ color: "white", textDecoration: "none" }}>Catálogo</a></li>
+                <li><a href="/productos-usuario" style={{ color: "white", textDecoration: "none" }}>Productos</a></li>
+                <li><a href="/catalogos-usuario" style={{ color: "white", textDecoration: "none" }}>Catálogos</a></li>
               </Box>
             </Grid>
 
