@@ -19,19 +19,17 @@ import LinkBehavior from './LinkBehavior';
 import logoTeddyShop from '../../assets/img/LogoTeddyShop.jpg';
 import Login from '../../pages/login/login';
 
+
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorElRoles, setAnchorElRoles] = useState(null);
   const [anchorElUsuarios, setAnchorElUsuarios] = useState(null);
   const [anchorElProductos, setAnchorElProductos] = useState(null);
-  const [anchorElPedidos, setAnchorElPedidos] = useState(null);
-  const [anchorElVerProductos, setAnchorElVerProductos] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('authToken'));
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
-
+  const [anchorElVerProductos, setAnchorElVerProductos] = useState(null);
   useEffect(() => {
-    // Obtener el rol del usuario desde el token
     const token = localStorage.getItem('authToken');
     if (token) {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
@@ -167,21 +165,21 @@ export default function Navbar() {
               </>
             )}
 
-                <Button
-                  color="inherit"
-                  onClick={(event) => setAnchorElProductos(event.currentTarget)}
-                  style={{ color: '#2F2F2F', fontSize: '20px' }}
-                >
-                  Menu de Productos
-                </Button>
-                <Menu
-                  anchorEl={anchorElProductos}
-                  open={Boolean(anchorElProductos)}
-                  onClose={() => setAnchorElProductos(null)}
-                >
-                  <MenuItem component={LinkBehavior} to="/catalogos-usuario" onClick={() => setAnchorElProductos(null)}>Catálogos</MenuItem>
-                  <MenuItem component={LinkBehavior} to="/productos-usuario" onClick={() => setAnchorElProductos(null)}>Productos</MenuItem>
-                </Menu>   
+            <Button
+              color="inherit"
+              onClick={(event) => setAnchorElVerProductos(event.currentTarget)}
+              style={{ color: '#2F2F2F', fontSize: '20px' }}
+            >
+              Menú de Productos
+            </Button>
+            <Menu
+              anchorEl={anchorElVerProductos}
+              open={Boolean(anchorElVerProductos)}
+              onClose={() => setAnchorElVerProductos(null)}
+            >
+              <MenuItem component={LinkBehavior} to="/catalogos-usuario" onClick={() => setAnchorElVerProductos(null)}>Catálogos</MenuItem>
+              <MenuItem component={LinkBehavior} to="/productos-usuario" onClick={() => setAnchorElVerProductos(null)}>Productos</MenuItem>
+            </Menu>   
 
             {/* Botón de login/logout */}
             {!isAuthenticated ? (
@@ -211,13 +209,13 @@ export default function Navbar() {
         open={drawerOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
-          keepMounted: true, // Mejora el rendimiento en móviles al mantener el Drawer montado
+          keepMounted: true,
         }}
         PaperProps={{
           sx: {
-            backgroundColor: '#F3E5F5', // Cambia el color de fondo
-            width: '70vw', // Ajusta el ancho del Drawer en móviles
-            color: 'black', // Color de texto de las opciones
+            backgroundColor: '#F3E5F5',
+            width: '70vw',
+            color: 'black',
           },
         }}
       >
