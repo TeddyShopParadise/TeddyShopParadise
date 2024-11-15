@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { TextField, Button, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState('');
@@ -17,7 +20,7 @@ const Login = ({ setIsAuthenticated }) => {
     const body = { email, contraseña };
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
+      const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

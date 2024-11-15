@@ -24,6 +24,10 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
+
 
 const CategoriaComponent = () => {
   const [categorias, setCategorias] = useState([]);
@@ -36,7 +40,7 @@ const CategoriaComponent = () => {
 
   const fetchCategorias = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/categorias');
+      const response = await fetch(`${apiUrl}/categorias`);
       if (!response.ok) {
         throw new Error('Error al obtener las categorías');
       }
@@ -55,7 +59,7 @@ const CategoriaComponent = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/categorias', {
+      const response = await fetch(`${apiUrl}/categorias`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +86,7 @@ const CategoriaComponent = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/categorias/${editingId}`, {
+      const response = await fetch(`${apiUrl}/categorias/${editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +109,7 @@ const CategoriaComponent = () => {
   const eliminarCategoria = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
       try {
-        const response = await fetch(`http://localhost:3000/api/categorias/${id}`, {
+        const response = await fetch(`${apiUrl}/categorias/${id}`, {
           method: 'DELETE',
         });
 

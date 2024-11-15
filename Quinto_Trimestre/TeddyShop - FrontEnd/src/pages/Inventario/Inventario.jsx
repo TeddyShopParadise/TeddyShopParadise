@@ -21,7 +21,12 @@ import {
   Paper,
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
+import { getApiUrl } from '../../utils/apiConfig'
 import '../PagesStyle.css';
+
+const apiUrl = getApiUrl();
+
+console.log("Url almacenada: ",apiUrl);
 
 const Inventario = () => {
   const [inventarios, setInventarios] = useState([]);
@@ -44,7 +49,7 @@ const Inventario = () => {
   
   const fetchInventarios = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/inventario');
+      const response = await fetch(`${apiUrl}/inventario`);
       if (!response.ok) throw new Error('Error al obtener los inventarios');
       const data = await response.json();
       console.log('Inventarios cargados:', data);  // Verifica los datos
@@ -57,7 +62,7 @@ const Inventario = () => {
 
   const crearInventario = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/inventario', {
+      const response = await fetch(`${apiUrl}/inventario`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +78,7 @@ const Inventario = () => {
 
   const actualizarInventario = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/inventario/${id}`, {
+      const response = await fetch(`${apiUrl}/inventario/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +95,7 @@ const Inventario = () => {
 
   const eliminarInventario = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/inventario/${id}`, {
+      const response = await fetch(`${apiUrl}/inventario/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error al eliminar el inventario');

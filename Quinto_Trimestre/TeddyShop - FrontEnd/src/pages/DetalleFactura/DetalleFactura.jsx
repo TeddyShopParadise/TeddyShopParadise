@@ -30,6 +30,9 @@ import {
   Info,
 } from "@mui/icons-material";
 import "../PagesStyle.css";
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const DetalleFactura = () => {
   const [detalles, setDetalles] = useState([]);
@@ -54,7 +57,7 @@ const DetalleFactura = () => {
 
   const fetchProductos = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/productos");
+      const response = await fetch(`${apiUrl}/productos`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
@@ -67,7 +70,7 @@ const DetalleFactura = () => {
 
   const fetchInventarios = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/inventarios");
+      const response = await fetch(`${apiUrl}/inventarios`);
       if (!response.ok) {
         throw new Error("Error al obtener los inventarios");
       }
@@ -80,7 +83,7 @@ const DetalleFactura = () => {
 
   const fetchFacturas = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/facturas");
+      const response = await fetch(`${apiUrl}/facturas`);
       if (!response.ok) {
         throw new Error("Error al obtener las facturas");
       }
@@ -95,7 +98,7 @@ const DetalleFactura = () => {
   const fetchDetalles = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/detallesFactura",
+        `${apiUrl}/detallesFactura`,
         {
           method: "GET",
           headers: {
@@ -142,8 +145,8 @@ const DetalleFactura = () => {
 
     const method = editingId ? "PUT" : "POST";
     const url = editingId
-      ? `http://localhost:3000/api/detallesFactura/${editingId}`
-      : "http://localhost:3000/api/detallesFactura";
+      ? `${apiUrl}/detallesFactura/${editingId}`
+      : `${apiUrl}/detallesFactura`;
 
     try {
       const response = await fetch(url, {
@@ -186,7 +189,7 @@ const DetalleFactura = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/detallesFactura/${id}`,
+        `${apiUrl}/detallesFactura/${id}`,
         {
           method: "DELETE",
         }

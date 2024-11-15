@@ -24,7 +24,12 @@ import {
 } from "@mui/material";
 import { Edit, Delete, Info } from "@mui/icons-material";
 import '../PagesStyle.css';
-const API_URL = 'http://localhost:3000/api/producto';
+
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
+
+const API_URL = apiUrl + "/producto";
 
 const Producto = () => {
   const [productos, setProductos] = useState([]);

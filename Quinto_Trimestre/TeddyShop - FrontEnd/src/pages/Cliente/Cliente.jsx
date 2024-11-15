@@ -23,6 +23,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 export default function Cliente() {
   const [clientes, setClientes] = useState([]);
@@ -45,7 +48,7 @@ export default function Cliente() {
   // Función para listar clientes
   const listarClientes = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/clientes');
+      const response = await fetch(`${apiUrl}/clientes`);
       if (!response.ok) throw new Error('Error al obtener los clientes');
       const data = await response.json();
       setClientes(data);
@@ -101,8 +104,8 @@ const handleSubmit = async (e) => {
 
   try {
     const url = selectedClientId
-      ? `http://localhost:3000/api/clientes/${selectedClientId}`
-      : 'http://localhost:3000/api/clientes';
+      ? `${apiUrl}/clientes/${selectedClientId}`
+      : `${apiUrl}/clientes`;
     const method = selectedClientId ? 'PUT' : 'POST';
 
     const response = await fetch(url, {
@@ -160,7 +163,7 @@ const handleSubmit = async (e) => {
   const eliminarCliente = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
       try {
-        const response = await fetch(`http://localhost:3000/api/clientes/${id}`, {
+        const response = await fetch(`${apiUrl}/clientes/${id}`, {
           method: 'DELETE',
         });
 

@@ -23,6 +23,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
 import '../PagesStyle.css'
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const Pedido = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -58,7 +61,7 @@ const Pedido = () => {
 
   const fetchPedidos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/pedido');
+      const response = await fetch(`${apiUrl}/pedido`);
       const data = await response.json();
       setPedidos(data);
     } catch (error) {
@@ -74,7 +77,7 @@ const Pedido = () => {
 
   const crearPedido = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/pedido', {
+      const response = await fetch(`${apiUrl}/pedido`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoPedido),
@@ -119,7 +122,7 @@ const Pedido = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/api/pedido/${pedidoEdicion._id}`, {
+      const response = await fetch(`${apiUrl}/pedido/${pedidoEdicion._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pedidoActualizar),
@@ -145,7 +148,7 @@ const Pedido = () => {
     if (!currentId) return;
 
     try {
-      await fetch(`http://localhost:3000/api/pedido/${currentId}`, {
+      await fetch(`${apiUrl}/pedido/${currentId}`, {
         method: 'DELETE',
       });
       setPedidos((prevPedidos) => prevPedidos.filter((pedido) => pedido._id !== currentId));

@@ -26,7 +26,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
-
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 // Componente principal
 const HistorialPrecios = () => {
   const [historialPrecios, setHistorialPrecios] = useState([]);
@@ -46,7 +48,7 @@ const HistorialPrecios = () => {
   // Obtener historial de precios
   const fetchHistorialPrecios = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/historialPrecio');
+      const response = await fetch(`${apiUrl}/historialPrecio`);
       const data = await response.json();
       setHistorialPrecios(data);
     } catch (error) {
@@ -62,7 +64,7 @@ const HistorialPrecios = () => {
   const crearHistorialPrecio = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/api/historialPrecio', {
+      const response = await fetch(`${apiUrl}/historialPrecio`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +87,7 @@ const HistorialPrecios = () => {
   const actualizarHistorialPrecio = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/api/historialPrecio/${editingId}`, {
+      const response = await fetch(`${apiUrl}/historialPrecio/${editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +110,7 @@ const HistorialPrecios = () => {
   // Eliminar historial de precio
   const eliminarHistorialPrecio = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/historialPrecio/${id}`, {
+      const response = await fetch(`${apiUrl}/historialPrecio/${id}`, {
         method: 'DELETE',
       });
 

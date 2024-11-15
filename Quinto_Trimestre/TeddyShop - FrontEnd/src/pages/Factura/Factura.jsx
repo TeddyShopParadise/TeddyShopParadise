@@ -21,6 +21,10 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
+
 
 const Facturas = () => {
   const [facturas, setFacturas] = useState([]);
@@ -45,7 +49,7 @@ const Facturas = () => {
 
   const listarFacturas = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/factura');
+      const response = await fetch(`${apiUrl}/factura`);
       const data = await response.json();
       setFacturas(data);
     } catch (error) {
@@ -55,7 +59,7 @@ const Facturas = () => {
 
   const crearFactura = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/factura', {
+      const response = await fetch(`${apiUrl}/factura`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +87,7 @@ const Facturas = () => {
 
   const actualizarFactura = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/factura/${currentId}`, {
+      const response = await fetch(`${apiUrl}/factura/${currentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -113,7 +117,7 @@ const Facturas = () => {
 
   const obtenerFacturaPorId = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/factura/${id}`);
+      const response = await fetch(`${apiUrl}/factura/${id}`);
       const data = await response.json();
       setFactura(data);
       setEditing(true);
@@ -125,7 +129,7 @@ const Facturas = () => {
 
   const eliminarFactura = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/factura/${id}`, {
+      const response = await fetch(`${apiUrl}/factura/${id}`, {
         method: 'DELETE',
       });
 

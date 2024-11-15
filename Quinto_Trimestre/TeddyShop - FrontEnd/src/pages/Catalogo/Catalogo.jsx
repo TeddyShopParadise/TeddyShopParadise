@@ -23,6 +23,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 export default function Catalogo() {
   const [catalogos, setCatalogos] = useState([]);
@@ -45,14 +48,14 @@ export default function Catalogo() {
   }, []);
 
   const listarCatalogos = async () => {
-    const response = await fetch('http://localhost:3000/api/catalogos/activos');
+    const response = await fetch(`${apiUrl}/catalogos/activos`);
     const data = await response.json();
     setCatalogos(data);
   };
 
   const crearCatalogo = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:3000/api/catalogos', {
+    const response = await fetch(`${apiUrl}/catalogos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +82,7 @@ export default function Catalogo() {
 
   const actualizarCatalogo = async (e) => {
     e.preventDefault();
-    const response = await fetch(`http://localhost:3000/api/catalogos/${selectedCatalogoId}`, {
+    const response = await fetch(`${apiUrl}/catalogos/${selectedCatalogoId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -109,7 +112,7 @@ export default function Catalogo() {
     if (!currentId) return;
 
     try {
-      await fetch(`http://localhost:3000/api/catalogo/${currentId}`, {
+      await fetch(`${apiUrl}/catalogo/${currentId}`, {
         method: 'DELETE',
       });
       setCatalogos((prevCatalogos) => prevCatalogos.filter((catalogo) => catalogo._id !== currentId));

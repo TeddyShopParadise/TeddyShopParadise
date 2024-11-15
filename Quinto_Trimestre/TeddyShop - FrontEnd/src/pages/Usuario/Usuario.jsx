@@ -24,6 +24,9 @@ import {
 } from "@mui/material";
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from "@mui/icons-material";
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -44,7 +47,7 @@ const Usuarios = () => {
 
   const fetchUsuarios = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/usuario');
+      const response = await fetch(`${apiUrl}/usuario`);
       const data = await response.json();
       setUsuarios(data);
       setFilteredUsuarios(data);
@@ -68,7 +71,7 @@ const Usuarios = () => {
   };
 
   const handleSaveUsuario = async () => {
-    const url = isEditing ? `http://localhost:3000/api/usuario/${currentId}` : 'http://localhost:3000/api/usuario';
+    const url = isEditing ? `${apiUrl}/usuario/${currentId}` : `${apiUrl}/usuario`;
     const method = isEditing ? 'PUT' : 'POST';
 
     try {
@@ -106,7 +109,7 @@ const Usuarios = () => {
 
   const handleDeleteUsuario = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/usuario/${currentId}`, { method: 'DELETE' });
+      const response = await fetch(`${apiUrl}/usuario/${currentId}`, { method: 'DELETE' });
 
       if (response.ok) {
         fetchUsuarios();

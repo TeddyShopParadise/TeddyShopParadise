@@ -26,6 +26,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const DetallePedido = () => {
   const [detalles, setDetalles] = useState([]);
@@ -47,7 +50,7 @@ const DetallePedido = () => {
   // Función para obtener los detalles de pedido
   const fetchDetalles = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/detallesPedido', {
+      const response = await fetch(`${apiUrl}/detallesPedido`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -66,7 +69,7 @@ const DetallePedido = () => {
   // Función para obtener los pedidos
   const fetchPedidos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/pedidos', {
+      const response = await fetch(`${apiUrl}/pedidos`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -85,7 +88,7 @@ const DetallePedido = () => {
   // Función para obtener los productos
   const fetchProductos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/productos', {
+      const response = await fetch(`${apiUrl}/productos`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -122,8 +125,8 @@ const DetallePedido = () => {
     
     const method = editingId ? 'PUT' : 'POST';
     const url = editingId
-      ? `http://localhost:3000/api/detallesPedido/${editingId}`
-      : 'http://localhost:3000/api/detallesPedido';
+      ? `${apiUrl}/detallesPedido/${editingId}`
+      : `${apiUrl}/detallesPedido`;
   
     // Log para ver la URL y el método de la solicitud
     console.log('Método:', method);
@@ -177,7 +180,7 @@ const DetallePedido = () => {
   // Manejar la eliminación de un detalle
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/detallesPedido/${id}`, {
+      const response = await fetch(`${apiUrl}/detallesPedido/${id}`, {
         method: 'DELETE',
       });
 

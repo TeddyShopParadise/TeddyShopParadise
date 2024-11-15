@@ -25,6 +25,9 @@ import {
 } from "@mui/material";
 import { Edit, Delete, ArrowUpward, ArrowDownward } from "@mui/icons-material";
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -43,7 +46,7 @@ const Roles = () => {
 
   const fetchRoles = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/roles');
+      const response = await fetch(`${apiUrl}/roles`);
       const data = await response.json();
       setRoles(data);
       setFilteredRoles(data);
@@ -67,7 +70,7 @@ const Roles = () => {
   };
 
   const handleSaveRole = async () => {
-    const url = isEditing ? `http://localhost:3000/api/roles/${currentId}` : 'http://localhost:3000/api/roles';
+    const url = isEditing ? `${apiUrl}/roles/${currentId}` : `${apiUrl}/roles`;
     const method = isEditing ? 'PUT' : 'POST';
 
     try {
@@ -105,7 +108,7 @@ const Roles = () => {
 
   const handleDeleteRole = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/roles/${currentId}`, { method: 'DELETE' });
+      const response = await fetch(`${apiUrl}/roles/${currentId}`, { method: 'DELETE' });
 
       if (response.ok) {
         fetchRoles();

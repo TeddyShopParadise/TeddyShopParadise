@@ -24,6 +24,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const Empleado = () => {
   const [empleados, setEmpleados] = useState([]);
@@ -50,7 +53,7 @@ const Empleado = () => {
 
   // Fetch empleados from the API
   const fetchEmpleados = async () => {
-    const response = await fetch('http://localhost:3000/api/empleado');
+    const response = await fetch(`${apiUrl}/empleado`);
     const data = await response.json();
     setEmpleados(data);
   };
@@ -73,7 +76,7 @@ const Empleado = () => {
     e.preventDefault();
 
     const method = editMode ? 'PUT' : 'POST';
-    const url = editMode ? `http://localhost:3000/api/empleado/${currentId}` : 'http://localhost:3000/api/empleado';
+    const url = editMode ? `${apiUrl}/empleado/${currentId}` : `${apiUrl}/empleado`;
 
     await fetch(url, {
       method,
@@ -108,7 +111,7 @@ const Empleado = () => {
 
   // Delete empleado
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:3000/api/empleado/${id}`, {
+    await fetch(`${apiUrl}/empleado/${id}`, {
       method: 'DELETE',
     });
     fetchEmpleados();

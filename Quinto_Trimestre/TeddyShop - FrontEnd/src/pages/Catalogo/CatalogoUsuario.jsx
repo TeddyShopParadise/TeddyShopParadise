@@ -8,6 +8,10 @@ import {
   Typography,
   Grid,
 } from '@mui/material';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
+
 
 export default function CatalogoUsuario() {
   const [catalogos, setCatalogos] = useState([]);
@@ -19,7 +23,7 @@ export default function CatalogoUsuario() {
   }, []);
 
   const listarCatalogos = async () => {
-    const response = await fetch('http://localhost:3000/api/catalogos/activos');
+    const response = await fetch(`${apiUrl}/catalogos/activos`);
     const data = await response.json();
     setCatalogos(data);
   };

@@ -24,6 +24,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const Movimientos = () => {
   const [movimientos, setMovimientos] = useState([]);
@@ -50,7 +53,7 @@ const Movimientos = () => {
 
   const fetchMovimientos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/movimiento');
+      const response = await fetch(`${apiUrl}/movimiento`);
       const data = await response.json();
       setMovimientos(data);
     } catch (error) {
@@ -67,8 +70,8 @@ const Movimientos = () => {
     e.preventDefault();
     const method = editId ? 'PUT' : 'POST';
     const url = editId 
-      ? `http://localhost:3000/api/movimiento/${editId}` 
-      : 'http://localhost:3000/api/movimiento';
+      ? `${apiUrl}/movimiento/${editId}` 
+      : `${apiUrl}/movimiento`;
 
     try {
       const response = await fetch(url, {
@@ -102,7 +105,7 @@ const Movimientos = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/movimiento/${id}`, {
+      const response = await fetch(`${apiUrl}/movimiento/${id}`, {
         method: 'DELETE'
       });
       if (response.ok) {

@@ -24,6 +24,8 @@ import {
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
 
 const MetodoPago = () => {
   const [metodosPago, setMetodosPago] = useState([]);
@@ -44,7 +46,7 @@ const MetodoPago = () => {
 
   const fetchMetodosPago = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/metodoPago');
+      const response = await fetch(`${apiUrl}/metodoPago`);
       const data = await response.json();
       setMetodosPago(data);
     } catch (error) {
@@ -60,7 +62,7 @@ const MetodoPago = () => {
 
   const crearMetodoPago = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/metodoPago', {
+      const response = await fetch(`${apiUrl}/metodoPago`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoMetodo),
@@ -91,7 +93,7 @@ const MetodoPago = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/api/metodoPago/${editarMetodo._id}`, {
+      const response = await fetch(`${apiUrl}/metodoPago/${editarMetodo._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(metodoActualizar),
@@ -118,7 +120,7 @@ const MetodoPago = () => {
     if (!currentId) return;
 
     try {
-      await fetch(`http://localhost:3000/api/metodoPago/${currentId}`, {
+      await fetch(`${apiUrl}/metodoPago/${currentId}`, {
         method: 'DELETE',
       });
       setMetodosPago((prevMetodos) => prevMetodos.filter((metodo) => metodo._id !== currentId));

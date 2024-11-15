@@ -16,7 +16,7 @@ import Modal from '@mui/material/Modal';
 import normalizeText from '../../utils/textUtils';
 import { Link } from 'react-router-dom';
 import { Link as RouterLink, useNavigate } from 'react-router-dom'; // Cambiar nombre de Link a RouterLink
-import LinkBehavior from './LinkBehavior';
+import LinkBehavior from './LInkBehavior';
 import logoTeddyShop from '../../assets/img/LogoTeddyShop.jpg';
 import Login from '../../pages/login/login';
 

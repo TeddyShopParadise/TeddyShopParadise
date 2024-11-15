@@ -13,6 +13,9 @@ import {
   MenuItem
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 export default function CategoriaUsuario() {
   const [tamañoFiltro, setTamañoFiltro] = useState("todos");
@@ -25,7 +28,7 @@ export default function CategoriaUsuario() {
 
   const fetchCategorias = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/categorias');
+      const response = await fetch(`${apiUrl}/categorias`);
       const data = await response.json();
       setCategorias(data);
     } catch (error) {

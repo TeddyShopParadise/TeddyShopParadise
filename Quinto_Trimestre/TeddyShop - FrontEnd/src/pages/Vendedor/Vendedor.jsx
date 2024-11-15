@@ -24,7 +24,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
-
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 
 const Vendedores = () => {
@@ -47,7 +49,7 @@ const Vendedores = () => {
 
   const fetchVendedores = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/vendedor');
+      const response = await fetch(`${apiUrl}/vendedor`);
       const data = await response.json();
       setVendedores(data);
       setFilteredVendedores(data);
@@ -71,7 +73,7 @@ const Vendedores = () => {
   };
 
   const handleSaveVendedor = async () => {
-    const url = isEditing ? `http://localhost:3000/api/vendedor/${currentId}` : 'http://localhost:3000/api/vendedor';
+    const url = isEditing ? `${apiUrl}/vendedor/${currentId}` : `${apiUrl}/vendedor`;
     const method = isEditing ? 'PUT' : 'POST';
     const newVendedor = { dniEmpleado, codigoVendedor };
 
@@ -112,7 +114,7 @@ const Vendedores = () => {
 
   const handleDeleteVendedor = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/vendedor/${currentId}`, { method: 'DELETE' });
+      const response = await fetch(`${apiUrl}/vendedor/${currentId}`, { method: 'DELETE' });
 
       if (response.ok) {
         fetchVendedores();

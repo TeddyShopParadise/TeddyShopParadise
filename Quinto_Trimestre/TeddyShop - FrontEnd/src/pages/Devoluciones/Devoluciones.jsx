@@ -24,6 +24,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const Devoluciones = () => {
     const [devoluciones, setDevoluciones] = useState([]);
@@ -41,7 +44,7 @@ const Devoluciones = () => {
 
     const fetchDevoluciones = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/devoluciones');
+            const response = await fetch(`${apiUrl}/devoluciones`);
             if (!response.ok) throw new Error('Error fetching data');
             const data = await response.json();
             setDevoluciones(data);
@@ -65,8 +68,8 @@ const Devoluciones = () => {
     
             const method = isEditing ? 'PUT' : 'POST';
             const url = isEditing
-                ? `http://localhost:3000/api/devoluciones/${currentId}`
-                : 'http://localhost:3000/api/devoluciones';
+                ? `${apiUrl}/devoluciones/${currentId}`
+                : `${apiUrl}/devoluciones`;
     
             const response = await fetch(url, {
                 method,
@@ -95,7 +98,7 @@ const Devoluciones = () => {
 
     const handleDelete = async () => {
         try {
-            await fetch(`http://localhost:3000/api/devoluciones/${currentId}`, { method: 'DELETE' });
+            await fetch(`${apiUrl}/devoluciones/${currentId}`, { method: 'DELETE' });
             setSnackbarMessage('Devolución eliminada');
             setOpenSnackbar(true);
             fetchDevoluciones();

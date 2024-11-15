@@ -24,6 +24,9 @@ import {
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
 
 const Compania = () => {
   const [companias, setCompanias] = useState([]);
@@ -42,7 +45,7 @@ const Compania = () => {
   // Obtener la lista de compañías
   const fetchCompanias = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/compania');
+      const response = await fetch(`${apiUrl}/compania`);
       if (!response.ok) {
         throw new Error('Error al obtener las compañías');
       }
@@ -76,7 +79,7 @@ const Compania = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/compania', {
+      const response = await fetch(`${apiUrl}/compania`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +107,7 @@ const Compania = () => {
     }
   
     try {
-      const response = await fetch(`http://localhost:3000/api/compania/${editingId}`, {
+      const response = await fetch(`${apiUrl}/compania/${editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +132,7 @@ const Compania = () => {
   const eliminarCompania = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar esta compañía?')) {
       try {
-        const response = await fetch(`http://localhost:3000/api/compania/${id}`, {
+        const response = await fetch(`${apiUrl}/compania/${id}`, {
           method: 'DELETE',
         });
 

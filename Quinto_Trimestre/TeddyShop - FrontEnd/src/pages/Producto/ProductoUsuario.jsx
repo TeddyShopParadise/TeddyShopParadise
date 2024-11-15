@@ -22,8 +22,12 @@ import {
   FormControl,
 } from '@mui/material';
 
-const API_URL = 'http://localhost:3000/api/producto';
-const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias'; // Suponiendo que tienes un endpoint para obtener las categorías
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ",apiUrl);
+
+const API_URL = apiUrl + "/producto";
+const CATEGORIAS_API_URL = apiUrl + "/categorias"; // Suponiendo que tienes un endpoint para obtener las categorías
 
 const ProductoUsuario = () => {
   const [productos, setProductos] = useState([]);
