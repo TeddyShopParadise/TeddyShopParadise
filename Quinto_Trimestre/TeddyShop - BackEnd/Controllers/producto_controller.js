@@ -1,16 +1,20 @@
 //Controlador para Producto
-//Importación para que funcione correctamente
 const logic = require('../Logic/producto_logic'); 
+const Producto = require('../models/producto_model');
 const { productoSchemaValidation } = require('../Validations/producto_validation'); 
 
 // Controlador para listar todos los productos
 const listarProductos = async (req, res) => {
     try {
-        const productos = await logic.listarProductos();
+        const productos = await Producto.find().populate('categorias');
+        if (!productos) {
+          return res.status(404).json({ message: 'No se encontraron productos' });
+        }
         res.json(productos);
-    } catch (err) {
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
+      } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).json({ message: 'Error al obtener productos', error: error.message });
+      }
 };
 
 // Controlador para crear un nuevo producto

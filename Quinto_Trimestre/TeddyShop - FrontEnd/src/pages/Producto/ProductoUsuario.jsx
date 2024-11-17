@@ -22,18 +22,21 @@ import {
   FormControl,
 } from '@mui/material';
 
-import { getApiUrl } from '../../utils/apiConfig'
-const apiUrl = getApiUrl();
-console.log("Url almacenada: ",apiUrl);
+const API_URL = 'http://localhost:3000/api/producto';
+const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias'; 
 
-const API_URL = apiUrl + "/producto";
-const CATEGORIAS_API_URL = apiUrl + "/categorias"; // Suponiendo que tienes un endpoint para obtener las categorías
-
-const ProductoUsuario = () => {
-  const [productos, setProductos] = useState([]);
-  const [categorias, setCategorias] = useState([]); // Estado para las categorías
-  const [openCarritoDialog, setOpenCarritoDialog] = useState(false);
-  const [openDetalleDialog, setOpenDetalleDialog] = useState(false);
+  const ProductoUsuario = () => {
+    const [productos, setProductos] = useState([]);
+    const [categorias, setCategorias] = useState([]);
+    const [openCarritoDialog, setOpenCarritoDialog] = useState(false);
+    const [openDetalleDialog, setOpenDetalleDialog] = useState(false);
+    const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [filteredProductos, setFilteredProductos] = useState([]);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [categoriaFiltro, setCategoriaFiltro] = useState('todos');
+    const productosPerPage = 9;
 
   const [pedido, setPedido] = useState({
     tamañoOso: '',
@@ -49,22 +52,14 @@ const ProductoUsuario = () => {
     cliente: '',
   });
 
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [filteredProductos, setFilteredProductos] = useState([]);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const productosPerPage = 9;
-  const [tamañoFiltro, setTamañoFiltro] = useState('todos');
-  const [categoriaFiltro, setCategoriaFiltro] = useState('todos'); // Estado para el filtro de categoría
-
   // Obtener productos de la API
   const fetchProductos = async () => {
     try {
       const response = await fetch(API_URL);
       const data = await response.json();
-      setProductos(data);
-      setFilteredProductos(data); // Inicialmente mostramos todos los productos
+      const productosArray = Array.isArray(data) ? data : [];
+      setProductos(productosArray);
+      setFilteredProductos(productosArray); // Inicialmente mostramos todos los productos
     } catch (error) {
       console.error('Error fetching productos:', error);
       setSnackbarMessage('Error al obtener los productos');
@@ -76,10 +71,15 @@ const ProductoUsuario = () => {
   const fetchCategorias = async () => {
     try {
       const response = await fetch(CATEGORIAS_API_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
-      setCategorias(data);
+      setCategorias(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching categorias:', error);
+      setSnackbarMessage('Error al obtener las categorías');
+      setOpenSnackbar(true);
     }
   };
 
@@ -100,27 +100,20 @@ const ProductoUsuario = () => {
   const handleCategoriaFiltroChange = (event) => {
     const selectedCategoria = event.target.value;
     setCategoriaFiltro(selectedCategoria);
-
-    filterProductos(tamañoFiltro, selectedCategoria);
+    filterProductos(selectedCategoria);
   };
 
   // Filtrar productos por tamaño y categoría
-  const filterProductos = (tamaño, categoria) => {
-    let productosFiltrados = productos;
-
-    if (tamaño !== 'todos') {
-      productosFiltrados = productosFiltrados.filter(
-        (producto) => producto.tamañoProducto === tamaño
+  const filterProductos = (categoriaId) => {
+    if (categoriaId === 'todos') {
+      setFilteredProductos(productos);
+    } else {
+      const productosFiltrados = productos.filter(producto => 
+        producto.categorias && producto.categorias.some(cat => cat._id === categoriaId)
       );
+      setFilteredProductos(productosFiltrados);
     }
-
-    if (categoria !== 'todos') {
-      productosFiltrados = productosFiltrados.filter(
-        (producto) => producto.categoria === categoria
-      );
-    }
-
-    setFilteredProductos(productosFiltrados);
+    setCurrentPage(1);
   };
 
   // Obtener productos de la página actual
@@ -208,7 +201,7 @@ const ProductoUsuario = () => {
             PRODUCTOS
           </Typography>
           {/* Filtro de categoría */}
-          <FormControl style={{ width: "150px" }} sx={{ marginBottom: 5 }}>
+          <FormControl style={{ width: "200px" }} sx={{ marginBottom: 5 }}>
             <InputLabel id="categoriaFiltro-label">Filtrar por Categoría</InputLabel>
             <Select
               labelId="categoriaFiltro-label"
@@ -216,7 +209,7 @@ const ProductoUsuario = () => {
               onChange={handleCategoriaFiltroChange}
               label="Filtrar por Categoría"
             >
-              <MenuItem value="todos">Todos</MenuItem>
+              <MenuItem value="todos">Todas las categorías</MenuItem>
               {categorias.map((categoria) => (
                 <MenuItem key={categoria._id} value={categoria._id}>
                   {categoria.nombreCategoria}
@@ -225,6 +218,7 @@ const ProductoUsuario = () => {
             </Select>
           </FormControl>
 
+          {/* Grid de productos */}
           <Grid container spacing={3}>
             {currentProductos.map((producto) => (
               <Grid item xs={12} sm={6} md={4} key={producto._id}>
@@ -257,9 +251,14 @@ const ProductoUsuario = () => {
             ))}
           </Grid>
 
-          {/* Componente de Paginación */}
+          {/* Paginación */}
           <Box mt={4} display="flex" justifyContent="center">
-            <Pagination count={Math.ceil(productos.length / productosPerPage)} page={currentPage} onChange={handlePageChange} color="primary" />
+            <Pagination 
+              count={Math.ceil(filteredProductos.length / productosPerPage)} 
+              page={currentPage} 
+              onChange={handlePageChange} 
+              color="primary" 
+            />
           </Box>
 
           {/* Diálogo para detalles del producto */}
