@@ -36,7 +36,7 @@ const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias';
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [categoriaFiltro, setCategoriaFiltro] = useState('todos');
-    const productosPerPage = 9;
+    const productosPerPage = 12;
 
   const [pedido, setPedido] = useState({
     tamañoOso: '',
@@ -218,38 +218,64 @@ const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias';
             </Select>
           </FormControl>
 
-          {/* Grid de productos */}
           <Grid container spacing={3}>
-            {currentProductos.map((producto) => (
-              <Grid item xs={12} sm={6} md={4} key={producto._id}>
-                <Card sx={{ transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' }, borderRadius: 3, boxShadow: 3 }}>
-                  <CardMedia
-                    component="img"
-                    height="350"
-                    image={producto.imagen || 'default-image-url.jpg'}
-                    alt={producto.estiloProducto}
-                    sx={{ borderRadius: '12px 12px 0 0' }}
-                  />
-                  <CardContent sx={{ textAlign: 'left' }}>
-                    <Typography variant="h5" gutterBottom>{producto.estiloProducto}</Typography>
-                    <Typography variant="body1" color="text.secondary">
-                      <strong>Material:</strong> {producto.materialProducto}
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                      <strong>Tamaño:</strong> {producto.tamañoProducto}
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                      <strong>Disponibilidad:</strong> {producto.disponibilidadProducto}
-                    </Typography>
-                    <Box mt={2} display="flex" justifyContent="space-between">
-                      <Button variant="outlined" color="primary" onClick={() => handleDetalleClick(producto)}>Ver Detalles</Button>
-                      <Button variant="contained" color="secondary" onClick={() => handleCarritoClick(producto)}>Comprar</Button>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+  {currentProductos.map((producto) => (
+    <Grid item xs={12} sm={6} md={3} key={producto._id}>
+      <Card
+        sx={{
+          transition: 'transform 0.3s',
+          '&:hover': { transform: 'scale(1.05)' },
+          borderRadius: 3,
+          boxShadow: 3,
+        }}
+      >
+        <CardMedia
+          component="img"
+          height="386"
+          width="500"
+          image={producto.imagen || 'default-image-url.jpg'}
+          alt={producto.estiloProducto}
+          sx={{
+            objectFit: 'cover',
+            backgroundColor: '#f0f0f0',
+            borderRadius: '12px 12px 0 0',
+          }}
+        />
+        <CardContent sx={{ textAlign: 'left' }}>
+          <Typography variant="h5" gutterBottom>
+            {producto.estiloProducto}
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            <strong>Material:</strong> {producto.materialProducto}
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            <strong>Tamaño:</strong> {producto.tamañoProducto}
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            <strong>Disponibilidad:</strong> {producto.disponibilidadProducto}
+          </Typography>
+          <Box mt={2} display="flex" justifyContent="space-between">
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => handleDetalleClick(producto)}
+            >
+              Ver Detalles
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => handleCarritoClick(producto)}
+            >
+              Comprar
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
+
 
           {/* Paginación */}
           <Box mt={4} display="flex" justifyContent="center">
@@ -268,13 +294,13 @@ const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias';
                 <>
                   <CardMedia
                     component="img"
-                    height="600"
+                    height="700"
                     image={productoSeleccionado.imagen || 'default-image-url.jpg'}
                     alt={productoSeleccionado.estiloProducto}
                     sx={{
-                      borderRadius: "10px",
+                      borderRadius: "90px",
                       width: "100%",
-                      objectFit: "cover",
+                      objectFit: "contain",
                       boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
                       marginBottom: 3,
                     }}
@@ -284,7 +310,7 @@ const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias';
                     display: "flex",
                     flexDirection: "column",
                     gap: 1.5,
-                    width: "100%",
+                    width: "95%",  
                     alignItems: "flex-start",
                   }}>
                     <Typography variant="body1"><strong>Material:</strong> {productoSeleccionado.materialProducto}</Typography>
