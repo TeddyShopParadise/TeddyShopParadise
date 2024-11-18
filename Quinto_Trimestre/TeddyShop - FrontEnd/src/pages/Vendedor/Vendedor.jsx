@@ -184,7 +184,7 @@ const Vendedores = () => {
   return (
     <Box
       sx={{
-        height: { xs: 'auto', md: '130vh' },
+        height: { xs: 'auto', md: 'auto' },
         width: '100vw',
         display: 'flex',
         alignItems: 'center',

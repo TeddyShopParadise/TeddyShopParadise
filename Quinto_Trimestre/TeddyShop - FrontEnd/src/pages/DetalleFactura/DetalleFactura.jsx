@@ -227,7 +227,7 @@ const DetalleFactura = () => {
   return (
     <Box
       sx={{
-        height: { xs: "auto", md: "140vh" },
+        height: { xs: "auto", md: "auto" },
         width: "100vw",
         display: "flex",
         alignItems: "center",

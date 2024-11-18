@@ -153,7 +153,7 @@ export default function Catalogo() {
   return (
     <Box
       sx={{
-        height: { xs: 'auto', md: '180vh' },
+        height: { xs: 'auto', md: 'auto' },
         width: '100vw',
         display: 'flex',
         alignItems: 'center',
