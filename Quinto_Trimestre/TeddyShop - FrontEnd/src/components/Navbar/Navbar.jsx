@@ -14,12 +14,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Modal from '@mui/material/Modal';
 import normalizeText from '../../utils/textUtils';
-import { Link } from 'react-router-dom';
-import { Link as RouterLink, useNavigate } from 'react-router-dom'; // Cambiar nombre de Link a RouterLink
+import { Link as RouterLink, useNavigate } from 'react-router-dom'; 
 import LinkBehavior from './LInkBehavior';
 import logoTeddyShop from '../../assets/img/LogoTeddyShop.jpg';
 import Login from '../../pages/login/login';
-
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -31,13 +29,15 @@ export default function Navbar() {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [anchorElVerProductos, setAnchorElVerProductos] = useState(null);
+
+  // Se ejecuta cuando el estado de isAuthenticated cambia
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
       setUserRole(decodedToken.roles && decodedToken.roles[0]);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated]); // Cuando isAuthenticated cambie, vuelve a ejecutarse este useEffect
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -56,6 +56,17 @@ export default function Navbar() {
     setIsAuthenticated(false);
     setUserRole(null);
     navigate('/'); // Redirigir al home después de cerrar sesión
+  };
+
+  const handleLoginSuccess = (token) => {
+    localStorage.setItem('authToken', token);
+
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    setUserRole(decodedToken.roles && decodedToken.roles[0]);
+    setIsAuthenticated(true);
+    
+    setLoginModalOpen(false); 
+    navigate('/'); 
   };
 
   const drawer = (
@@ -188,7 +199,8 @@ export default function Navbar() {
             {!isAuthenticated ? (
               <Button
                 color="inherit"
-                onClick={handleLoginOpen}
+                component={LinkBehavior}
+                to="/login"
                 style={{ color: '#2F2F2F', fontSize: '20px' }}
               >
                 Iniciar sesión
@@ -227,7 +239,7 @@ export default function Navbar() {
 
       <Modal open={loginModalOpen} onClose={handleLoginClose}>
         <Box>
-          <Login onClose={handleLoginClose} setIsAuthenticated={setIsAuthenticated} />
+          <Login onClose={handleLoginClose} onLoginSuccess={handleLoginSuccess} />
         </Box>
       </Modal>
     </>

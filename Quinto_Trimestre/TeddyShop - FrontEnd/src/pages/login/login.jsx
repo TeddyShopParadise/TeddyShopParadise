@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { getApiUrl } from '../../utils/apiConfig'
+import { getApiUrl } from '../../utils/apiConfig';
+import './Login.css';
+
 const apiUrl = getApiUrl();
-console.log("Url almacenada: ",apiUrl);
+console.log("URL de la API:", apiUrl); // Verifica si la URL está correcta
 
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState('');
@@ -13,13 +15,23 @@ const Login = ({ setIsAuthenticated }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Función para manejar el login
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
+    // Verificar si los campos no están vacíos
+    if (!email || !contraseña) {
+      setMessage('Por favor, ingresa el correo electrónico y la contraseña.');
+      setOpen(true);
+      return;
+    }
+
+    setLoading(true);
     const body = { email, contraseña };
+    console.log('Cuerpo de la solicitud:', body); // Para depurar los datos que se envían
 
     try {
+      // Realizar la solicitud al servidor
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         headers: {
@@ -28,12 +40,18 @@ const Login = ({ setIsAuthenticated }) => {
         body: JSON.stringify(body),
       });
 
+      // Verifica si la respuesta fue exitosa
       const data = await response.json();
+      console.log('Respuesta de la API:', data); // Para ver la respuesta completa
+
       setLoading(false);
 
+      // Si la respuesta es exitosa (status 200-299)
       if (response.ok) {
+        // Guardamos el token en el almacenamiento local
         localStorage.setItem('authToken', data.token);
 
+        // Decodificamos el token
         let decodedToken;
         try {
           decodedToken = JSON.parse(atob(data.token.split('.')[1]));
@@ -41,15 +59,17 @@ const Login = ({ setIsAuthenticated }) => {
         } catch (e) {
           setMessage('Error al decodificar el token');
           setOpen(true);
-          setIsAuthenticated(false);
+          if (typeof setIsAuthenticated === 'function') {
+            setIsAuthenticated(false);
+          }
           return;
         }
 
-        // Verificar roles en el token decodificado (basado en nombres de roles)
+        // Verificar los roles del usuario decodificado
         const userRoles = Array.isArray(decodedToken.roles) ? decodedToken.roles : [];
-        console.log("Roles del usuario:", userRoles); // Verifica si los roles están presentes y son correctos
-        let userRole = null;
+        console.log("Roles del usuario:", userRoles); // Verifica los roles
 
+        let userRole = null;
         if (userRoles.includes('Administrador')) {
           userRole = 'Administrador';
         } else if (userRoles.includes('Empleado')) {
@@ -58,51 +78,94 @@ const Login = ({ setIsAuthenticated }) => {
 
         if (userRole) {
           setMessage(`Login exitoso como ${userRole.toLowerCase()}`);
-          setIsAuthenticated(true);
-          navigate(userRole === 'Administrador' ? '/admin' : '/vendedor');
+          if (typeof setIsAuthenticated === 'function') {
+            setIsAuthenticated(true); // Actualiza el estado de autenticación
+          }
+          navigate(userRole === 'Administrador' ? '/home' : '/home');
         } else {
           setMessage('Rol desconocido. Contacte con soporte.');
-          setIsAuthenticated(false);
+          if (typeof setIsAuthenticated === 'function') {
+            setIsAuthenticated(false);
+          }
         }
         setOpen(true);
       } else {
+        // Si la respuesta no es exitosa, muestra el mensaje de error
         setMessage(data.message || 'Error al iniciar sesión');
         setOpen(true);
       }
     } catch (error) {
+      console.error('Error al conectar con la API:', error);
       setMessage('Error al conectar con el servidor');
       setOpen(true);
       setLoading(false);
     }
   };
 
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        console.log('Token decodificado:', decodedToken);
+  
+        // Marca como autenticado y redirige
+        setIsAuthenticated(true);
+        setIsRedirecting(true);
+      } catch (error) {
+        console.error('Error al decodificar el token:', error);
+        localStorage.removeItem('authToken'); // Elimina un token inválido
+      }
+    }
+  }, [setIsAuthenticated]);
+  
+  if (isRedirecting) {
+    navigate('/home', { replace: true });
+    return null;
+  }
+  
   return (
-    <div>
-      <form onSubmit={handleLogin}>
-        <TextField
-          label="Correo electrónico"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          label="Contraseña"
-          type="password"
-          value={contraseña}
-          onChange={(e) => setContraseña(e.target.value)}
-          fullWidth
-        />
+    <div className="wrapper">
+      <form onSubmit={handleLogin} className="form">
+        <h1 className="title">Inicio</h1>
+        <div className="inp">
+          <TextField
+            label="Correo electrónico"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="input"
+            fullWidth
+          />
+          <i className="fa-solid fa-user"></i>
+        </div>
+        <div className="inp">
+          <TextField
+            label="Contraseña"
+            type="password"
+            value={contraseña}
+            onChange={(e) => setContraseña(e.target.value)}
+            className="input"
+            fullWidth
+          />
+          <i className="fa-solid fa-lock"></i>
+        </div>
         <Button
           type="submit"
           variant="contained"
           color="primary"
+          className="submit"
           disabled={loading}
         >
           {loading ? 'Cargando...' : 'Iniciar sesión'}
         </Button>
       </form>
-
+      <div className="banner">
+        <h1 className="wel_text">Bienvenidos</h1><br />
+        <p className="para"></p>
+      </div>
       <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
         <Alert onClose={() => setOpen(false)} severity={message.includes('exitoso') ? 'success' : 'error'}>
           {message}
