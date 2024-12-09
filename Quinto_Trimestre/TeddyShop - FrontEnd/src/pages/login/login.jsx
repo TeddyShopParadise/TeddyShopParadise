@@ -75,13 +75,13 @@ const Login = ({ setIsAuthenticated }) => {
         } else if (userRoles.includes('Empleado')) {
           userRole = 'Empleado';
         }
-
         if (userRole) {
           setMessage(`Login exitoso como ${userRole.toLowerCase()}`);
           if (typeof setIsAuthenticated === 'function') {
             setIsAuthenticated(true); // Actualiza el estado de autenticación
           }
           navigate(userRole === 'Administrador' ? '/home' : '/home');
+            window.location.reload();
         } else {
           setMessage('Rol desconocido. Contacte con soporte.');
           if (typeof setIsAuthenticated === 'function') {

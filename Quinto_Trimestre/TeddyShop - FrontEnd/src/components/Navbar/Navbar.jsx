@@ -71,7 +71,7 @@ export default function Navbar() {
 
   const drawer = (
     <List sx={{ width: 250 }}>
-      {['Productos-usuario', 'Categorias-usuario', 'Catalogos-usuario'].map((text, index) => (
+      {['Productos-usuario', 'Catalogos-usuario'].map((text, index) => (
         <ListItem 
           button 
           component={LinkBehavior} 

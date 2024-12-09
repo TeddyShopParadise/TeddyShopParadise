@@ -55,7 +55,7 @@ const Home = () => {
      {/* Sección de Carrusel */}
       <Box
           sx={{
-            height: { xs: "auto", md: "70vh" },
+            height: { xs: "auto", md: "auto" },
             width: "100vw",
             display: "flex",
             alignItems: "center",
@@ -133,7 +133,7 @@ const Home = () => {
       {/* Sección de bienvenida */}
       <Box
         sx={{
-          height: { xs: "auto", md: "90vh" },
+          height: { xs: "auto", md: "auto" },
           width: "100vw",
           display: "flex",
           alignItems: "center",
@@ -207,7 +207,7 @@ const Home = () => {
       {/* Sección de Catalogos */}
       <Box
         sx={{
-          minHeight: { xs: "auto", md: "90vh" },
+          minHeight: { xs: "auto", md: "auto" },
           width: "100vw",
           display: "flex",
           alignItems: "center",
@@ -289,7 +289,7 @@ const Home = () => {
       {/* Sección de los más vendidos */}
       <Box
         sx={{
-          minHeight: { xs: "auto", md: "90vh" },
+          minHeight: { xs: "auto", md: "auto" },
           width: "100vw",
           display: "flex",
           alignItems: "center",
@@ -372,7 +372,7 @@ const Home = () => {
       {/* Sección de preguntas frecuentes */}
       <Box
         sx={{
-          minHeight: { xs: "auto", md: "90vh" },
+          minHeight: { xs: "auto", md: "auto" },
           width: "100vw",
           display: "flex",
           alignItems: "center",
@@ -416,7 +416,7 @@ const Home = () => {
       {/* Sección de ubicación */}
       <Box
         sx={{
-          height: { xs: "auto", md: "70vh" },
+          height: { xs: "auto", md: "auto" },
           width: "100vw",
           display: "flex",
           alignItems: "center",
