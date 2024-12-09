@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ArrowUpward, ArrowDownward, Delete, Edit, Info } from '@mui/icons-material';
 import {
   Container,
   TextField,
@@ -15,21 +16,14 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  Snackbar,
-  Alert,
   Box,
-  TablePagination,
-  Switch,
 } from '@mui/material';
-import { Edit, Delete, Info } from '@mui/icons-material';
-import '../PagesStyle.css';
-import { getApiUrl } from '../../utils/apiConfig'
+import { getApiUrl } from '../../utils/apiConfig';
+
 const apiUrl = getApiUrl();
-console.log("Url almacenada: ",apiUrl);
 
 const Empleado = () => {
-  const [empleados, setEmpleados] = useState([]);
+  // Definir el estado de los empleados y los campos del formulario
   const [formData, setFormData] = useState({
     dniEmpleado: '',
     telefonoEmpleado: '',
@@ -37,55 +31,149 @@ const Empleado = () => {
     fechaNacimientoEmpleado: '',
     nombreEmpleado: '',
     compania: '',
-    administrador: '',
     usuario: '',
     vendedor: ''
   });
-  const [editMode, setEditMode] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentId, setCurrentId] = useState(null);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [empleados, setEmpleados] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
-  const [page, setPage] = useState(0);
-  const [sortBy, setSortBy] = useState('codigoEmpleado');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortOrder, setSortOrder] = useState('asc');
 
-  // Fetch empleados from the API
+  // Obtener empleados desde el servidor
   const fetchEmpleados = async () => {
-    const response = await fetch(`${apiUrl}/empleado`);
-    const data = await response.json();
-    setEmpleados(data);
+    try {
+      const response = await fetch(`${apiUrl}/empleado`);
+      if (!response.ok) {
+        throw new Error('Error al obtener los empleados');
+      }
+      const data = await response.json();
+      setEmpleados(data);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
-  useEffect(() => {
-    fetchEmpleados();
-  }, []);
-
-  // Handle form input changes
-  const handleChange = (e) => {
+  // Manejo de cambios en el formulario
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Create or Update empleado
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Crear un nuevo empleado
+  const crearEmpleado = async () => {
+    const { dniEmpleado, telefonoEmpleado, codigoEmpleado, nombreEmpleado, compania } = formData;
+    if (!dniEmpleado || !telefonoEmpleado || !codigoEmpleado || !nombreEmpleado || !compania) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
 
-    const method = editMode ? 'PUT' : 'POST';
-    const url = editMode ? `${apiUrl}/empleado/${currentId}` : `${apiUrl}/empleado`;
+    try {
+      const response = await fetch(`${apiUrl}/empleado`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
+      if (!response.ok) {
+        throw new Error('Error al crear el empleado');
+      }
+
+      fetchEmpleados();
+      resetForm();
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  // Actualizar un empleado
+  const actualizarEmpleado = async () => {
+    const { dniEmpleado, telefonoEmpleado, codigoEmpleado, nombreEmpleado, compania } = formData;
+    if (!editingId || !dniEmpleado || !telefonoEmpleado || !codigoEmpleado || !nombreEmpleado || !compania) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+
+    // Depuración: mostrar URL y datos
+    console.log("Actualizando empleado con ID:", editingId);
+    console.log("Datos a actualizar:", formData);
+
+    try {
+      const response = await fetch(`${apiUrl}/empleado/${editingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error al actualizar el empleado: ${response.statusText}`);
+      }
+
+      fetchEmpleados();
+      resetForm();
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+
+  // Eliminar un empleado
+  const eliminarEmpleado = async (id) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este empleado?')) {
+      try {
+        const response = await fetch(`${apiUrl}/empleado/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al eliminar el empleado');
+        }
+
+        fetchEmpleados();
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
+    }
+  };
+
+  // Cargar los datos del empleado a editar
+  const editarEmpleado = (empleado) => {
+    setEditingId(empleado._id);
+    setFormData({
+      dniEmpleado: empleado.dniEmpleado || '',
+      telefonoEmpleado: empleado.telefonoEmpleado || '',
+      codigoEmpleado: empleado.codigoEmpleado || '',
+      fechaNacimientoEmpleado: empleado.fechaNacimientoEmpleado || '',
+      nombreEmpleado: empleado.nombreEmpleado || '',
+      compania: empleado.compania || '',
+      usuario: empleado.usuario || '',
+      vendedor: empleado.vendedor || ''
     });
+  };
 
+
+  // Ver detalles del empleado
+  const verDetalles = (empleado) => {
+    setSelectedEmpleado(empleado);
+    setDialogOpen(true);
+  };
+
+  // Cerrar el diálogo de detalles
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedEmpleado(null);
+  };
+
+  // Restablecer el formulario
+  const resetForm = () => {
     setFormData({
       dniEmpleado: '',
       telefonoEmpleado: '',
@@ -93,308 +181,131 @@ const Empleado = () => {
       fechaNacimientoEmpleado: '',
       nombreEmpleado: '',
       compania: '',
-      administrador: '',
       usuario: '',
       vendedor: ''
     });
-    setEditMode(false);
-    setCurrentId(null);
-    fetchEmpleados();
+    setEditingId(null);
   };
 
-  // Edit empleado
-  const handleEdit = (empleado) => {
-    setFormData(empleado);
-    setEditMode(true);
-    setCurrentId(empleado._id);
-  };
-
-  // Delete empleado
-  const handleDelete = async (id) => {
-    await fetch(`${apiUrl}/empleado/${id}`, {
-      method: 'DELETE',
-    });
-    fetchEmpleados();
-  };
-
-  // Handle open dialog for details
-  const handleDetails = (empleado) => {
-    setSelectedEmpleado(empleado);
-    setOpenDialog(true);
-  };
-
-  // Handle close dialog
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setSelectedEmpleado(null);
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  // Handle pagination change
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const filteredEmpleados = empleados.filter((empleado) =>
-    empleado.codigoEmpleado && empleado.codigoEmpleado.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const sortedEmpleados = [...filteredEmpleados].sort((a, b) => {
-    const aValue = a[sortBy];
-    const bValue = b[sortBy];
-
-    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
-    return 0;
+  // Ordenar los empleados
+  const sortedEmpleados = [...empleados].sort((a, b) => {
+    if (sortOrder === 'asc') {
+      return a.nombreEmpleado.localeCompare(b.nombreEmpleado);
+    } else {
+      return b.nombreEmpleado.localeCompare(a.nombreEmpleado);
+    }
   });
 
-  return (
-    <Box
-      sx={{
-        height: { xs: 'auto', md: 'auto' },
-        width: '100vw',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        margin: 0,
-        padding: 0,
-        py: 2,
-      }}
-    >
-      <Box
-        sx={{
-          width: '90%',
-          maxWidth: '100%',
-          padding: { xs: '20px', md: '50px' },
-          background:
-            'linear-gradient(135deg, rgba(150, 50, 150, 0.9), rgba(221, 160, 221, 0.5), rgba(150, 50, 150, 0.9), rgba(255, 182, 193, 0.7))',
-          borderRadius: '30px',
-          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.5)',
-          backdropFilter: 'blur(8px)',
-          backgroundSize: '200% 200%',
-          animation: 'shimmer 10s infinite linear',
-        }}
-      >
-        <Container>
-          <h1>Empleados</h1>
-          <form onSubmit={handleSubmit} noValidate autoComplete="off">
-            <TextField
-              type="number"
-              name="dniEmpleado"
-              label="DNI"
-              value={formData.dniEmpleado}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' }, // Tamaño de la etiqueta
-                '& .MuiInputBase-input': { fontSize: '1.2rem' }, // Tamaño de entrada
-              }}
-            />
-            <TextField
-              type="text"
-              name="telefonoEmpleado"
-              label="Teléfono"
-              value={formData.telefonoEmpleado}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="text"
-              name="codigoEmpleado"
-              label="Código"
-              value={formData.codigoEmpleado}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="date"
-              name="fechaNacimientoEmpleado"
-              value={formData.fechaNacimientoEmpleado}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-              variant="outlined"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="text"
-              name="nombreEmpleado"
-              label="Nombre"
-              value={formData.nombreEmpleado}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="text"
-              name="compania"
-              label="Compañía"
-              value={formData.compania}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="text"
-              name="administrador"
-              label="Administrador"
-              value={formData.administrador}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="text"
-              name="usuario"
-              label="Usuario"
-              value={formData.usuario}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <TextField
-              type="text"
-              name="vendedor"
-              label="Vendedor"
-              value={formData.vendedor}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              sx={{
-                '& .MuiInputLabel-root': { fontSize: '1.2rem' },
-                '& .MuiInputBase-input': { fontSize: '1.2rem' },
-              }}
-            />
-            <Button type="submit" variant="contained" sx={{ marginTop: 2, fontSize: '1.2rem' }}>
-              {editMode ? 'Actualizar' : 'Crear'}
-            </Button>
-          </form>
+  useEffect(() => {
+    fetchEmpleados();
+  }, []);
 
-          <Box display="flex" justifyContent="space-between" alignItems="center" mt={4}>
-            <h2>Lista de Empleados</h2>
-            <TextField
-              label="Buscar por nombre"
-              variant="outlined"
-              size="small"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              style={{ width: 250 }}
-            />
-          </Box>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Codigo</TableCell>
-                    <TableCell>Nombre</TableCell>
-                    <TableCell>Teléfono</TableCell>
-                    <TableCell>Acciones</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {empleados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((empleado) => (
-                    <TableRow key={empleado._id}>
-                      <TableCell>{empleado.codigoEmpleado}</TableCell>
-                      <TableCell>{empleado.nombreEmpleado}</TableCell>
-                      <TableCell>{empleado.telefonoEmpleado}</TableCell>
-                      <TableCell>
-                        <IconButton onClick={() => handleEdit(empleado)}>
-                          <Edit />
-                        </IconButton>
-                        <IconButton onClick={() => handleDelete(empleado._id)}>
-                          <Delete />
-                        </IconButton>
-                        <IconButton onClick={() => handleDetails(empleado)}>
-                          <Info />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={sortedEmpleados.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </Container>
+  return (
+    <Container>
+      <Box>
+        <h2>{editingId ? 'Editar' : 'Crear'} Empleado</h2>
+        <form>
+          <TextField
+            label="DNI"
+            name="dniEmpleado"
+            value={formData.dniEmpleado || ''}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Teléfono"
+            name="telefonoEmpleado"
+            value={formData.telefonoEmpleado || ''}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Código"
+            name="codigoEmpleado"
+            value={formData.codigoEmpleado || ''}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Nombre"
+            name="nombreEmpleado"
+            value={formData.nombreEmpleado || ''}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Compañía"
+            name="compania"
+            value={formData.compania || ''}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Usuario"
+            name="usuario"
+            value={formData.usuario || ''}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Vendedor"
+            name="vendedor"
+            value={formData.vendedor || ''}
+            onChange={handleInputChange}
+          />
+
+          <Button
+            variant="contained"
+            onClick={editingId ? actualizarEmpleado : crearEmpleado}
+          >
+            {editingId ? 'Actualizar' : 'Crear'} Empleado
+          </Button>
+        </form>
       </Box>
 
-      {/* Dialog for employee details */}
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Nombre</TableCell>
+              <TableCell>DNI</TableCell>
+              <TableCell>Teléfono</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {sortedEmpleados.map((empleado) => (
+              <TableRow key={empleado._id}>
+                <TableCell>{empleado.nombreEmpleado}</TableCell>
+                <TableCell>{empleado.dniEmpleado}</TableCell>
+                <TableCell>{empleado.telefonoEmpleado}</TableCell>
+
+                <TableCell>
+                  <IconButton onClick={() => editarEmpleado(empleado)}>
+                    <Edit />
+                  </IconButton>
+                  <IconButton onClick={() => eliminarEmpleado(empleado._id)}>
+                    <Delete />
+                  </IconButton>
+                  <IconButton onClick={() => verDetalles(empleado)}>
+                    <Info />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Detalles del Empleado</DialogTitle>
         <DialogContent>
           {selectedEmpleado && (
-            <DialogContentText>
-              <strong>Nombre:</strong> {selectedEmpleado.nombreEmpleado}<br />
-              <strong>DNI:</strong> {selectedEmpleado.dniEmpleado}<br />
-              <strong>Teléfono:</strong> {selectedEmpleado.telefonoEmpleado}<br />
-              <strong>Código:</strong> {selectedEmpleado.codigoEmpleado}<br />
-              {/*<strong>Compañía:</strong> {selectedEmpleado.compania}<br />*/}
-              <strong>Administrador:</strong> {selectedEmpleado.administrador}<br />
-              <strong>Usuario:</strong> {selectedEmpleado.usuario}<br />
-              <strong>Vendedor:</strong> {selectedEmpleado.vendedor}
-            </DialogContentText>
+            <Box>
+              <p><strong>Nombre:</strong> {selectedEmpleado.nombreEmpleado}</p>
+              <p><strong>DNI:</strong> {selectedEmpleado.dniEmpleado}</p>
+              <p><strong>Teléfono:</strong> {selectedEmpleado.telefonoEmpleado}</p>
+              <p><strong>Fecha de Nacimiento:</strong> {selectedEmpleado.fechaNacimientoEmpleado}</p>
+              <p><strong>Compañía:</strong> {selectedEmpleado.compania ? selectedEmpleado.compania.nombreEmpresa : 'No disponible'}</p>
+              <p><strong>Usuario:</strong> {selectedEmpleado.usuario ? selectedEmpleado.usuario.email : 'No disponible'}</p>
+              <p><strong>Vendedor:</strong> {selectedEmpleado.vendedor ? selectedEmpleado.vendedor._id : 'No disponible'}</p>
+
+
+            </Box>
           )}
         </DialogContent>
         <DialogActions>
@@ -403,7 +314,7 @@ const Empleado = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </Container>
   );
 };
 
