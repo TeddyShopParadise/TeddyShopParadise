@@ -21,19 +21,25 @@ import {
   Box,
   TablePagination,
   Switch,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from '@mui/material';
 import { Edit, Delete, ArrowUpward, ArrowDownward, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
 import { getApiUrl } from '../../utils/apiConfig'
 const apiUrl = getApiUrl();
-console.log("Url almacenada: ",apiUrl);
+console.log("Url almacenada: ", apiUrl);
 
 
 const Vendedores = () => {
   const [vendedores, setVendedores] = useState([]);
+  const [empleados, setEmpleados] = useState([]);
   const [filteredVendedores, setFilteredVendedores] = useState([]);
   const [dniEmpleado, setDniEmpleado] = useState('');
   const [codigoVendedor, setCodigoVendedor] = useState('');
+  const [empleado, setEmpleado] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -60,8 +66,21 @@ const Vendedores = () => {
     }
   };
 
+  const fetchEmpleados = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/empleado`); // Asume que tienes una API de empleados
+      const data = await response.json();
+      setEmpleados(data); // Guarda los empleados en el estado
+    } catch (error) {
+      console.error('Error al obtener empleados:', error);
+      setSnackbarMessage('Error al obtener los empleados');
+      setOpenSnackbar(true);
+    }
+  };
+
   useEffect(() => {
     fetchVendedores();
+    fetchEmpleados();
   }, []);
 
   const handleInputChange = (e) => {
@@ -75,7 +94,7 @@ const Vendedores = () => {
   const handleSaveVendedor = async () => {
     const url = isEditing ? `${apiUrl}/vendedor/${currentId}` : `${apiUrl}/vendedor`;
     const method = isEditing ? 'PUT' : 'POST';
-    const newVendedor = { dniEmpleado, codigoVendedor };
+    const newVendedor = { dniEmpleado, codigoVendedor, empleado };
 
     try {
       const response = await fetch(url, {
@@ -88,6 +107,7 @@ const Vendedores = () => {
         fetchVendedores();
         setDniEmpleado('');
         setCodigoVendedor('');
+        setEmpleado('');
         setIsEditing(false);
         setCurrentId(null);
         setSnackbarMessage(isEditing ? 'Vendedor actualizado' : 'Vendedor creado');
@@ -103,6 +123,7 @@ const Vendedores = () => {
   const handleEditClick = (vendedor) => {
     setDniEmpleado(vendedor.dniEmpleado);
     setCodigoVendedor(vendedor.codigoVendedor);
+    setEmpleado(vendedor.empleado?._id);
     setIsEditing(true);
     setCurrentId(vendedor._id);
   };
@@ -230,6 +251,34 @@ const Vendedores = () => {
               margin="normal"
               required
             />
+
+            {/* Campo select para el empleado */}
+            <FormControl fullWidth margin="normal" required>
+              <InputLabel>Empleado</InputLabel>
+              <Select
+                value={empleado}
+                onChange={(e) => setEmpleado(e.target.value)}
+                label="Empleado"
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      maxHeight: 250, // Tamaño máximo de la lista
+                      overflow: 'auto', // Permite el desplazamiento si la lista es muy larga
+                    },
+                  },
+                }}
+              >
+                <MenuItem value="">
+                  <em>Seleccionar Empleado</em>
+                </MenuItem>
+                {empleados.map((emp) => (
+                  <MenuItem key={emp._id} value={emp._id}>
+                    {emp.nombreEmpleado} ({emp.dniEmpleado})
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
             <Button
               variant="contained"
               onClick={handleSaveVendedor}

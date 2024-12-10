@@ -22,21 +22,24 @@ import {
   FormControl,
 } from '@mui/material';
 
-const API_URL = 'http://localhost:3000/api/producto';
-const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias'; 
+import { getApiUrl } from '../../utils/apiConfig'
+const apiUrl = getApiUrl();
+console.log("Url almacenada: ", apiUrl);
+const API_URL = apiUrl + "/producto";
+const CATEGORIAS_API_URL = apiUrl + "/categorias";
 
-  const ProductoUsuario = () => {
-    const [productos, setProductos] = useState([]);
-    const [categorias, setCategorias] = useState([]);
-    const [openCarritoDialog, setOpenCarritoDialog] = useState(false);
-    const [openDetalleDialog, setOpenDetalleDialog] = useState(false);
-    const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [filteredProductos, setFilteredProductos] = useState([]);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [categoriaFiltro, setCategoriaFiltro] = useState('todos');
-    const productosPerPage = 12;
+const ProductoUsuario = () => {
+  const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [openCarritoDialog, setOpenCarritoDialog] = useState(false);
+  const [openDetalleDialog, setOpenDetalleDialog] = useState(false);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [filteredProductos, setFilteredProductos] = useState([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [categoriaFiltro, setCategoriaFiltro] = useState('todos');
+  const productosPerPage = 12;
 
   const [pedido, setPedido] = useState({
     tamañoOso: '',
@@ -108,7 +111,7 @@ const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias';
     if (categoriaId === 'todos') {
       setFilteredProductos(productos);
     } else {
-      const productosFiltrados = productos.filter(producto => 
+      const productosFiltrados = productos.filter(producto =>
         producto.categorias && producto.categorias.some(cat => cat._id === categoriaId)
       );
       setFilteredProductos(productosFiltrados);
@@ -178,10 +181,10 @@ const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias';
     `;
 
     const mensajeCodificado = encodeURIComponent(mensaje.trim());
-    
+
     const numeroWhatsApp = "573209611061";
     const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
-    
+
     window.open(urlWhatsApp, "_blank");
     setSnackbarMessage('Pedido realizado exitosamente');
     setOpenSnackbar(true);
@@ -219,71 +222,71 @@ const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias';
           </FormControl>
 
           <Grid container spacing={3}>
-  {currentProductos.map((producto) => (
-    <Grid item xs={12} sm={6} md={3} key={producto._id}>
-      <Card
-        sx={{
-          transition: 'transform 0.3s',
-          '&:hover': { transform: 'scale(1.05)' },
-          borderRadius: 3,
-          boxShadow: 3,
-        }}
-      >
-        <CardMedia
-          component="img"
-          height="386"
-          width="500"
-          image={producto.imagen || 'default-image-url.jpg'}
-          alt={producto.estiloProducto}
-          sx={{
-            objectFit: 'cover',
-            backgroundColor: '#f0f0f0',
-            borderRadius: '12px 12px 0 0',
-          }}
-        />
-        <CardContent sx={{ textAlign: 'left' }}>
-          <Typography variant="h5" gutterBottom>
-            {producto.estiloProducto}
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            <strong>Material:</strong> {producto.materialProducto}
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            <strong>Tamaño:</strong> {producto.tamañoProducto}
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            <strong>Disponibilidad:</strong> {producto.disponibilidadProducto}
-          </Typography>
-          <Box mt={2} display="flex" justifyContent="space-between">
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleDetalleClick(producto)}
-            >
-              Ver Detalles
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleCarritoClick(producto)}
-            >
-              Comprar
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
-    </Grid>
-  ))}
-</Grid>
+            {currentProductos.map((producto) => (
+              <Grid item xs={12} sm={6} md={3} key={producto._id}>
+                <Card
+                  sx={{
+                    transition: 'transform 0.3s',
+                    '&:hover': { transform: 'scale(1.05)' },
+                    borderRadius: 3,
+                    boxShadow: 3,
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="386"
+                    width="500"
+                    image={producto.imagen || 'default-image-url.jpg'}
+                    alt={producto.estiloProducto}
+                    sx={{
+                      objectFit: 'cover',
+                      backgroundColor: '#f0f0f0',
+                      borderRadius: '12px 12px 0 0',
+                    }}
+                  />
+                  <CardContent sx={{ textAlign: 'left' }}>
+                    <Typography variant="h5" gutterBottom>
+                      {producto.estiloProducto}
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      <strong>Material:</strong> {producto.materialProducto}
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      <strong>Tamaño:</strong> {producto.tamañoProducto}
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      <strong>Disponibilidad:</strong> {producto.disponibilidadProducto}
+                    </Typography>
+                    <Box mt={2} display="flex" justifyContent="space-between">
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => handleDetalleClick(producto)}
+                      >
+                        Ver Detalles
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => handleCarritoClick(producto)}
+                      >
+                        Comprar
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
 
 
           {/* Paginación */}
           <Box mt={4} display="flex" justifyContent="center">
-            <Pagination 
-              count={Math.ceil(filteredProductos.length / productosPerPage)} 
-              page={currentPage} 
-              onChange={handlePageChange} 
-              color="primary" 
+            <Pagination
+              count={Math.ceil(filteredProductos.length / productosPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
             />
           </Box>
 
@@ -310,7 +313,7 @@ const CATEGORIAS_API_URL = 'http://localhost:3000/api/categorias';
                     display: "flex",
                     flexDirection: "column",
                     gap: 1.5,
-                    width: "95%",  
+                    width: "95%",
                     alignItems: "flex-start",
                   }}>
                     <Typography variant="body1"><strong>Material:</strong> {productoSeleccionado.materialProducto}</Typography>
