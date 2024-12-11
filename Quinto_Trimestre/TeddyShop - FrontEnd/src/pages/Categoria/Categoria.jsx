@@ -21,18 +21,24 @@ import {
   Box,
   TablePagination,
   Switch,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { Edit, Delete, Info } from '@mui/icons-material';
 import '../PagesStyle.css';
 import { getApiUrl } from '../../utils/apiConfig'
 const apiUrl = getApiUrl();
-console.log("Url almacenada: ",apiUrl);
+console.log("Url almacenada: ", apiUrl);
 
 
 const CategoriaComponent = () => {
   const [categorias, setCategorias] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [nombreCategoria, setNombreCategoria] = useState('');
   const [descripcionCategoria, setDescripcionCategoria] = useState('');
+  const [productosSeleccionados, setProductosSeleccionados] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -52,8 +58,22 @@ const CategoriaComponent = () => {
     }
   };
 
+  const fetchProductos = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/producto`);
+      if (!response.ok) {
+        throw new Error('Error al obtener los productos');
+      }
+      const data = await response.json();
+      setProductos(data);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
   const crearCategoria = async () => {
-    if (!nombreCategoria || !descripcionCategoria) {
+    if (!nombreCategoria || !descripcionCategoria || productosSeleccionados.length === 0) {
       alert('Por favor, completa todos los campos.');
       return;
     }
@@ -64,7 +84,11 @@ const CategoriaComponent = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nombreCategoria, descripcionCategoria }),
+        body: JSON.stringify({
+          nombreCategoria,
+          descripcionCategoria,
+          productos: productosSeleccionados,
+        }),
       });
 
       if (!response.ok) {
@@ -80,10 +104,13 @@ const CategoriaComponent = () => {
   };
 
   const actualizarCategoria = async () => {
-    if (!editingId || !nombreCategoria || !descripcionCategoria) {
+    if (!editingId || !nombreCategoria || !descripcionCategoria || productosSeleccionados.length === 0) {
       alert('Por favor, completa todos los campos.');
       return;
     }
+
+    // Extraer solo los _id de los productos seleccionados si es necesario
+    const productosIds = productosSeleccionados.map(producto => producto._id || producto);
 
     try {
       const response = await fetch(`${apiUrl}/categorias/${editingId}`, {
@@ -91,13 +118,18 @@ const CategoriaComponent = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nombreCategoria, descripcionCategoria }),
+        body: JSON.stringify({
+          nombreCategoria,
+          descripcionCategoria,
+          productos: productosIds, // Enviar solo los IDs de los productos
+        }),
       });
 
       if (!response.ok) {
         throw new Error('Error al actualizar la categoría');
       }
 
+      console.log('Categoría actualizada', await response.json());
       fetchCategorias();
       resetForm();
     } catch (error) {
@@ -126,14 +158,16 @@ const CategoriaComponent = () => {
   };
 
   const editarCategoria = (categoria) => {
-    setEditingId(categoria._id);
+    setEditingId(categoria._id); // Establece el ID de la categoría que se está editando
     setNombreCategoria(categoria.nombreCategoria);
     setDescripcionCategoria(categoria.descripcionCategoria);
+    setProductosSeleccionados(categoria.productos || []);
   };
 
   const resetForm = () => {
     setNombreCategoria('');
     setDescripcionCategoria('');
+    setProductosSeleccionados([]);
     setEditingId(null);
   };
 
@@ -156,6 +190,7 @@ const CategoriaComponent = () => {
 
   useEffect(() => {
     fetchCategorias();
+    fetchProductos();
   }, []);
 
   return (
@@ -226,6 +261,32 @@ const CategoriaComponent = () => {
                 '& .MuiInputBase-input': { fontSize: '1.2rem' },
               }}
             />
+
+            <FormControl fullWidth margin="normal" required>
+              <InputLabel>Productos</InputLabel>
+              <Select
+                multiple
+                value={productosSeleccionados}
+                onChange={(e) => setProductosSeleccionados(e.target.value)}
+                label="Productos"
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      maxHeight: 250, // Tamaño máximo de la lista
+                      overflow: 'auto', // Permite el desplazamiento si la lista es muy larga
+                    },
+                  },
+                }}
+              >
+                {productos.map((prod) => (
+                  <MenuItem key={prod._id} value={prod._id}>
+                    {prod.estiloProducto} - {prod.tamañoProducto}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+
             <Box display="flex" justifyContent="space-between" mt={2}>
               <Button
                 type="submit"
