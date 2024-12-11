@@ -92,17 +92,35 @@ const Vendedores = () => {
   };
 
   const handleSaveVendedor = async () => {
+    if (!dniEmpleado || !codigoVendedor || !empleado) {
+      setSnackbarMessage('Todos los campos son obligatorios');
+      setOpenSnackbar(true);
+      return;
+    }
+  
+    if (isNaN(dniEmpleado) || dniEmpleado.length < 7 || dniEmpleado.length > 13) {
+      setSnackbarMessage('El DNI del empleado debe ser un número entre 7 y 13');
+      setOpenSnackbar(true);
+      return;
+    }
+  
+    if (codigoVendedor.length < 3) {
+      setSnackbarMessage('El código del vendedor debe tener al menos 3 caracteres');
+      setOpenSnackbar(true);
+      return;
+    }
+  
     const url = isEditing ? `${apiUrl}/vendedor/${currentId}` : `${apiUrl}/vendedor`;
     const method = isEditing ? 'PUT' : 'POST';
     const newVendedor = { dniEmpleado, codigoVendedor, empleado };
-
+  
     try {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newVendedor),
       });
-
+  
       if (response.ok) {
         fetchVendedores();
         setDniEmpleado('');
@@ -112,13 +130,28 @@ const Vendedores = () => {
         setCurrentId(null);
         setSnackbarMessage(isEditing ? 'Vendedor actualizado' : 'Vendedor creado');
         setOpenSnackbar(true);
+      } else {
+        // Si la respuesta no es OK, procesamos el error
+        const errorData = await response.json();
+  
+        // Detectar conflictos con el código de vendedor o dniEmpleado
+        if (errorData.error === 'Código de vendedor repetido') {
+          setSnackbarMessage('El código del vendedor ya está en uso');
+        } else if (errorData.error === 'DNI de vendedor repetido') {
+          setSnackbarMessage('El DNI del empleado ya está en uso por otro vendedor');
+        } else {
+          setSnackbarMessage('Error al guardar el vendedor');
+        }
+  
+        setOpenSnackbar(true);
       }
     } catch (error) {
-      console.error(isEditing ? 'Error updating vendedor:' : 'Error creating vendedor:', error);
+      console.error('Error en la solicitud:', error);
       setSnackbarMessage('Error al guardar el vendedor');
       setOpenSnackbar(true);
     }
   };
+
 
   const handleEditClick = (vendedor) => {
     setDniEmpleado(vendedor.dniEmpleado);
@@ -371,11 +404,17 @@ const Vendedores = () => {
             open={openSnackbar}
             autoHideDuration={6000}
             onClose={handleCloseSnackbar}
+            anchorOrigin={{
+              vertical: 'top',  // Coloca el Snackbar en la parte superior
+              horizontal: 'left',  // Centra el Snackbar horizontalmente
+            }}
           >
-            <Alert onClose={handleCloseSnackbar} severity="success">
+            <Alert onClose={handleCloseSnackbar} severity="error">
               {snackbarMessage}
             </Alert>
           </Snackbar>
+
+
 
           {/* Dialog de detalles */}
           <Dialog open={openDetailDialog} onClose={handleCloseDetailDialog}>
