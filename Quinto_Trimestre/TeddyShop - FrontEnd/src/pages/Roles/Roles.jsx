@@ -44,9 +44,21 @@ const Roles = () => {
   const [sortBy, setSortBy] = useState("nombre");
   const [sortOrder, setSortOrder] = useState("asc");
 
+  const getAuthToken = () => {
+    const token = localStorage.getItem('authToken');
+    return token;
+  };
+
+  const token = getAuthToken();
+
   const fetchRoles = async () => {
     try {
-      const response = await fetch(`${apiUrl}/roles`);
+      const response = await fetch(`${apiUrl}/roles`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,  // Añadir el token al encabezado
+      },
+    });
       const data = await response.json();
       setRoles(data);
       setFilteredRoles(data);
@@ -72,14 +84,18 @@ const Roles = () => {
   const handleSaveRole = async () => {
     const url = isEditing ? `${apiUrl}/roles/${currentId}` : `${apiUrl}/roles`;
     const method = isEditing ? 'PUT' : 'POST';
-
+    const token = getAuthToken();  // Obtener el token
+  
     try {
       const response = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,  // Añadir el token al encabezado
+        },
         body: JSON.stringify(role),
       });
-
+  
       if (response.ok) {
         fetchRoles();
         setRole({ nombre: '', estado: true });
@@ -107,9 +123,16 @@ const Roles = () => {
   };
 
   const handleDeleteRole = async () => {
+    const token = getAuthToken();  // Obtener el token
+  
     try {
-      const response = await fetch(`${apiUrl}/roles/${currentId}`, { method: 'DELETE' });
-
+      const response = await fetch(`${apiUrl}/roles/${currentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,  // Añadir el token al encabezado
+        },
+      });
+  
       if (response.ok) {
         fetchRoles();
         setOpenDeleteDialog(false);
@@ -122,6 +145,7 @@ const Roles = () => {
       setOpenSnackbar(true);
     }
   };
+  
 
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);

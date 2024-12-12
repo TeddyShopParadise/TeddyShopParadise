@@ -42,13 +42,28 @@ const Compania = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCompania, setSelectedCompania] = useState(null);
 
+  const getAuthToken = () => {
+    const token = localStorage.getItem('authToken');
+    return token;
+  };
+
+  const token = getAuthToken();
+
   // Obtener la lista de compañías
   const fetchCompanias = async () => {
     try {
-      const response = await fetch(`${apiUrl}/compania`);
+      const token = getAuthToken(); // Obtener el token
+      const response = await fetch(`${apiUrl}/compania`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`, // Añadir el token al encabezado
+        },
+      });
+  
       if (!response.ok) {
         throw new Error('Error al obtener las compañías');
       }
+  
       const data = await response.json();
       setCompanias(data);
     } catch (error) {
@@ -77,20 +92,22 @@ const Compania = () => {
       alert('Por favor, completa todos los campos.');
       return;
     }
-
+  
     try {
+      const token = getAuthToken(); // Obtener el token
       const response = await fetch(`${apiUrl}/compania`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Añadir el token al encabezado
         },
         body: JSON.stringify({ NIT, telefonoEmpresa, nombreEmpresa, direccionEmpresa, catalogos, empleados }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Error al crear la compañía');
       }
-
+  
       fetchCompanias();
       resetForm();
     } catch (error) {
@@ -98,8 +115,7 @@ const Compania = () => {
       alert(error.message);
     }
   };
-
-  // Actualizar compañía
+  
   const actualizarCompania = async () => {
     if (!editingId || !NIT || !telefonoEmpresa || !nombreEmpresa || !direccionEmpresa) {
       alert('Por favor, completa todos los campos.');
@@ -107,10 +123,12 @@ const Compania = () => {
     }
   
     try {
+      const token = getAuthToken(); // Obtener el token
       const response = await fetch(`${apiUrl}/compania/${editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Añadir el token al encabezado
         },
         body: JSON.stringify({ NIT, telefonoEmpresa, nombreEmpresa, direccionEmpresa, catalogos, empleados }),
       });
@@ -127,19 +145,22 @@ const Compania = () => {
       alert(error.message);
     }
   };
-
-  // Eliminar compañía
+  
   const eliminarCompania = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar esta compañía?')) {
       try {
+        const token = getAuthToken(); // Obtener el token
         const response = await fetch(`${apiUrl}/compania/${id}`, {
           method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Añadir el token al encabezado
+          },
         });
-
+  
         if (!response.ok) {
           throw new Error('Error al eliminar la compañía');
         }
-
+  
         fetchCompanias();
       } catch (error) {
         console.error(error);

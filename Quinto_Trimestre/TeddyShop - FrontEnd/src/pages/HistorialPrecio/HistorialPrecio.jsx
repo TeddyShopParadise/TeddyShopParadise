@@ -45,10 +45,22 @@ const HistorialPrecios = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const getAuthToken = () => {
+    const token = localStorage.getItem('authToken');
+    return token;
+  };
+
+  const token = getAuthToken();
+
   // Obtener historial de precios
   const fetchHistorialPrecios = async () => {
     try {
-      const response = await fetch(`${apiUrl}/historialPrecio`);
+      const response = await fetch(`${apiUrl}/historialPrecio`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`, // Aquí agregas el token en el encabezado
+        },
+      });
       const data = await response.json();
       setHistorialPrecios(data);
     } catch (error) {
@@ -68,10 +80,11 @@ const HistorialPrecios = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Agregar el token aquí también
         },
         body: JSON.stringify(nuevoHistorial),
       });
-
+  
       if (response.ok) {
         fetchHistorialPrecios(); // Actualiza la lista después de crear
         setNuevoHistorial({ precio: '', fechaInicio: '', fechaFin: '', estadoPrecio: true, producto: '' });
@@ -82,8 +95,7 @@ const HistorialPrecios = () => {
       console.error('Error al enviar los datos:', error);
     }
   };
-
-  // Actualizar historial de precio
+  
   const actualizarHistorialPrecio = async (e) => {
     e.preventDefault();
     try {
@@ -91,10 +103,11 @@ const HistorialPrecios = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Incluir el token aquí también
         },
         body: JSON.stringify(nuevoHistorial),
       });
-
+  
       if (response.ok) {
         fetchHistorialPrecios(); // Actualiza la lista después de actualizar
         setNuevoHistorial({ precio: '', fechaInicio: '', fechaFin: '', estadoPrecio: true, producto: '' });
@@ -106,14 +119,16 @@ const HistorialPrecios = () => {
       console.error('Error al enviar los datos:', error);
     }
   };
-
-  // Eliminar historial de precio
+  
   const eliminarHistorialPrecio = async (id) => {
     try {
       const response = await fetch(`${apiUrl}/historialPrecio/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`, // También agregar el token en la eliminación
+        },
       });
-
+  
       if (response.ok) {
         fetchHistorialPrecios(); // Actualiza la lista después de eliminar
       } else {
@@ -123,6 +138,7 @@ const HistorialPrecios = () => {
       console.error('Error al eliminar:', error);
     }
   };
+  
 
   // Maneja el cambio en el formulario
   const handleChange = (e) => {
