@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const productoController = require('../Controllers/producto_controller');
+const multer = require('multer');
+const storage = multer.memoryStorage(); 
+const upload = multer({ storage: storage });
+
+
 
 /**
  * @swagger
@@ -123,7 +128,7 @@ router.get('/', productoController.listarProductos);
  *         description: Error interno del servidor
  */
 
-router.post('/', productoController.crearProducto);
+router.post('/',upload.single('image'), productoController.crearProducto);
 
 /**
  * @swagger
@@ -216,7 +221,7 @@ router.get('/:id', productoController.obtenerProductoPorId);
  *         description: Producto no encontrado
  */
 
-router.put('/:id', productoController.actualizarProducto);
+router.put('/:id', upload.single('image'), productoController.actualizarProducto);
 
 /**
  * @swagger

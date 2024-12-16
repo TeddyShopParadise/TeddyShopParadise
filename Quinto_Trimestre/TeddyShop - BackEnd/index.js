@@ -6,11 +6,17 @@ const http = require('http');
 const fs = require('fs');
 const runAllSeeds = require('./seeds/seedDatabase');
 const cors = require('cors');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { v4: uuidv4 } = require('uuid'); // Para generar un nombre único para las imágenes
+
 
 require('dotenv').config();
 // const https = require('https');
 
 //Importar todas las rutas 
+const uploadRoutes = require('./routes/upload_routes');
+
 const catalogoRoutes = require('./routes/catalogos_routes');
 const categoriaRoutes = require('./routes/categorias_routes');
 const clienteRoutes = require('./routes/clientes_routes');
@@ -33,6 +39,7 @@ const loginRoute = require('./routes/login_routes');
 
 // Middleware
 const app = express();
+const upload = multer();
 
 app.use(cors({
   origin: '*', // Origen permitido
@@ -63,6 +70,11 @@ const options = {
   cert: fs.readFileSync('ruta/a/tu/certificado.crt')
 };
 */
+cloudinary.config({
+  cloud_name: 'peluches',    
+  api_key: '381838619856281',          
+  api_secret: 'K3bBlaVv-cGj1A0LopGfOLstHs4'    
+});
 
 // Middleware adicional
 app.use(express.json());
